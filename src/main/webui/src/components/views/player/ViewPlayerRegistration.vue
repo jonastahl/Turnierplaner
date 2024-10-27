@@ -38,11 +38,10 @@ import { PlayerRegistrationForm } from "@/interfaces/player"
 import { reactive, ref } from "vue"
 import { useRegisterPlayer } from "@/backend/registration"
 import ViewPlayerForm from "@/components/views/player/ViewPlayerForm.vue"
-import FormCompetition from "@/components/views/competitions/FormCompetition.vue"
 
 const { t } = useI18n()
 const toast = useToast()
-const form = ref<InstanceType<typeof FormCompetition> | null>(null)
+const form = ref<InstanceType<typeof ViewPlayerForm> | null>(null)
 
 const {
 	mutate: register,
