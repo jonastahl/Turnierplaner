@@ -1,12 +1,12 @@
 <template>
-	<div class="bg-primary-900 p-6">
-		<div class="flex justify-between items-center sm:flex-row flex-col gap-2">
+	<div class="bg-primary-900 p-6 flex justify-content-between">
+		<div class="flex items-center sm:flex-row flex-column gap-2">
 			<u class="text-white transition-colors cursor-pointer" @click="selected"
 				>Impressum</u
 			>
 			<div class="flex gap-2">
 				<a
-					href="https://www.tsv-wolnzach-tennis.de/"
+					href="https://github.com/jonastahl/Turnierplaner"
 					target="_blank"
 					rel="noopener noreferrer"
 					class="hover:text-primary transition-colors text-white"
@@ -23,11 +23,13 @@
 				</a>
 			</div>
 		</div>
+		<span>Turnierplaner v{{ version }}</span>
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { router } from "@/main"
+import { version } from "@/../package.json"
 
 function selected() {
 	router.push({
