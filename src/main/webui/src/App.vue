@@ -1,10 +1,16 @@
 <template>
 	<HeadContent />
-	<div v-if="silentLoginCompleted" id="body">
-		<RouterView />
+	<div
+		v-if="silentLoginCompleted"
+		id="body"
+		class="flex flex-column justify-content-between"
+	>
+		<div>
+			<RouterView />
+		</div>
+		<AppFooter />
 	</div>
 	<Toast />
-	<AppFooter />
 </template>
 
 <script lang="ts" setup>
@@ -78,7 +84,7 @@ body {
 <style scoped>
 #body {
 	margin-top: 20px;
-	min-height: calc(100vh - 70px);
+	min-height: calc(100vh - 90px);
 }
 
 main {
