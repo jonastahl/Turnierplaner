@@ -5,55 +5,57 @@
 			tableDoubles: props.mode === Mode.DOUBLE,
 		}"
 	>
-		<tr :class="{ winner: props.match.finished && props.match.winner }">
-			<td class="name">
-				<ViewTeamNames :team="props.match.teamA" :inverted="true" />
-			</td>
-			<template v-if="props.match.sets && props.match.sets.length > 0">
-				<td
-					v-for="set in props.match.sets"
-					:key="set.index"
-					class="result"
-					:class="{
-						'cursor-pointer': isReporter,
-					}"
-					@click="showPopUp(props.match)"
-				>
-					{{ set.scoreA }}
+		<tbody>
+			<tr :class="{ winner: props.match.finished && props.match.winner }">
+				<td class="name">
+					<ViewTeamNames :team="props.match.teamA" :inverted="true" />
 				</td>
-			</template>
-			<template v-else-if="allowUpdate && isReporter">
-				<td
-					rowspan="2"
-					class="empty-result"
-					:class="{
-						'cursor-pointer': isReporter,
-					}"
-					@click="showPopUp(props.match)"
-				>
-					<span class="material-symbols-outlined">add_circle</span>
+				<template v-if="props.match.sets && props.match.sets.length > 0">
+					<td
+						v-for="set in props.match.sets"
+						:key="set.index"
+						class="result"
+						:class="{
+							'cursor-pointer': isReporter,
+						}"
+						@click="showPopUp(props.match)"
+					>
+						{{ set.scoreA }}
+					</td>
+				</template>
+				<template v-else-if="allowUpdate && isReporter">
+					<td
+						rowspan="2"
+						class="empty-result"
+						:class="{
+							'cursor-pointer': isReporter,
+						}"
+						@click="showPopUp(props.match)"
+					>
+						<span class="material-symbols-outlined">add_circle</span>
+					</td>
+				</template>
+			</tr>
+			<tr :class="{ winner: props.match.finished && !props.match.winner }">
+				<td class="name">
+					<ViewTeamNames :team="props.match.teamB" :inverted="true" />
 				</td>
-			</template>
-		</tr>
-		<tr :class="{ winner: props.match.finished && !props.match.winner }">
-			<td class="name">
-				<ViewTeamNames :team="props.match.teamB" :inverted="true" />
-			</td>
 
-			<template v-if="props.match.sets && props.match.sets.length > 0">
-				<td
-					v-for="set in props.match.sets"
-					:key="set.index"
-					class="result"
-					:class="{
-						'cursor-pointer': isReporter,
-					}"
-					@click="showPopUp(props.match)"
-				>
-					{{ set.scoreB }}
-				</td>
-			</template>
-		</tr>
+				<template v-if="props.match.sets && props.match.sets.length > 0">
+					<td
+						v-for="set in props.match.sets"
+						:key="set.index"
+						class="result"
+						:class="{
+							'cursor-pointer': isReporter,
+						}"
+						@click="showPopUp(props.match)"
+					>
+						{{ set.scoreB }}
+					</td>
+				</template>
+			</tr>
+		</tbody>
 	</table>
 	<UpdatePointsDialog
 		v-if="isReporter"
@@ -112,7 +114,7 @@ table {
 	height: 108px;
 }
 
-table > tr {
+tbody > tr {
 	height: 50%;
 }
 

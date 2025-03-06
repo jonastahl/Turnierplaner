@@ -1,62 +1,64 @@
 <template>
 	<!-- TODO mobile optimization -->
 	<table style="width: calc(100% - 1px)">
-		<tr>
-			<th id="first">
-				<span>{{ t("ViewGroupSystem.group") }} {{ props.group.index }}</span>
-			</th>
-			<template
-				v-for="(team, index) in props.group.teams.slice().reverse()"
-				:key="index"
-			>
-				<th
-					v-if="index !== props.group.teams.length - 1"
-					:class="hoverIdB === index ? 'highlight' : ''"
-					@mouseover="headerHover(team.id)"
-					@mouseleave="hoverLeave()"
-				>
-					<ViewTeamNames :team="team" :inverted="true" short />
-				</th>
-			</template>
-		</tr>
-		<template v-for="(teamA, index) in props.group.teams" :key="index">
-			<tr v-if="index !== props.group.teams.length - 1">
-				<th
-					:class="hoverIdA === index ? 'highlight ' : ''"
-					@mouseover="headerHover(teamA.id)"
-					@mouseleave="hoverLeave()"
-				>
-					<ViewTeamNames :team="teamA" :inverted="true" short />
+		<tbody>
+			<tr>
+				<th id="first">
+					<span>{{ t("ViewGroupSystem.group") }} {{ props.group.index }}</span>
 				</th>
 				<template
-					v-for="(teamB, indexB) in props.group.teams.slice().reverse()"
-					:key="indexB"
+					v-for="(team, index) in props.group.teams.slice().reverse()"
+					:key="index"
 				>
-					<td
-						v-if="
-							indexB !== props.group.teams.length - 1 &&
-							index + indexB < props.group.teams.length - 1
-						"
-						:class="{
-							'cursor-pointer': isReporter,
-							highlightLow:
-								hoverIdA &&
-								hoverIdB &&
-								((hoverIdA === index && indexB < hoverIdB) ||
-									(hoverIdB === indexB && index < hoverIdA)),
-							highlight: hoverTeam === teamA.id || hoverTeam === teamB.id,
-						}"
-						@mouseover="matchHover(index, indexB)"
+					<th
+						v-if="index !== props.group.teams.length - 1"
+						:class="hoverIdB === index ? 'highlight' : ''"
+						@mouseover="headerHover(team.id)"
 						@mouseleave="hoverLeave()"
-						@click="showPopUp(findMatch(teamA, teamB).match)"
 					>
-						<div>
-							<ViewMatch v-bind="findMatch(teamA, teamB)" />
-						</div>
-					</td>
+						<ViewTeamNames :team="team" :inverted="true" short />
+					</th>
 				</template>
 			</tr>
-		</template>
+			<template v-for="(teamA, index) in props.group.teams" :key="index">
+				<tr v-if="index !== props.group.teams.length - 1">
+					<th
+						:class="hoverIdA === index ? 'highlight ' : ''"
+						@mouseover="headerHover(teamA.id)"
+						@mouseleave="hoverLeave()"
+					>
+						<ViewTeamNames :team="teamA" :inverted="true" short />
+					</th>
+					<template
+						v-for="(teamB, indexB) in props.group.teams.slice().reverse()"
+						:key="indexB"
+					>
+						<td
+							v-if="
+								indexB !== props.group.teams.length - 1 &&
+								index + indexB < props.group.teams.length - 1
+							"
+							:class="{
+								'cursor-pointer': isReporter,
+								highlightLow:
+									hoverIdA &&
+									hoverIdB &&
+									((hoverIdA === index && indexB < hoverIdB) ||
+										(hoverIdB === indexB && index < hoverIdA)),
+								highlight: hoverTeam === teamA.id || hoverTeam === teamB.id,
+							}"
+							@mouseover="matchHover(index, indexB)"
+							@mouseleave="hoverLeave()"
+							@click="showPopUp(findMatch(teamA, teamB).match)"
+						>
+							<div>
+								<ViewMatch v-bind="findMatch(teamA, teamB)" />
+							</div>
+						</td>
+					</template>
+				</tr>
+			</template>
+		</tbody>
 	</table>
 	<UpdatePointsDialog
 		v-if="isReporter"
