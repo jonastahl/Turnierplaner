@@ -1,3 +1,12 @@
+<template>
+	<HeadContent />
+	<div v-if="silentLoginCompleted" id="body">
+		<RouterView />
+	</div>
+	<Toast />
+	<AppFooter />
+</template>
+
 <script lang="ts" setup>
 import HeadContent from "@/components/header/HeadContent.vue"
 import { provide, ref, watch } from "vue"
@@ -6,8 +15,7 @@ import { getConfig } from "@/backend/config"
 import { useI18n } from "vue-i18n"
 import { rebuildAuthSettings } from "@/security/settings"
 import { settings } from "@/settings"
-
-let aside = false
+import AppFooter from "@/components/footer/AppFooter.vue"
 
 const { data: lConfig } = getConfig(ref(false))
 const silentLoginCompleted = ref(false)
@@ -60,18 +68,6 @@ watch(
 )
 </script>
 
-<template>
-	<HeadContent />
-
-	<div v-if="silentLoginCompleted" id="body">
-		<router-view />
-		<aside v-if="aside">
-			<h2>Aside content</h2>
-		</aside>
-	</div>
-	<Toast />
-</template>
-
 <style>
 body {
 	margin: 0;
@@ -82,7 +78,7 @@ body {
 <style scoped>
 #body {
 	margin-top: 20px;
-	display: flex;
+	min-height: calc(100vh - 70px);
 }
 
 main {
