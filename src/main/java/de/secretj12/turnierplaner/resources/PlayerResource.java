@@ -60,7 +60,7 @@ public class PlayerResource {
     @Path("/compFind/{tourId}/{compId}/")
     @Produces(MediaType.APPLICATION_JSON)
     public List<jUserPlayer> listCompPlayer(@PathParam("tourId") String tourId, @PathParam("compId") String compId,
-                                            @QueryParam("search") String search,
+                                            @DefaultValue("") @QueryParam("search") String search,
                                             @DefaultValue("false") @QueryParam("playerB") boolean playerB) {
         commonHelpers.checkTournamentAccessibility(tourId);
         Competition competition = competitionRepository.getByName(tourId, compId);

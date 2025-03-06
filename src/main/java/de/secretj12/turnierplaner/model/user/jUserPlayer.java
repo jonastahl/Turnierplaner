@@ -21,6 +21,9 @@ public class jUserPlayer {
         this.lastName = p.getLastName();
     }
 
+    public jUserPlayer() {
+    }
+
     public UUID getId() {
         return id;
     }
