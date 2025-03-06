@@ -112,4 +112,9 @@ export default [
 		name: "Templates",
 		component: () => import("@/components/views/ViewTemplates.vue"),
 	},
+	{
+		path: "/impressum",
+		name: "Impressum",
+		component: () => import("@/components/views/ViewImpressum.vue"),
+	},
 ]
