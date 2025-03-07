@@ -1,0 +1,30 @@
+name: Feature Request
+description: Suggest a new feature or improvement.
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: "Feature Description"
+      description: "Describe the feature or enhancement you'd like to see."
+      placeholder: "Explain your feature request in detail..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: "Use Case"
+      description: "Explain why this feature is important and provide specific use cases where it would be helpful."
+      placeholder: "Describe how this feature will help you or others..."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: additional-context
+    attributes:
+      label: "Additional Context"
+      description: "Check all that apply."
+      options:
+        - label: "I can help implement this feature"
