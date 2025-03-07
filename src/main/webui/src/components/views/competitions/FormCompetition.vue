@@ -24,6 +24,7 @@
 				:disabled="disabled"
 				class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
 				rows="4"
+				maxlength="255"
 				type="text"
 				v-bind="descriptionAttrs"
 			></textarea>
