@@ -4,7 +4,7 @@
 		:loading="!courts || !selectedCourts"
 		:options="courts?.toSorted(courtComp)"
 		option-label="name"
-		placeholder="Select courts"
+		:placeholder="t('court.select')"
 		class="w-full"
 	>
 		<template #footer>
@@ -20,6 +20,9 @@ import ViewCreateCourtSmall from "@/components/views/court/ViewCreateCourtSmall.
 import { Court } from "@/interfaces/court"
 import { courtComp, getCourts } from "@/backend/court"
 import { watch } from "vue"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const selectedCourts = defineModel<Court[]>({ default: [] })
 const { data: courts } = getCourts()

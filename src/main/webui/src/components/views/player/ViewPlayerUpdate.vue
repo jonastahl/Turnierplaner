@@ -35,7 +35,6 @@ import { useToast } from "primevue/usetoast"
 import { PlayerRegistration } from "@/interfaces/player"
 import { ref } from "vue"
 import ViewPlayerForm from "@/components/views/player/ViewPlayerForm.vue"
-import FormCompetition from "@/components/views/competitions/FormCompetition.vue"
 import {
 	getPlayerDetails,
 	PlayerDefault,
@@ -46,7 +45,7 @@ import { useRoute } from "vue-router"
 const route = useRoute()
 const { t } = useI18n()
 const toast = useToast()
-const form = ref<InstanceType<typeof FormCompetition> | null>(null)
+const form = ref<InstanceType<typeof ViewPlayerForm> | null>(null)
 
 const { mutate: register, isPending: disabled } = useUpdatePlayerDetails(
 	t,

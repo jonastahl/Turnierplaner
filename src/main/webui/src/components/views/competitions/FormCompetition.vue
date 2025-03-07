@@ -24,6 +24,7 @@
 				:disabled="disabled"
 				class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
 				rows="4"
+				maxlength="255"
 				type="text"
 				v-bind="descriptionAttrs"
 			></textarea>
@@ -444,7 +445,7 @@ const { values, defineField, errors, handleSubmit } = useForm<CompetitionForm>({
 	validationSchema: toTypedSchema(
 		object({
 			name: string().min(4).max(40).required(),
-			description: string().max(50),
+			description: string().max(255),
 			tourType: mixed().oneOf(Object.values(CompType)).required(),
 			mode: mixed().oneOf(Object.values(Mode)).required(),
 			signUp: mixed().oneOf(Object.values(SignUp)).required(),
@@ -523,15 +524,21 @@ const numberSetsOptions = ref([
 	{ name: "5", value: NumberSets.FIVE },
 ])
 
-const onSubmit = handleSubmit((values) => {
-	emit(
-		"submit",
-		competitionFormToServer(
-			<CompetitionForm>values,
-			<string | null>props.competition.id,
-		),
-	)
-})
+const onSubmit = handleSubmit(
+	(values) => {
+		emit(
+			"submit",
+			competitionFormToServer(
+				<CompetitionForm>values,
+				<string | null>props.competition.id,
+			),
+		)
+	},
+	(ctx) => {
+		console.log("Validation error #TODO")
+		console.log(ctx.errors)
+	},
+)
 defineExpose({ onSubmit })
 const emit = defineEmits(["submit"])
 </script>

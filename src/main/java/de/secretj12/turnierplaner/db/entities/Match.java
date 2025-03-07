@@ -49,8 +49,8 @@ public class Match {
     @Column(name = "end_time")
     private Instant end;
 
-    @Column(name = "finished")
-    private Boolean finished;
+    @Column(name = "finished", nullable = false)
+    private Boolean finished = false;
     /**
      * Determines who is the winner of the game
      * true - Team A
