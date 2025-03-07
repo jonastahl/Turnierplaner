@@ -65,22 +65,27 @@ function updateA(val: Team) {
 	emit("update:teamA", val)
 	return val
 }
+
 function removeA() {
 	emit("update:teamA", null)
 }
+
 function updateB(val: Team) {
 	emit("update:teamB", val)
 	return val
 }
+
 function removeB() {
 	emit("update:teamB", null)
 }
 
 watch(props, () => {
-	if (teamA.value !== (props.match.teamA ? [props.match.teamA] : []))
-		teamA.value = props.match.teamA ? [props.match.teamA] : []
-	if (teamB.value !== (props.match.teamB ? [props.match.teamB] : []))
-		teamB.value = props.match.teamB ? [props.match.teamB] : []
+	if (props.match.teamA === null) teamA.value = []
+	else if (teamA.value.length === 0 || teamA.value[0] !== props.match.teamA)
+		teamA.value = [props.match.teamA]
+	if (props.match.teamB === null) teamB.value = []
+	else if (teamB.value.length === 0 || teamB.value[0] !== props.match.teamB)
+		teamB.value = [props.match.teamB]
 })
 </script>
 
