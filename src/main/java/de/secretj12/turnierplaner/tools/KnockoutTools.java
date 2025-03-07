@@ -64,6 +64,7 @@ public class KnockoutTools {
     }
 
     private Match updateKnockoutTree(Competition competition, jUserKnockoutMatch tree, Match match, int number) {
+        match.setFinished(false);
         match.setNumber(number);
         match.setCompetition(competition);
         matches.persist(match);
