@@ -31,6 +31,7 @@
 								matches.splice(extEventToDeletePos, 1)
 						}
 					"
+					@delete-schedule="(match) => matches.push(remSchedule(match))"
 				/>
 			</div>
 		</div>
@@ -97,8 +98,8 @@ function nextPage() {
 
 function save() {
 	isUpdating.value = true
-	updateMatches(
-		scheduledMatches.value
+	updateMatches([
+		...scheduledMatches.value
 			.filter((event) => !event.secondary)
 			.map((event) => {
 				return {
@@ -108,9 +109,19 @@ function save() {
 					court: event.split,
 				}
 			}),
-	)
+		...matches.value.map((match) => {
+			return match
+		}),
+	])
 	updateCourts(selectedCourts.value)
 	isUpdating.value = false
+}
+
+function remSchedule(match: AnnotatedMatch) {
+	match.begin = null
+	match.end = null
+	match.court = null
+	return match
 }
 
 defineExpose({ prevPage, save, nextPage })

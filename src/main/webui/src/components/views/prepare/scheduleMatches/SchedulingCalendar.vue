@@ -9,7 +9,9 @@
 		:max-date="tournament.game_phase.end"
 		:split-days="splitDays"
 		:editable-events="!!props.courts.length"
+		deletable-events
 		@on-event-drop="onEventDrop"
+		@on-event-delete="onEventDelete"
 		@on-view-change="onViewChange"
 	>
 		<template #event="{ event }">
@@ -52,7 +54,10 @@ function reload() {
 	if (calendar.value) calendar.value.reload()
 }
 
-const emit = defineEmits<{ removeId: [id: string] }>()
+const emit = defineEmits<{
+	removeId: [id: string]
+	deleteSchedule: [event: AnnotatedMatch]
+}>()
 const props = defineProps<{
 	courts: Court[]
 }>()
@@ -159,6 +164,10 @@ function onEventDrop(
 			data: originalEvent.data,
 		})
 	}
+}
+
+function onEventDelete(event: MatchCalEvent) {
+	emit("deleteSchedule", event.data)
 }
 
 const splitDays = computed(() => {
