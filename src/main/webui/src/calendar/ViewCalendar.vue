@@ -20,16 +20,9 @@
 		:time-cell-height="props.timeCellHeight"
 		:snap-to-time="props.snapToTime"
 		:time-step="props.timeStep"
-		:editable-events="{
-			title: false,
-			drag: props.editableEvents,
-			resize: props.editableEvents,
-			delete: props.deletableEvents,
-			create: false,
-		}"
+		:editable-events="props.editableEvents"
 		@event-drop="onEventDrop"
 		@event-change="onEventChange"
-		@event-delete="onEventDelete"
 		@view-change="onViewChange"
 	>
 		<template v-if="$slots.event" #event="{ event }">
@@ -82,7 +75,6 @@ const props = withDefaults(
 		snapToTime?: number
 		timeStep?: number
 		editableEvents?: boolean
-		deletableEvents?: boolean
 		automaticEvent?: boolean
 	}>(),
 	{
@@ -95,7 +87,6 @@ const props = withDefaults(
 		disabledViews: () => [View.years, View.year, View.month],
 		locale: "en",
 		editableEvents: false,
-		deletableEvents: false,
 		automaticEvent: true,
 		minDate: undefined,
 		maxDate: undefined,
@@ -113,7 +104,6 @@ const emit = defineEmits<{
 	onEventDrop: [CalEvent<T>, CalEvent<T>, boolean]
 	onEventChange: [CalEvent<T>, CalEvent<T>]
 	onViewChange: [Date, Date]
-	onEventDelete: [CalEvent<T>]
 }>()
 
 const vuecal = ref()
@@ -174,14 +164,6 @@ function onEventChange({
 		})
 	}
 	emit("onEventChange", event, originalEvent)
-}
-
-function onEventDelete(event: CalEvent<T>) {
-	events.value.splice(
-		events.value.findIndex((e) => e.id === event.id),
-		1,
-	)
-	emit("onEventDelete", event)
 }
 
 async function onViewChange({
