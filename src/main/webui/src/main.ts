@@ -6,6 +6,7 @@ import * as VueRouter from "vue-router"
 import { settings } from "@/settings"
 
 /* https request */
+import VueAxios from "vue-axios"
 import axios from "axios"
 
 import { access_token } from "@/security/AuthService"
@@ -78,7 +79,7 @@ declare module "@vue/runtime-core" {
 const app = createApp(App)
 
 const router = VueRouter.createRouter({
-	history: VueRouter.createWebHistory(),
+	history: VueRouter.createWebHashHistory(),
 	routes,
 })
 
@@ -111,7 +112,7 @@ const vueQueryPluginOptions: VueQueryPluginOptions = {
 
 app
 	.use(i18n)
-	.use(axios)
+	.use(VueAxios, axios)
 	.use(router)
 	/* Primevue */
 	.use(PrimeVue, { ripple: true })
