@@ -264,8 +264,7 @@
 			"CLAY": "Sand",
 			"GRASS": "Grass"
 		},
-		"not_selected": "All fields need to be filled",
-		"select": "Select courts"
+		"not_selected": "All fields need to be filled"
 	},
 	"set": {
 		"invalid_sets": "There are invalid sets"

@@ -263,8 +263,7 @@
 			"CLAY": "Sand",
 			"GRASS": "Gras"
 		},
-		"not_selected": "Alle Felder müssen ausgefüllt werden",
-		"select": "Plätze auswählen"
+		"not_selected": "Alle Felder müssen ausgefüllt werden"
 	},
 	"set": {
 		"invalid_sets": "Es gibt ungültige Sätze"
