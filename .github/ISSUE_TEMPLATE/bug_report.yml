@@ -1,0 +1,53 @@
+name: Bug Report
+description: Report a bug to help us improve.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: "Version of Turnierplaner"
+      description: "Specify the version of Turnierplaner you are using (e.g., v0.0.3). The version can be found in the footer."
+      placeholder: "e.g. v0.0.3"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: "Device"
+      description: "Specify the device you experienced the bug"
+      placeholder: "e.g. IPhone 15, Samsung S25, MacBook, Laptop, ..."
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: "Browser"
+      description: "Specify the browser you experienced the bug"
+      placeholder: "e.g. Chrome, Firefox, Safari, ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: "Describe the Bug & Expected Behavior"
+      description: "Provide a clear and concise description of the bug and what you expected to happen. Add screenshots if helpful."
+      placeholder: "Describe the bug and expected behavior here..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Provide a Reproduction Link or Steps"
+      description: |
+        - Describe steps to reproduce the behavior:
+          1. Go to '...'
+          2. Click on '...'
+          3. See error
+      placeholder: "Describe steps here..."
+    validations:
+      required: true
