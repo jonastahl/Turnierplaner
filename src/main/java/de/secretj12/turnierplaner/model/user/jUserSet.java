@@ -7,6 +7,9 @@ public class jUserSet {
     private byte scoreA;
     private byte scoreB;
 
+    public jUserSet() {
+    }
+
     public jUserSet(byte index, byte scoreA, byte scoreB) {
         this.index = index;
         this.scoreA = scoreA;
