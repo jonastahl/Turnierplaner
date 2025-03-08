@@ -114,7 +114,7 @@ table {
 	height: 108px;
 }
 
-table > tr {
+tbody > tr {
 	height: 50%;
 }
 
