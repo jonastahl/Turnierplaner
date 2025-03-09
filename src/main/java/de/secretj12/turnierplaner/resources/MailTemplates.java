@@ -14,7 +14,7 @@ public class MailTemplates {
 
     public Mail verificationMail(String recipient, String verificationCode) {
         String vLink = UriBuilder
-            .fromUri(url + "/#/player/verification")
+            .fromUri(url + "/player/verification")
             .queryParam("code", verificationCode)
             .build()
             .toString();
