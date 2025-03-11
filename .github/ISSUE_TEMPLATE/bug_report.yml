@@ -22,7 +22,7 @@ body:
       required: true
 
   - type: input
-    id: device
+    id: browser
     attributes:
       label: "Browser"
       description: "Specify the browser you experienced the bug"
