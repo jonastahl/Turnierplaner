@@ -56,7 +56,7 @@ public class CompetitionLogic {
     MailTemplates mailTemplates;
 
     @Transactional
-    public void newCompetitionLogic(String tourName, jDirectorCompetitionAdd competition) {
+    public void addCompetitionLogic(String tourName, jDirectorCompetitionAdd competition) {
         if (competition.getName() == null) throw new BadRequestException("No competition specified");
 
         if (competitions.getByName(tourName, competition.getName()) != null)
