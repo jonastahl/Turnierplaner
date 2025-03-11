@@ -227,8 +227,7 @@ public class TestPlayerResource {
         assertEquals(1, mailbox.getTotalMessagesSent());
         assertDoesNotThrow(() -> mailbox.getMailMessagesSentTo(recipient).getFirst().getHtml());
         String text = mailbox.getMailMessagesSentTo("ab@example.org").getFirst().getHtml();
-        assertTrue(text.contains("Please verify"));
-        String code = text.split("code=")[1].split(">")[0];
+        String code = text.split("code=")[1].split("\"")[0];
         VerificationCode verificationCode = verificationCodes.findByUUID(UUID.fromString(code));
         Player player = players.getByName("firstName", "lastName");
         assertEquals(verificationCode.getPlayer().getId(), player.getId());

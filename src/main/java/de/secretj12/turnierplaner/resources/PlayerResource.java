@@ -178,15 +178,18 @@ public class PlayerResource {
         newPlayer.setAdminVerified(securityIdentity.hasRole("director"));
         playerRepository.persist(newPlayer);
 
+        System.out.println("Player: " + newPlayer.getId());
         VerificationCode verificationCode = new VerificationCode();
         verificationCode.setPlayer(newPlayer);
         verificationCode.setExpirationDate(Instant.now().plus(expire, ChronoUnit.MINUTES));
         verificationCodeRepository.persist(verificationCode);
 
+
         try {
-            mailer.send(mailTemplates.verificationMail(newPlayer.getEmail(), verificationCode.getId().toString()));
+            mailTemplates.verificationMail(newPlayer.getFirstName(),newPlayer.getEmail(), verificationCode.getId().toString());
         } catch (Exception e) {
             // TODO print by logger
+            System.out.println(e);
             throw new BadRequestException("Problem sending you the verification mail. Please try again later.");
         }
 
