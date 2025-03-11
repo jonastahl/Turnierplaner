@@ -26,6 +26,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -35,6 +37,7 @@ import java.util.UUID;
 
 @Path("/player")
 public class PlayerResource {
+    private static final Logger log = LoggerFactory.getLogger(PlayerResource.class);
     @Inject
     CompetitionRepository competitionRepository;
     @Inject
@@ -186,10 +189,11 @@ public class PlayerResource {
 
 
         try {
-            mailTemplates.verificationMail(newPlayer.getFirstName(),newPlayer.getEmail(), verificationCode.getId().toString());
+            mailTemplates.verificationMail(newPlayer, verificationCode.getId()
+                .toString());
         } catch (Exception e) {
             // TODO print by logger
-            System.out.println(e);
+            log.error("e: ", e);
             throw new BadRequestException("Problem sending you the verification mail. Please try again later.");
         }
 

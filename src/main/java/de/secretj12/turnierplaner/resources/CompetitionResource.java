@@ -3,10 +3,10 @@ package de.secretj12.turnierplaner.resources;
 import de.secretj12.turnierplaner.db.entities.Match;
 import de.secretj12.turnierplaner.db.entities.Player;
 import de.secretj12.turnierplaner.enums.*;
-import de.secretj12.turnierplaner.db.entities.Tournament;
 import de.secretj12.turnierplaner.db.entities.competition.*;
 import de.secretj12.turnierplaner.db.entities.groups.Group;
 import de.secretj12.turnierplaner.db.repositories.*;
+import de.secretj12.turnierplaner.logic.CompetitionLogic;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorCompetitionAdd;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorCompetitionUpdate;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorGroupsDivision;
@@ -20,7 +20,6 @@ import de.secretj12.turnierplaner.model.user.knockout.jUserKnockoutSystem;
 import de.secretj12.turnierplaner.tools.CommonHelpers;
 import de.secretj12.turnierplaner.tools.GroupTools;
 import de.secretj12.turnierplaner.tools.KnockoutTools;
-import io.quarkus.security.UnauthorizedException;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -62,6 +61,10 @@ public class CompetitionResource {
     KnockoutTools knockoutTools;
     @Inject
     GroupTools groupTools;
+    @Inject
+    MailTemplates mailTemplates;
+    @Inject
+    CompetitionLogic competitionLogic;
 
     @GET
     @Path("/list")
@@ -104,32 +107,10 @@ public class CompetitionResource {
     @POST
     @Path("/add")
     @RolesAllowed("director")
-    @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String addCompetition(@PathParam("tourName") String tourName, jDirectorCompetitionAdd competition) {
-        if (competition.getName() == null) throw new BadRequestException("No competition specified");
-
-        if (competitions.getByName(tourName, competition.getName()) != null)
-            throw new BadRequestException("Competition already exists");
-
-        Tournament tournament = tournaments.getByName(tourName);
-        if (tournament == null) throw new BadRequestException("Tournament doesn't exist");
-
-        if (competition.getPlayerA().isHasMinAge() && competition.getPlayerA().getMinAge() == null)
-            throw new BadRequestException("Player A: Min age null although has min age");
-        if (competition.getPlayerA().isHasMaxAge() && competition.getPlayerA().getMaxAge() == null)
-            throw new BadRequestException("Player A: Max age null although has max age");
-        if (competition.getPlayerB().isHasMinAge() && competition.getPlayerB().getMinAge() == null)
-            throw new BadRequestException("Player B: Min age null although has min age");
-        if (competition.getPlayerB().isHasMaxAge() && competition.getPlayerB().getMaxAge() == null)
-            throw new BadRequestException("Player B: Max age null although has max age");
-
-        Competition dbCompetition = new Competition();
-        competition.toDB(dbCompetition);
-        dbCompetition.setcProgress(CreationProgress.TEAMS);
-        dbCompetition.setTournament(tournament);
-        competitions.persist(dbCompetition);
+        competitionLogic.newCompetitionLogic(tourName, competition);
         return "successfully added";
     }
 
@@ -173,136 +154,11 @@ public class CompetitionResource {
 
     @POST
     @Path("/{compName}/signUp")
-    @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String signUpPlayer(@PathParam("tourName") String tourName, @PathParam("compName") String compName,
                                jUserPlayerSignUpForm reg) {
-        // TODO better checks if team or members of it are already registered in team
-        // TODO check if both layers are the same
-        // TODO check if players match conditions
-        common.checkTournamentAccessibility(tourName);
-
-        Competition competition = competitions.getByName(tourName, compName);
-        if (competition == null) throw new BadRequestException("Competition doesn't exist");
-
-        if (!securityIdentity.hasRole("director") && // or registration phase
-            (competition.getTournament().getBeginRegistration().isAfter(Instant.now())
-                || competition.getTournament().getEndRegistration().isBefore(Instant.now())))
-            throw new NotAuthorizedException("Registration phase is not active");
-
-        if (competition.getMode() == CompetitionMode.SINGLE
-            || (competition.getSignup() == CompetitionSignUp.INDIVIDUAL
-                && !competition.isPlayerBdifferent())) {
-            // single mode or double with individual registration but same constraints
-            // -> every registration as player A and player B is null
-
-            if (reg.getPlayerA() == null) throw new BadRequestException("Player A is null");
-            if (reg.getPlayerB() != null) throw new BadRequestException("Player B is not null");
-
-            Player playerA = players.findById(reg.getPlayerA().getId());
-            if (playerA == null) throw new BadRequestException("Player A does not exist");
-
-            if (conditionsFailA(competition, playerA))
-                throw new BadRequestException("Player A does not meed the conditions");
-
-            List<Team> regTeams = competition.getTeams();
-            if (regTeams != null
-                && regTeams.stream()
-                    .anyMatch(t -> (t.getPlayerA() != null && t.getPlayerA().getId().equals(playerA.getId()))
-                        || (t.getPlayerB() != null && t.getPlayerB().getId().equals(playerA.getId()))))
-                throw new WebApplicationException("Player already registered", Response.Status.CONFLICT);
-
-            Team team = new Team();
-            team.setPlayerA(playerA);
-            team.setCompetition(competition);
-            teams.persist(team);
-        } else {
-            // double mode
-            if (competition.getSignup() == CompetitionSignUp.INDIVIDUAL && competition.isPlayerBdifferent()) {
-                // double mode with individual registration and different constraints
-                // -> each registration needs to be player A xor player B null
-
-                if (reg.getPlayerA() == null && reg.getPlayerB() == null)
-                    throw new BadRequestException("Player A and player B are null");
-                if (reg.getPlayerA() != null && reg.getPlayerB() != null)
-                    throw new BadRequestException("Player A and player B are not null");
-
-                if (reg.getPlayerA() != null) {
-                    Player playerA = players.findById(reg.getPlayerA().getId());
-                    if (playerA == null) throw new BadRequestException("Player A doesn't exist");
-
-                    if (conditionsFailA(competition, playerA))
-                        throw new BadRequestException("Player A is does not meet the conditions");
-
-                    List<Team> regTeams = competition.getTeams();
-                    if (regTeams != null
-                        && regTeams.stream().anyMatch(t -> (t.getPlayerA() != null && t.getPlayerA().getId().equals(
-                            playerA.getId()))
-                            || (t.getPlayerB() != null && t.getPlayerB().getId().equals(playerA.getId()))))
-                        throw new WebApplicationException("Player already registered", Response.Status.CONFLICT);
-
-                    Team team = new Team();
-                    team.setPlayerA(playerA);
-                    team.setCompetition(competition);
-                    teams.persist(team);
-                }
-                if (reg.getPlayerB() != null) {
-                    Player playerB = players.findById(reg.getPlayerB().getId());
-                    if (playerB == null) throw new BadRequestException("Player B does not exist");
-
-                    if (conditionsFailB(competition, playerB))
-                        throw new BadRequestException("Player B is does not meet the conditions");
-
-                    List<Team> regTeams = competition.getTeams();
-                    if (regTeams != null
-                        && regTeams.stream().anyMatch(t -> (t.getPlayerA() != null
-                            && t.getPlayerA().getId().equals(playerB.getId()))
-                            || (t.getPlayerB() != null && t.getPlayerB().getId().equals(playerB.getId()))))
-                        throw new WebApplicationException("Player already registered", Response.Status.CONFLICT);
-
-                    Team team = new Team();
-                    team.setPlayerB(playerB);
-                    team.setCompetition(competition);
-                    teams.persist(team);
-                }
-            } else {
-                // double mode with registration together and any constraints
-                // -> needs player A and player B to be not null
-
-                if (reg.getPlayerA() == null) throw new BadRequestException("Player A is null");
-                if (reg.getPlayerB() == null) throw new BadRequestException("Player B is null");
-
-                Player playerA = players.findById(reg.getPlayerA().getId());
-                if (playerA == null) throw new BadRequestException("Player A does not exist");
-                Player playerB = players.findById(reg.getPlayerB().getId());
-                if (playerB == null) throw new BadRequestException("Player B does not exist");
-
-                if (conditionsFailA(competition, playerA))
-                    throw new BadRequestException("Player A is does not meet the conditions");
-                if (conditionsFailB(competition, playerB))
-                    throw new BadRequestException("Player B is does not meet the conditions");
-
-                List<Team> regTeams = competition.getTeams();
-                if (regTeams != null
-                    && regTeams.stream().anyMatch(t -> (t.getPlayerA() != null
-                        && t.getPlayerA().getId().equals(playerA.getId()))
-                        || (t.getPlayerB() != null && t.getPlayerB().getId().equals(playerA.getId()))))
-                    throw new WebApplicationException("Player already registered", Response.Status.CONFLICT);
-                if (regTeams != null && regTeams.stream().anyMatch(t -> (t.getPlayerA() != null
-                    && t.getPlayerA().getId().equals(playerB.getId()))
-                    || (t.getPlayerB() != null && t.getPlayerB().getId().equals(playerB.getId()))))
-                    throw new WebApplicationException("Player already registered", Response.Status.CONFLICT);
-
-                Team team = new Team();
-                team.setPlayerA(playerA);
-                team.setPlayerB(playerB);
-                team.setCompetition(competition);
-                teams.persist(team);
-            }
-        }
-
-        // TODO notify by mail?
+        competitionLogic.signUpPlayerLogic(tourName, compName, reg);
         return "Player registered";
     }
 
@@ -369,20 +225,6 @@ public class CompetitionResource {
         competitions.persist(competition);
 
         return "Teams updated";
-    }
-
-    private boolean conditionsFailA(Competition comp, Player player) {
-        return (comp.getPlayerASex() == SexFilter.FEMALE && player.getSex() == Sex.MALE)
-            || (comp.getPlayerASex() == SexFilter.MALE && player.getSex() == Sex.FEMALE)
-            || (comp.playerAhasMinAge() && comp.getPlayerAminAge().isBefore(player.getBirthday()))
-            || (comp.playerAhasMaxAge() && comp.getPlayerAmaxAge().isAfter(player.getBirthday()));
-    }
-
-    private boolean conditionsFailB(Competition comp, Player player) {
-        return (comp.getPlayerBSex() == SexFilter.FEMALE && player.getSex() == Sex.MALE)
-            || (comp.getPlayerBSex() == SexFilter.MALE && player.getSex() == Sex.FEMALE)
-            || (comp.playerBhasMinAge() && comp.getPlayerBminAge().isBefore(player.getBirthday()))
-            || (comp.playerBhasMaxAge() && comp.getPlayerBmaxAge().isAfter(player.getBirthday()));
     }
 
     @GET
