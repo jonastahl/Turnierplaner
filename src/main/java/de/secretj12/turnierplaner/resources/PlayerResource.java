@@ -181,7 +181,6 @@ public class PlayerResource {
         newPlayer.setAdminVerified(securityIdentity.hasRole("director"));
         playerRepository.persist(newPlayer);
 
-        System.out.println("Player: " + newPlayer.getId());
         VerificationCode verificationCode = new VerificationCode();
         verificationCode.setPlayer(newPlayer);
         verificationCode.setExpirationDate(Instant.now().plus(expire, ChronoUnit.MINUTES));
@@ -192,7 +191,6 @@ public class PlayerResource {
             mailTemplates.verificationMail(newPlayer, verificationCode.getId()
                 .toString());
         } catch (Exception e) {
-            // TODO print by logger
             log.error("e: ", e);
             throw new BadRequestException("Problem sending you the verification mail. Please try again later.");
         }
