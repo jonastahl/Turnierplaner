@@ -95,7 +95,7 @@ public class CompetitionLogic {
 
         Team team = new Team();
         if (competition.getMode() == CompetitionMode.SINGLE
-                || (competition.getSignup() == CompetitionSignUp.INDIVIDUAL && !competition.isPlayerBdifferent())) {
+            || (competition.getSignup() == CompetitionSignUp.INDIVIDUAL && !competition.isPlayerBdifferent())) {
             Player playerA = checkSingleSignUp(reg, competition);
             team.setPlayerA(playerA);
             teams.persist(team);
@@ -142,7 +142,8 @@ public class CompetitionLogic {
     }
 
     private Player checkIndividualSignUp(jUserPlayerSignUpForm reg, Competition competition) {
-        if (reg.getPlayerA() == null && reg.getPlayerB() == null || reg.getPlayerA() != null && reg.getPlayerB() != null)
+        if (reg.getPlayerA() == null && reg.getPlayerB() == null || reg.getPlayerA() != null && reg
+            .getPlayerB() != null)
             throw new BadRequestException("You need to register either player A or player B");
 
         if (reg.getPlayerA() != null) {
@@ -170,31 +171,30 @@ public class CompetitionLogic {
 
     private void checkPlayerAlreadyRegistered(List<Team> regTeams, Player player) {
         if (regTeams != null
-                && regTeams.stream().anyMatch(t ->
-                (t.getPlayerA() != null && t.getPlayerA().getId().equals(player.getId())
-                        || t.getPlayerB() != null && t.getPlayerB().getId().equals(player.getId())))
+            && regTeams.stream().anyMatch(t -> (t.getPlayerA() != null && t.getPlayerA().getId().equals(player.getId())
+                || t.getPlayerB() != null && t.getPlayerB().getId().equals(player.getId())))
         )
             throw new WebApplicationException("Player already registered", Response.Status.CONFLICT);
     }
 
     private void checkRoleAndAccessibility(Competition competition) {
         if (!securityIdentity.hasRole("director") && // or registration phase
-                (competition.getTournament().getBeginRegistration().isAfter(Instant.now())
-                        || competition.getTournament().getEndRegistration().isBefore(Instant.now())))
+            (competition.getTournament().getBeginRegistration().isAfter(Instant.now())
+                || competition.getTournament().getEndRegistration().isBefore(Instant.now())))
             throw new NotAuthorizedException("Registration phase is not active");
     }
 
     private boolean conditionsFailA(Competition comp, Player player) {
         return (comp.getPlayerASex() == SexFilter.FEMALE && player.getSex() == Sex.MALE)
-                || (comp.getPlayerASex() == SexFilter.MALE && player.getSex() == Sex.FEMALE)
-                || (comp.playerAhasMinAge() && comp.getPlayerAminAge().isBefore(player.getBirthday()))
-                || (comp.playerAhasMaxAge() && comp.getPlayerAmaxAge().isAfter(player.getBirthday()));
+            || (comp.getPlayerASex() == SexFilter.MALE && player.getSex() == Sex.FEMALE)
+            || (comp.playerAhasMinAge() && comp.getPlayerAminAge().isBefore(player.getBirthday()))
+            || (comp.playerAhasMaxAge() && comp.getPlayerAmaxAge().isAfter(player.getBirthday()));
     }
 
     private boolean conditionsFailB(Competition comp, Player player) {
         return (comp.getPlayerBSex() == SexFilter.FEMALE && player.getSex() == Sex.MALE)
-                || (comp.getPlayerBSex() == SexFilter.MALE && player.getSex() == Sex.FEMALE)
-                || (comp.playerBhasMinAge() && comp.getPlayerBminAge().isBefore(player.getBirthday()))
-                || (comp.playerBhasMaxAge() && comp.getPlayerBmaxAge().isAfter(player.getBirthday()));
+            || (comp.getPlayerBSex() == SexFilter.MALE && player.getSex() == Sex.FEMALE)
+            || (comp.playerBhasMinAge() && comp.getPlayerBminAge().isBefore(player.getBirthday()))
+            || (comp.playerBhasMaxAge() && comp.getPlayerBmaxAge().isAfter(player.getBirthday()));
     }
 }
