@@ -110,7 +110,7 @@ public class CompetitionResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String addCompetition(@PathParam("tourName") String tourName, jDirectorCompetitionAdd competition) {
-        competitionLogic.newCompetitionLogic(tourName, competition);
+        competitionLogic.addCompetitionLogic(tourName, competition);
         return "successfully added";
     }
 
