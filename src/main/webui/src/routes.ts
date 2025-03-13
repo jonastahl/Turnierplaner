@@ -98,7 +98,7 @@ export default [
 		component: () => import("@/components/views/player/ViewPlayerUpdate.vue"),
 	},
 	{
-		path: "/player/verification",
+		path: "/verify",
 		name: "Player verified",
 		component: () => import("@/components/views/player/ViewVerification.vue"),
 	},
