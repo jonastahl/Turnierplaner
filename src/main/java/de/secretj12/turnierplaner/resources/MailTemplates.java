@@ -16,6 +16,8 @@ public class MailTemplates {
 
     @CheckedTemplate
     static class Templates {
+        public static native MailTemplate.MailTemplateInstance masterTemplateMail();
+
         public static native MailTemplate.MailTemplateInstance createVerificationMail(
                                                                                       String url,
                                                                                       String firstName,
