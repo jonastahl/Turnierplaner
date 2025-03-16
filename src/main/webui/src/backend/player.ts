@@ -145,7 +145,7 @@ export function getPlayer(
 		queryKey: ["player", computed(() => route.params.playerId)],
 		queryFn: async () => {
 			return axios
-				.get<PlayerServer>(`/player/${route.params.playerId}`)
+				.get<PlayerServer>(`/player/get/${route.params.playerId}`)
 				.then<Player>((result) => playerServerToClient(result.data))
 				.catch((error) => {
 					toast.add({
@@ -170,7 +170,9 @@ export function getPlayerDetails(
 		queryKey: ["playerDetails", computed(() => route.params.playerId)],
 		queryFn: async () => {
 			return axios
-				.get<PlayerDetailsServer>(`/player/${route.params.playerId}/details`)
+				.get<PlayerDetailsServer>(
+					`/player/get/${route.params.playerId}/details`,
+				)
 				.then<PlayerDetails>((result) =>
 					playerDetailsServerToClient(result.data),
 				)

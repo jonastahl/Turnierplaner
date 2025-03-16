@@ -113,7 +113,7 @@ public class PlayerResource {
     }
 
     @GET
-    @Path("/{playerId}")
+    @Path("/get/{playerId}")
     @Produces(MediaType.APPLICATION_JSON)
     public jUserPlayer getPlayer(@PathParam("playerId") UUID playerId) {
         Player player = playerRepository.findById(playerId);
@@ -123,7 +123,7 @@ public class PlayerResource {
     }
 
     @GET
-    @Path("/{playerId}/details")
+    @Path("/get/{playerId}/details")
     @RolesAllowed("director")
     @Produces(MediaType.APPLICATION_JSON)
     public jDirectorPlayerUpdateForm getDetails(@PathParam("playerId") UUID playerId) {
@@ -161,7 +161,7 @@ public class PlayerResource {
 
     @POST
     @Transactional
-    @Path("/registration")
+    @Path("/register")
     @Blocking
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
@@ -221,7 +221,7 @@ public class PlayerResource {
 
     @GET
     @Transactional
-    @Path("/verification")
+    @Path("/verify")
     @Produces(MediaType.TEXT_PLAIN)
     public String verification(@QueryParam("code") String code) {
         VerificationCode verificationCode = verificationCodeRepository.findByUUID(UUID.fromString(code));
