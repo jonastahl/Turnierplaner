@@ -6,6 +6,7 @@ import * as VueRouter from "vue-router"
 import { settings } from "@/settings"
 
 /* https request */
+import VueAxios from "vue-axios"
 import axios from "axios"
 
 import { access_token } from "@/security/AuthService"
@@ -111,7 +112,8 @@ const vueQueryPluginOptions: VueQueryPluginOptions = {
 
 app
 	.use(i18n)
-	.use(axios)
+	// @ts-expect-error It works
+	.use(VueAxios, axios)
 	.use(router)
 	/* Primevue */
 	.use(PrimeVue, { ripple: true })
