@@ -1,33 +1,52 @@
 package de.secretj12.turnierplaner.resources;
 
-import io.quarkus.mailer.Mail;
+import de.secretj12.turnierplaner.db.entities.Player;
+import de.secretj12.turnierplaner.db.entities.competition.Competition;
+import io.quarkus.mailer.MailTemplate;
+import io.quarkus.qute.CheckedTemplate;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.core.UriBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class MailTemplates {
-    //    TODO internationalization
+    // TODO internationalization
 
     @ConfigProperty(name = "turnierplaner.frontend.url")
     String url;
 
-    public Mail verificationMail(String recipient, String verificationCode) {
-        String vLink = UriBuilder
-            .fromUri(url + "/player/verification")
-            .queryParam("code", verificationCode)
-            .build()
-            .toString();
-        StringBuilder content = new StringBuilder();
-        content.append("<p>Welcome!,</p>");
-        content.append("<p>Please verify your email with the following link:</p>");
-        content.append("<a href=");
-        content.append(vLink);
-        content.append(">");
-        content.append(vLink);
-        content.append("</a>");
-        content.append("<p>Best regards</p>");
-        return Mail
-            .withHtml(recipient, "Please verify your email", content.toString());
+    @CheckedTemplate
+    static class Templates {
+        public static native MailTemplate.MailTemplateInstance masterTemplateMail();
+
+        public static native MailTemplate.MailTemplateInstance createVerificationMail(
+                                                                                      String url,
+                                                                                      String firstName,
+                                                                                      String recipient,
+                                                                                      String verificationCode);
+
+        public static native MailTemplate.MailTemplateInstance createRegistrationMail(
+                                                                                      String url,
+                                                                                      String firstName,
+                                                                                      String recipient,
+                                                                                      String competitionName,
+                                                                                      String competitionDescription
+        );
+    }
+
+
+    public void verificationMail(Player player, String verificationCode) {
+        Templates.createVerificationMail(url, player.getFirstName(), player.getEmail(), verificationCode)
+            .to(player.getEmail())
+            .subject("Bitte verifizieren Sie Ihre E-Mail")
+            .sendAndAwait();
+    }
+
+    public void sendRegistrationMail(Player player, Competition competition) {
+        if (player.isMailVerified())
+            Templates.createRegistrationMail(url, player.getFirstName(), player.getEmail(), competition.getName(),
+                competition.getDescription())
+                .to(player.getEmail())
+                .subject("Registrierung bei Turnierplaner")
+                .sendAndAwait();
     }
 }

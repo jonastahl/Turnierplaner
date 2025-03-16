@@ -9,7 +9,7 @@ export function useRegisterPlayer(
 ) {
 	return useMutation({
 		mutationFn: async (reg: PlayerRegistration) => {
-			return axios.post("/player/registration", {
+			return axios.post("/player/register", {
 				firstName: reg.firstName,
 				lastName: reg.lastName,
 				sex: reg.sex,
@@ -41,7 +41,7 @@ export function useRegisterPlayer(
 export function useVerify() {
 	return useMutation({
 		mutationFn: async (code: string) => {
-			return axios.get(`/player/verification?code=${code}`)
+			return axios.get(`/player/verify?code=${code}`)
 		},
 	})
 }

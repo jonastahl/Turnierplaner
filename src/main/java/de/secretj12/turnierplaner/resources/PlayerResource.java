@@ -26,6 +26,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -35,6 +37,7 @@ import java.util.UUID;
 
 @Path("/player")
 public class PlayerResource {
+    private static final Logger log = LoggerFactory.getLogger(PlayerResource.class);
     @Inject
     CompetitionRepository competitionRepository;
     @Inject
@@ -110,7 +113,7 @@ public class PlayerResource {
     }
 
     @GET
-    @Path("/{playerId}")
+    @Path("/get/{playerId}")
     @Produces(MediaType.APPLICATION_JSON)
     public jUserPlayer getPlayer(@PathParam("playerId") UUID playerId) {
         Player player = playerRepository.findById(playerId);
@@ -120,7 +123,7 @@ public class PlayerResource {
     }
 
     @GET
-    @Path("/{playerId}/details")
+    @Path("/get/{playerId}/details")
     @RolesAllowed("director")
     @Produces(MediaType.APPLICATION_JSON)
     public jDirectorPlayerUpdateForm getDetails(@PathParam("playerId") UUID playerId) {
@@ -158,7 +161,7 @@ public class PlayerResource {
 
     @POST
     @Transactional
-    @Path("/registration")
+    @Path("/register")
     @Blocking
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
@@ -183,10 +186,12 @@ public class PlayerResource {
         verificationCode.setExpirationDate(Instant.now().plus(expire, ChronoUnit.MINUTES));
         verificationCodeRepository.persist(verificationCode);
 
+
         try {
-            mailer.send(mailTemplates.verificationMail(newPlayer.getEmail(), verificationCode.getId().toString()));
+            mailTemplates.verificationMail(newPlayer, verificationCode.getId()
+                .toString());
         } catch (Exception e) {
-            // TODO print by logger
+            log.error("e: ", e);
             throw new BadRequestException("Problem sending you the verification mail. Please try again later.");
         }
 
@@ -216,7 +221,7 @@ public class PlayerResource {
 
     @GET
     @Transactional
-    @Path("/verification")
+    @Path("/verify")
     @Produces(MediaType.TEXT_PLAIN)
     public String verification(@QueryParam("code") String code) {
         VerificationCode verificationCode = verificationCodeRepository.findByUUID(UUID.fromString(code));
