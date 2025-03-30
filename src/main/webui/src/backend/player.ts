@@ -15,6 +15,7 @@ import { computed, Ref } from "vue"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 import { RouteLocationNormalizedLoaded } from "vue-router"
 import { Page } from "@/interfaces/general"
+import { Language } from "@/interfaces/competition"
 
 export function findCompPlayers(
 	search: Ref<string>,
@@ -226,6 +227,7 @@ export const PlayerDefault: PlayerRegistrationForm = {
 	lastName: "",
 	sex: undefined,
 	birthday: undefined,
+	language: Language.EN,
 	email: "",
 	phone: "",
 }

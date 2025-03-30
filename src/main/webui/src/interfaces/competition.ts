@@ -6,6 +6,11 @@ export enum Sex {
 	ANY = "ANY",
 }
 
+export enum Language {
+	EN = "EN",
+	DE = "DE",
+}
+
 export enum CompType {
 	KNOCKOUT = "KNOCKOUT",
 	GROUPS = "GROUPS",

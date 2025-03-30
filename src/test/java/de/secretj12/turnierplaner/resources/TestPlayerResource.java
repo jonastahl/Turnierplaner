@@ -91,23 +91,23 @@ public class TestPlayerResource {
         for (int i = 0; i < 5; i++) {
             players.persist(
                 new Player("M" + i, "F" + i + "V", Sex.MALE, LocalDate.parse(
-                    "2023-04-02"), "a@example.org", "+12345", true, true));
+                    "2023-04-02"), "a@example.org", "+12345", true, true, Language.DE));
         }
         for (int i = 5; i < 10; i++) {
             players.persist(new Player("M" + i, "F" + i, Sex.MALE, LocalDate.parse(
-                "2023-04-05"), "a@example.org", "+12345", false, true));
+                "2023-04-05"), "a@example.org", "+12345", false, true, Language.EN));
         }
         for (int i = 10; i < 20; i++) {
             players.persist(new Player("M" + i, "F" + i + "V", Sex.MALE, LocalDate.parse(
-                "2023-04-05"), "a@example.org", "+12345", true, true));
+                "2023-04-05"), "a@example.org", "+12345", true, true, Language.DE));
         }
         for (int i = 0; i < 3; i++) {
             players.persist(new Player("F" + i, "M" + i + "V", Sex.FEMALE, LocalDate.parse(
-                "2023-04-02"), "a@example.org", "+12345", true, true));
+                "2023-04-02"), "a@example.org", "+12345", true, true, Language.EN));
         }
 
         players.persist(new Player("first", "last", Sex.MALE, LocalDate.parse(
-            "2023-04-02"), "a@example.org", "+12345", true, true));
+            "2023-04-02"), "a@example.org", "+12345", true, true, Language.DE));
 
         mailbox.clear();
     }

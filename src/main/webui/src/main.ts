@@ -112,7 +112,6 @@ const vueQueryPluginOptions: VueQueryPluginOptions = {
 
 app
 	.use(i18n)
-	// @ts-expect-error It works
 	.use(VueAxios, axios)
 	.use(router)
 	/* Primevue */

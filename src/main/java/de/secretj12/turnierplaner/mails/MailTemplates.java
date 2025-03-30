@@ -40,9 +40,9 @@ public class MailTemplates {
 
     public void verificationMail(Player player, String verificationCode) {
         Templates.createVerificationMail(url, player.getFirstName(), player.getEmail(), verificationCode)
-            .setAttribute("locale", "de")
+            .setAttribute("locale", player.getLanguage().getLanguageCode())
             .to(player.getEmail())
-            .subject(new verificationSubject().setLocale("de").render())
+            .subject(new verificationSubject().setLocale(player.getLanguage().getLanguageCode()).render())
             .sendAndAwait();
     }
 
@@ -54,9 +54,9 @@ public class MailTemplates {
         if (player.isMailVerified())
             Templates.createRegistrationMail(url, player.getFirstName(), player.getEmail(), competition.getName(),
                 competition.getDescription())
-                .setAttribute("locale", "de")
+                .setAttribute("locale", player.getLanguage().getLanguageCode())
                 .to(player.getEmail())
-                .subject(new registrationSubject().setLocale("de").render())
+                .subject(new registrationSubject().setLocale(player.getLanguage().getLanguageCode()).render())
                 .sendAndAwait();
     }
 }

@@ -1,6 +1,7 @@
 package de.secretj12.turnierplaner.model.user;
 
 import de.secretj12.turnierplaner.db.entities.Player;
+import de.secretj12.turnierplaner.enums.Language;
 import de.secretj12.turnierplaner.enums.Sex;
 
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ public class jUserPlayerRegistrationForm {
     LocalDate birthday;
     String email;
     String phone;
+    Language language;
 
     public jUserPlayerRegistrationForm() {
     }
@@ -24,6 +26,7 @@ public class jUserPlayerRegistrationForm {
         this.birthday = player.getBirthday();
         this.email = player.getEmail();
         this.phone = player.getPhone();
+        this.language = player.getLanguage();
     }
 
     public String getFirstName() {
@@ -72,5 +75,13 @@ public class jUserPlayerRegistrationForm {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 }

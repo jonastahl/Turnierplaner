@@ -1,3 +1,5 @@
+import { Language } from "@/interfaces/competition"
+
 export interface PlayerServer {
 	id?: string
 	firstName: string
@@ -39,6 +41,7 @@ export interface PlayerRegistrationForm {
 	lastName: string
 	sex: Sex | undefined
 	birthday: Date | undefined
+	language: Language
 	email: string
 	phone: string
 }
@@ -58,6 +61,7 @@ export interface PlayerDetailsServer {
 	lastName: string
 	sex: Sex
 	birthday: Date | string
+	language: Language
 	email: string
 	phone: string
 }

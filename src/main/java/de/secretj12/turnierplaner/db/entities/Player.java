@@ -1,5 +1,6 @@
 package de.secretj12.turnierplaner.db.entities;
 
+import de.secretj12.turnierplaner.enums.Language;
 import de.secretj12.turnierplaner.enums.Sex;
 import jakarta.persistence.*;
 
@@ -72,6 +73,9 @@ public class Player {
     @Column(name = "admin_verified")
     private boolean adminVerified;
 
+    @Column(name = "language")
+    private Language language;
+
     @OneToOne(mappedBy = "player", cascade = CascadeType.REMOVE)
     private VerificationCode verificationCode;
 
@@ -79,7 +83,7 @@ public class Player {
     }
 
     public Player(String firstName, String lastName, Sex sex, LocalDate birthday, String email, String phone,
-                  boolean mailVerified, boolean adminVerified) {
+                  boolean mailVerified, boolean adminVerified, Language language) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
@@ -88,6 +92,7 @@ public class Player {
         this.phone = phone;
         this.mailVerified = mailVerified;
         this.adminVerified = adminVerified;
+        this.language = language;
     }
 
     public UUID getId() {
@@ -168,5 +173,13 @@ public class Player {
 
     public void setVerificationCode(VerificationCode verificationCodes) {
         this.verificationCode = verificationCodes;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 }
