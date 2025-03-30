@@ -194,7 +194,7 @@ public class TestPlayerResource {
                     "email": "ab@example.org",
                     "phone": "+034759834"
                 }""")
-            .post("/player/registration")
+            .post("/player/register")
             .then().assertThat()
             .statusCode(Response.Status.CONFLICT.getStatusCode());
     }
@@ -211,10 +211,11 @@ public class TestPlayerResource {
                     "lastName": "lastName",
                     "sex": "MALE",
                     "birthday": "1977-03-10",
+                    "language": "EN",
                     "email": "%s",
                     "phone": "%s"
                 }""", recipient, tel))
-            .post("/player/registration")
+            .post("/player/register")
             .then().assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
@@ -234,7 +235,7 @@ public class TestPlayerResource {
         Panache.getTransactionManager().commit();
 
         given()
-            .param("code", code).get("/player/verification")
+            .param("code", code).get("/player/verify")
             .then().assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
         assertTrue(players.getByName("firstName", "lastName").isMailVerified());
@@ -254,10 +255,11 @@ public class TestPlayerResource {
                     "lastName": "lastName",
                     "sex": "FEMALE",
                     "birthday": "1977-03-10",
+                    "language": "DE",
                     "email": "%s",
                     "phone": "%s"
                 }""", recipient, tel))
-            .post("/player/registration")
+            .post("/player/register")
             .then().assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
     }
@@ -273,10 +275,11 @@ public class TestPlayerResource {
                     "firstName": "firstName",
                     "lastName": "lastName",
                     "birthday": "1977-03-10",
+                    "language": "EN",
                     "email": "%s",
                     "phone": "%s"
                 }""", recipient, tel))
-            .post("/player/registration")
+            .post("/player/register")
             .then().assertThat()
             .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }
