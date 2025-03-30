@@ -1,15 +1,16 @@
-package de.secretj12.turnierplaner.resources;
+package de.secretj12.turnierplaner.mails;
 
 import de.secretj12.turnierplaner.db.entities.Player;
 import de.secretj12.turnierplaner.db.entities.competition.Competition;
 import io.quarkus.mailer.MailTemplate;
 import io.quarkus.qute.CheckedTemplate;
+import io.quarkus.qute.TemplateContents;
+import io.quarkus.qute.TemplateInstance;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class MailTemplates {
-    // TODO internationalization
 
     @ConfigProperty(name = "turnierplaner.frontend.url")
     String url;
@@ -33,20 +34,29 @@ public class MailTemplates {
         );
     }
 
+    @TemplateContents("{msg:verifySubject()}")
+    record verificationSubject() implements TemplateInstance {
+    }
 
     public void verificationMail(Player player, String verificationCode) {
         Templates.createVerificationMail(url, player.getFirstName(), player.getEmail(), verificationCode)
+            .setAttribute("locale", "de")
             .to(player.getEmail())
-            .subject("Bitte verifizieren Sie Ihre E-Mail")
+            .subject(new verificationSubject().setLocale("de").render())
             .sendAndAwait();
+    }
+
+    @TemplateContents("{msg:registerSubject()}")
+    record registrationSubject() implements TemplateInstance {
     }
 
     public void sendRegistrationMail(Player player, Competition competition) {
         if (player.isMailVerified())
             Templates.createRegistrationMail(url, player.getFirstName(), player.getEmail(), competition.getName(),
                 competition.getDescription())
+                .setAttribute("locale", "de")
                 .to(player.getEmail())
-                .subject("Registrierung bei Turnierplaner")
+                .subject(new registrationSubject().setLocale("de").render())
                 .sendAndAwait();
     }
 }

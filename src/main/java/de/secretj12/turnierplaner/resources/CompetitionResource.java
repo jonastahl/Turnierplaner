@@ -7,6 +7,7 @@ import de.secretj12.turnierplaner.db.entities.competition.*;
 import de.secretj12.turnierplaner.db.entities.groups.Group;
 import de.secretj12.turnierplaner.db.repositories.*;
 import de.secretj12.turnierplaner.logic.CompetitionLogic;
+import de.secretj12.turnierplaner.mails.MailTemplates;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorCompetitionAdd;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorCompetitionUpdate;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorGroupsDivision;
