@@ -80,6 +80,34 @@
 				>{{ t(errors.sex || "") }}
 			</InlineMessage>
 		</div>
+		<div class="field col-6">
+			<label for="language">{{
+				t("ViewPlayerRegistration.language.field")
+			}}</label>
+			<Dropdown
+				v-model="language"
+				v-bind="languageAttrs"
+				:disabled="disabled"
+				:options="[
+					{ name: t('language.en'), value: Language.EN },
+					{ name: t('language.de'), value: Language.DE },
+				]"
+				option-label="name"
+				option-value="value"
+				:placeholder="t(`settings.language`)"
+				class="w-full"
+				:class="{ 'p-invalid': errors.language }"
+			>
+				<template #option="slotProps">
+					<div>
+						{{ slotProps.option.name }}
+					</div>
+				</template>
+			</Dropdown>
+			<InlineMessage v-if="errors.language" class="mt-2"
+				>{{ t(errors.language || "") }}
+			</InlineMessage>
+		</div>
 		<div class="field col-12">
 			<label for="email">{{ t("ViewPlayerRegistration.email.field") }}</label>
 			<InputText
@@ -117,7 +145,7 @@
 
 <script lang="ts" setup>
 import { useI18n } from "vue-i18n"
-import { Sex } from "@/interfaces/competition"
+import { Language, Sex } from "@/interfaces/competition"
 import { useForm } from "vee-validate"
 import { toTypedSchema } from "@vee-validate/yup"
 import { date, mixed, object, string } from "yup"
@@ -145,6 +173,7 @@ const { defineField, errors, handleSubmit } = useForm<PlayerRegistration>({
 			lastName: string().min(4).max(40).required(),
 			sex: mixed().oneOf(Object.values(Sex)).required(),
 			birthday: date().required(),
+			language: mixed().oneOf(Object.values(Language)).required(),
 			email: string().max(100).email().required(),
 			phone: string()
 				.matches(phoneRegExp, t("ViewPlayerRegistration.phone.correct"))
@@ -156,6 +185,7 @@ const { defineField, errors, handleSubmit } = useForm<PlayerRegistration>({
 		lastName: props.player.lastName,
 		sex: props.player.sex,
 		birthday: props.player.birthday,
+		language: props.player.language,
 		email: props.player.email,
 		phone: props.player.phone,
 	},
@@ -164,6 +194,7 @@ const { defineField, errors, handleSubmit } = useForm<PlayerRegistration>({
 const [firstName, firstNameAttrs] = defineField("firstName")
 const [lastName, lastNameAttrs] = defineField("lastName")
 const [sex, sexAttrs] = defineField("sex")
+const [language, languageAttrs] = defineField("language")
 const [birthday, birthdayAttrs] = defineField("birthday")
 const [email, emailAttrs] = defineField("email")
 const [phone, phoneAttrs] = defineField("phone")

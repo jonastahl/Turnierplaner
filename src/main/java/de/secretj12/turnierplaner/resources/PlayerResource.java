@@ -158,6 +158,7 @@ public class PlayerResource {
         }
         player.setEmail(form.getEmail());
         player.setPhone(form.getPhone());
+        player.setLanguage(form.getLanguage());
     }
 
     @POST

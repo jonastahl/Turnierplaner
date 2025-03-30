@@ -38,8 +38,9 @@ import { PlayerRegistrationForm } from "@/interfaces/player"
 import { reactive, ref } from "vue"
 import { useRegisterPlayer } from "@/backend/registration"
 import ViewPlayerForm from "@/components/views/player/ViewPlayerForm.vue"
+import { Language } from "@/interfaces/competition"
 
-const { t } = useI18n()
+const { locale, t } = useI18n()
 const toast = useToast()
 const form = ref<InstanceType<typeof ViewPlayerForm> | null>(null)
 
@@ -49,11 +50,16 @@ const {
 	isSuccess,
 } = useRegisterPlayer(t, toast)
 
+const langMap: Record<string, Language> = {
+	en: Language.EN,
+	de: Language.DE,
+}
 const player = reactive<PlayerRegistrationForm>({
 	firstName: "",
 	lastName: "",
 	sex: undefined,
 	birthday: undefined,
+	language: langMap[locale.value],
 	email: "",
 	phone: "",
 })

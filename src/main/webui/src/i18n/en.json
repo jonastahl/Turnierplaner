@@ -71,6 +71,11 @@
 			"Option1": "Men",
 			"Option2": "Woman"
 		},
+		"language": {
+			"field": "Language",
+			"prompt": "Please select your language",
+			"select": "Select"
+		},
 		"birthdate": {
 			"field": "Birthdate",
 			"prompt": "Please input your birthdate"
@@ -279,6 +284,11 @@
 		"user": "User management",
 		"player": "Player management",
 		"player_updated": "Player updated",
-		"player_update_headline": "Update player"
+		"player_update_headline": "Update player",
+		"language": "Language"
+	},
+	"language": {
+		"en": "English",
+		"de": "German"
 	}
 }

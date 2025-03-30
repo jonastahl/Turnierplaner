@@ -71,6 +71,11 @@
 			"Option1": "Männlich",
 			"Option2": "Weiblich"
 		},
+		"language": {
+			"field": "Sprache",
+			"prompt": "Bitte wähle deine Sprache",
+			"select": "Bitte wählen sie aus"
+		},
 		"birthdate": {
 			"field": "Geburtstag",
 			"prompt": "Bitte geben Sie Ihren Geburtstag ein"
@@ -278,6 +283,11 @@
 		"user": "Benutzerverwaltung",
 		"player": "Spielerverwaltung",
 		"player_updated": "Spieler aktualisiert",
-		"player_update_headline": "Spieler aktualisieren"
+		"player_update_headline": "Spieler aktualisieren",
+		"language": "Sprache"
+	},
+	"language": {
+		"en": "Englisch",
+		"de": "Deutsch"
 	}
 }

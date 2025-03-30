@@ -14,6 +14,7 @@ export function useRegisterPlayer(
 				lastName: reg.lastName,
 				sex: reg.sex,
 				birthday: dateToJson(reg.birthday),
+				language: reg.language,
 				email: reg.email,
 				phone: reg.phone,
 			})
