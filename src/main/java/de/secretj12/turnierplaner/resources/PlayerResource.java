@@ -9,6 +9,7 @@ import de.secretj12.turnierplaner.db.repositories.CompetitionRepository;
 import de.secretj12.turnierplaner.db.repositories.DefaultConfigRepository;
 import de.secretj12.turnierplaner.db.repositories.PlayerRepository;
 import de.secretj12.turnierplaner.db.repositories.VerificationCodeRepository;
+import de.secretj12.turnierplaner.mails.MailTemplates;
 import de.secretj12.turnierplaner.model.director.jDirectorPlayer;
 import de.secretj12.turnierplaner.model.director.jDirectorPlayerUpdateForm;
 import de.secretj12.turnierplaner.model.jPage;

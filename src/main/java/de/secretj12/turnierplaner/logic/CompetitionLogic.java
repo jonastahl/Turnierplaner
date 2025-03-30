@@ -8,7 +8,7 @@ import de.secretj12.turnierplaner.db.repositories.*;
 import de.secretj12.turnierplaner.enums.*;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorCompetitionAdd;
 import de.secretj12.turnierplaner.model.user.jUserPlayerSignUpForm;
-import de.secretj12.turnierplaner.resources.MailTemplates;
+import de.secretj12.turnierplaner.mails.MailTemplates;
 import de.secretj12.turnierplaner.resources.PlayerResource;
 import de.secretj12.turnierplaner.tools.CommonHelpers;
 import de.secretj12.turnierplaner.tools.GroupTools;

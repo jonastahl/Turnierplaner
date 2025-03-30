@@ -10,15 +10,15 @@
 			<td class="wrapper"
 					style="font-family: Helvetica, sans-serif; font-size: 16px; vertical-align: top; box-sizing: border-box; padding: 24px;"
 					valign="top">
-				<p
-					style="font-family: Helvetica, sans-serif; font-size: 28px; font-weight: bold; margin: 0; margin-bottom: 16px;">
-					Hallo {firstName}</p>
-				<p
-					style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
-					Du wurdest für die Konkurrenz {competitionName} - {competitionDescription} erfolgreich angemeldet.</p>
-				<p
-					style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
-					Danke für das Nutzen des Turnierplaners!</p>
+				<p style="font-family: Helvetica, sans-serif; font-size: 28px; font-weight: bold; margin: 0; margin-bottom: 16px;">
+					{msg:helloName(firstName)}
+				</p>
+				<p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
+					{msg:registeredFor(competitionName, competitionDescription)}
+				</p>
+				<p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
+					{msg:thanksForUsing()}
+				</p>
 			</td>
 		</tr>
 
