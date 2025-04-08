@@ -248,7 +248,8 @@
 			"teams": "Teams",
 			"ranking": "Ranking",
 			"knockout_not_assigned": "Not all players have been assigned yet"
-		}
+		},
+		"overview": "Overview"
 	},
 	"validation": {
 		"field_invalid": "Field is invalid",

@@ -247,7 +247,8 @@
 			"teams": "Teams",
 			"ranking": "Rangliste",
 			"knockout_not_assigned": "Es wurden noch nicht alle Spieler zugeteilt"
-		}
+		},
+		"overview": "Übersicht"
 	},
 	"validation": {
 		"field_invalid": "Feld ist ungültig",

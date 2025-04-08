@@ -178,14 +178,14 @@ function selected(competition: string) {
 function prepare() {
 	if (competitions.value)
 		router.push({
-			name: "Edit competition",
+			name: "Prepare competition",
 			params: { tourId: route.params.tourId },
 		})
 }
 
 function settingsItem(competition: string) {
 	router.push({
-		name: "Edit competition",
+		name: "Prepare competition",
 		params: { tourId: route.params.tourId, compId: competition },
 	})
 }

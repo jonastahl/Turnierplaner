@@ -48,7 +48,7 @@ export default [
 	},
 	{
 		path: "/tournament/:tourId/prepare/:compId?",
-		name: "Edit competition",
+		name: "Prepare competition",
 		component: () =>
 			import("@/components/views/prepare/ViewPrepareMatches.vue"),
 		children: [
@@ -85,6 +85,12 @@ export default [
 				meta: { step: 4, reset: false },
 			},
 		],
+	},
+	{
+		path: "/tournament/:tourId/prepareOverview",
+		name: "Prepare competition overview",
+		component: () =>
+			import("@/components/views/prepare/ViewPrepareMatches.vue"),
 	},
 	{
 		path: "/player/registration",
