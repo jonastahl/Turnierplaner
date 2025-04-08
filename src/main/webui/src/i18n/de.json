@@ -225,6 +225,7 @@
 			"editTeams": "Teams auslosen",
 			"assignMatches": "Spiele auslosen",
 			"scheduleMatches": "Zeiteinteilung",
+			"done": "Abgeschlossen",
 			"previous": "Zurück",
 			"next": "Weiter",
 			"invalid_step": {
@@ -232,6 +233,7 @@
 				"detail": "Vorherige Schritte wurden noch nicht erledigt"
 			}
 		},
+		"prepare": "Vorbereiten",
 		"editTeams": {
 			"deleteBox": "Löschen",
 			"randomize": "Auslosen",

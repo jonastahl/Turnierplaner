@@ -18,14 +18,11 @@
 						</div>
 					</template>
 				</TabMenu>
-				<Steps
+				<ViewSteps
 					v-if="route.name !== 'Prepare competition overview'"
 					:active-step="<number>route.meta.step - 1"
-					:model="stepList"
-					:readonly="true"
 					class="mt-5"
-				>
-				</Steps>
+				/>
 			</template>
 			<template #content>
 				<template v-if="route.name !== 'Prepare competition overview'">
@@ -36,55 +33,59 @@
 							v-model:is-updating="isUpdating"
 						/>
 					</router-view>
-
-					<div class="mt-2 grid grid-nogutter justify-content-between">
-						<Button
-							:style="{
-								visibility: route.meta.step !== 1 ? 'visible' : 'hidden',
-							}"
-							:disabled="route.meta.step === 1 || isUpdating"
-							:label="t('general.back')"
-							icon="pi pi-angle-left"
-							icon-pos="left"
-							@click="prevPage"
-						/>
-						<Button
-							v-if="route.meta.reset"
-							:disabled="isUpdating"
-							:label="t('general.reset')"
-							severity="danger"
-							@click="reset"
-						/>
-						<Button
-							:disabled="isUpdating"
-							:label="t('general.save')"
-							severity="success"
-							@click="save"
-						/>
-						<Button
-							v-if="route.meta.step !== 4"
-							:disabled="
-								isUpdating ||
-								!competition ||
-								<number>route.meta.step >= progressOrder(competition.cProgress)
-							"
-							icon="pi pi-angle-right"
-							icon-pos="right"
-							:label="t('general.next')"
-							@click="nextPage"
-						/>
-						<Button
-							v-else
-							:disabled="isUpdating"
-							label="Complete"
-							icon="pi pi-check"
-							icon-pos="right"
-							class="p-button-success"
-							@click="nextPage"
-						/>
-					</div>
 				</template>
 				<ViewPrepareOverview v-else />
+			</template>
+			<template #footer>
+				<div
+					v-if="route.name !== 'Prepare competition overview'"
+					class="mt-2 grid grid-nogutter justify-content-between"
+				>
+					<Button
+						:style="{
+							visibility: route.meta.step !== 1 ? 'visible' : 'hidden',
+						}"
+						:disabled="route.meta.step === 1 || isUpdating"
+						:label="t('general.back')"
+						icon="pi pi-angle-left"
+						icon-pos="left"
+						@click="prevPage"
+					/>
+					<Button
+						v-if="route.meta.reset"
+						:disabled="isUpdating"
+						:label="t('general.reset')"
+						severity="danger"
+						@click="reset"
+					/>
+					<Button
+						:disabled="isUpdating"
+						:label="t('general.save')"
+						severity="success"
+						@click="save"
+					/>
+					<Button
+						v-if="route.meta.step !== 4"
+						:disabled="
+							isUpdating ||
+							!competition ||
+							<number>route.meta.step >= progressOrder(competition.cProgress)
+						"
+						icon="pi pi-angle-right"
+						icon-pos="right"
+						:label="t('general.next')"
+						@click="nextPage"
+					/>
+					<Button
+						v-else
+						:disabled="isUpdating"
+						label="Complete"
+						icon="pi pi-check"
+						icon-pos="right"
+						class="p-button-success"
+						@click="nextPage"
+					/>
+				</div>
 			</template>
 		</Card>
 	</div>
@@ -100,17 +101,13 @@ import {
 	getCompetitionDetails,
 	getCompetitionsList,
 } from "@/backend/competition"
-import Steps from "primevue/steps"
 import { Progress, progressOrder } from "@/interfaces/competition"
 import Button from "primevue/button"
 import ViewEditTeams from "@/components/views/prepare/editTeams/ViewEditTeams.vue"
 import ViewPrepareOverview from "@/components/views/prepare/ViewPrepareOverview.vue"
+import ViewSteps from "@/components/views/prepare/ViewSteps.vue"
 
 const { t } = useI18n()
-
-function $t(name: string) {
-	return computed(() => t(name))
-}
 
 const router = useRouter()
 const route = useRoute()
@@ -154,7 +151,9 @@ function updateRoute(compId?: string | null) {
 	if (!competitions.value.find((c) => c.name === compId)) compId = null
 
 	activeTab.value =
-		compId === null ? 0 : competitions.value.findIndex((c) => c.name === compId)
+		compId === null
+			? 0
+			: competitions.value.findIndex((c) => c.name === compId) + 1
 
 	if (compId === null) {
 		router.replace({
@@ -176,7 +175,7 @@ function updateRoute(compId?: string | null) {
 			step = undefined
 		}
 		if (route.meta.step === undefined || !step) {
-			switch (competitions.value[activeTab.value].cProgress) {
+			switch (competitions.value[activeTab.value - 1].cProgress) {
 				case Progress.TEAMS:
 					step = "editTeams"
 					break
@@ -221,29 +220,6 @@ function save() {
 function nextPage() {
 	if (curPrepStep.value) curPrepStep.value.nextPage()
 }
-
-const stepList = ref([
-	{
-		label: <string>(<unknown>$t("general.settings")),
-		name: "settings",
-		index: 1,
-	},
-	{
-		label: <string>(<unknown>$t("ViewPrepare.steps.editTeams")),
-		name: "editTeams",
-		index: 2,
-	},
-	{
-		label: <string>(<unknown>$t("ViewPrepare.steps.assignMatches")),
-		name: "assignMatches",
-		index: 3,
-	},
-	{
-		label: <string>(<unknown>$t("ViewPrepare.steps.scheduleMatches")),
-		name: "scheduleMatches",
-		index: 4,
-	},
-])
 </script>
 
 <style scoped>

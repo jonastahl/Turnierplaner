@@ -226,6 +226,7 @@
 			"editTeams": "Edit teams",
 			"assignMatches": "Assign matches",
 			"scheduleMatches": "Schedule matches",
+			"done": "Completed",
 			"previous": "Previous",
 			"next": "Next",
 			"invalid_step": {
@@ -233,6 +234,7 @@
 				"detail": "Previous steps need to be fulfilled first"
 			}
 		},
+		"prepare": "Prepare",
 		"editTeams": {
 			"deleteBox": "Drop to delete",
 			"randomize": "Randomize",
