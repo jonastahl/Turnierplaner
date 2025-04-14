@@ -51,8 +51,8 @@
 import { KnockoutMatch } from "@/interfaces/knockoutSystem"
 import { ref, TransitionGroup, watch } from "vue"
 import DraggablePanel from "@/draggable/DraggablePanel.vue"
-import TeamCard from "@/components/views/prepare/components/TeamCard.vue"
-import MatchBox from "@/components/views/prepare/components/MatchBox.vue"
+import TeamCard from "@/components/views/compManage/prepare/components/TeamCard.vue"
+import MatchBox from "@/components/views/compManage/prepare/components/MatchBox.vue"
 import { Team } from "@/interfaces/team"
 
 const props = defineProps<{ match: KnockoutMatch; animated: boolean }>()

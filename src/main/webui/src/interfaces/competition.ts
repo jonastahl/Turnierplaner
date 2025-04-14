@@ -35,16 +35,19 @@ export enum Progress {
 	TEAMS = "TEAMS",
 	GAMES = "GAMES",
 	SCHEDULING = "SCHEDULING",
+	PUBLISHING = "PUBLISHING",
 	DONE = "DONE",
 }
 
 export function progressOrder(progress: Progress) {
 	switch (progress) {
 		case Progress.TEAMS:
-			return 2
+			return 1
 		case Progress.GAMES:
-			return 3
+			return 2
 		case Progress.SCHEDULING:
+			return 3
+		case Progress.PUBLISHING:
 			return 4
 		case Progress.DONE:
 			return 5

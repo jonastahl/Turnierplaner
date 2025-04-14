@@ -8,45 +8,43 @@
 			/>
 			<Knockout v-else ref="knockoutRef" v-model:is-updating="isUpdating" />
 		</Transition>
+		<NavigationButtons
+			:loading="isUpdating"
+			reload
+			@reset="resetDialog = true"
+			@reload="reload"
+			@save="save"
+			@complete="complete"
+		/>
 	</div>
+	<DialogResetProgress v-model="resetDialog" />
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from "vue-router"
+import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
 import { CompType } from "@/interfaces/competition"
-import Groups from "@/components/views/prepare/assignMatches/AssignMatchesGroups.vue"
-import AssignMatchesGroups from "@/components/views/prepare/assignMatches/AssignMatchesGroups.vue"
-import Knockout from "@/components/views/prepare/assignMatches/AssignMatchesKnockout.vue"
-import AssignMatchesKnockout from "@/components/views/prepare/assignMatches/AssignMatchesKnockout.vue"
+import Groups from "@/components/views/compManage/prepare/assignMatches/AssignMatchesGroups.vue"
+import AssignMatchesGroups from "@/components/views/compManage/prepare/assignMatches/AssignMatchesGroups.vue"
+import Knockout from "@/components/views/compManage/prepare/assignMatches/AssignMatchesKnockout.vue"
+import AssignMatchesKnockout from "@/components/views/compManage/prepare/assignMatches/AssignMatchesKnockout.vue"
 import { ref } from "vue"
 import { getCompetitionDetails } from "@/backend/competition"
+import NavigationButtons from "@/components/views/compManage/prepare/components/NavigationButtons.vue"
+import DialogResetProgress from "@/components/views/compManage/prepare/DialogResetProgress.vue"
 
 const route = useRoute()
-const router = useRouter()
 const toast = useToast()
 const { t } = useI18n()
 
-const isUpdating = defineModel<boolean>("isUpdating", { default: false })
+const isUpdating = ref(false)
 const knockoutRef = ref<InstanceType<typeof AssignMatchesKnockout> | null>(null)
 const groupsRef = ref<InstanceType<typeof AssignMatchesGroups> | null>(null)
 
 const { data: competition } = getCompetitionDetails(route, t, toast)
 
-function prevPage() {
-	router.replace({
-		name: "editTeams",
-		params: { tourId: route.params.tourId, compId: route.params.compId },
-	})
-}
-
-function nextPage() {
-	router.replace({
-		name: "scheduleMatches",
-		params: { tourId: route.params.tourId, compId: route.params.compId },
-	})
-}
+const resetDialog = ref(false)
 
 function save() {
 	if (competition.value?.tourType === CompType.GROUPS) {
@@ -58,7 +56,17 @@ function save() {
 	}
 }
 
-function reset() {
+function complete() {
+	if (competition.value?.tourType === CompType.GROUPS) {
+		if (groupsRef.value === null) return
+		groupsRef.value.save(true)
+	} else {
+		if (knockoutRef.value === null) return
+		knockoutRef.value.save(true)
+	}
+}
+
+function reload() {
 	if (competition.value?.tourType === CompType.GROUPS) {
 		if (groupsRef.value === null) return
 		groupsRef.value.reload()
@@ -67,8 +75,6 @@ function reset() {
 		knockoutRef.value.reload()
 	}
 }
-
-defineExpose({ prevPage, save, reset, nextPage })
 </script>
 
 <style scoped>

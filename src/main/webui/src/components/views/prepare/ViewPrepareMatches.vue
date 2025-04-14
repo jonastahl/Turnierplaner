@@ -18,7 +18,7 @@
 						</div>
 					</template>
 				</TabMenu>
-				<ViewSteps
+				<ViewPrepareSteps
 					v-if="route.name !== 'Prepare competition overview'"
 					:active-step="<number>route.meta.step - 1"
 					class="mt-5"
@@ -60,12 +60,13 @@
 					/>
 					<Button
 						:disabled="isUpdating"
+						v-if="route.meta.step !== 5"
 						:label="t('general.save')"
 						severity="success"
 						@click="save"
 					/>
 					<Button
-						v-if="route.meta.step !== 4"
+						v-if="<number>route.meta.step !== 4"
 						:disabled="
 							isUpdating ||
 							!competition ||
@@ -78,7 +79,11 @@
 					/>
 					<Button
 						v-else
-						:disabled="isUpdating"
+						:disabled="
+							isUpdating ||
+							!competition ||
+							<number>route.meta.step >= progressOrder(competition.cProgress)
+							"
 						label="Complete"
 						icon="pi pi-check"
 						icon-pos="right"
@@ -103,9 +108,9 @@ import {
 } from "@/backend/competition"
 import { Progress, progressOrder } from "@/interfaces/competition"
 import Button from "primevue/button"
-import ViewEditTeams from "@/components/views/prepare/editTeams/ViewEditTeams.vue"
-import ViewPrepareOverview from "@/components/views/prepare/ViewPrepareOverview.vue"
-import ViewSteps from "@/components/views/prepare/ViewSteps.vue"
+import ViewEditTeams from "@/components/views/compManage/prepare/editTeams/ViewEditTeams.vue"
+import ViewPrepareOverview from "@/components/views/compManage/prepare/ViewPrepareOverview.vue"
+import ViewPrepareSteps from "@/components/views/compManage/prepare/ViewPrepareSteps.vue"
 
 const { t } = useI18n()
 

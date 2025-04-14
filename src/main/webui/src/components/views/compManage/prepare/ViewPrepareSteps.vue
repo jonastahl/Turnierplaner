@@ -1,5 +1,9 @@
 <template>
-	<Steps :active-step="props.activeStep" :model="stepList" :readonly="true" />
+	<Steps
+		:active-step="props.activeStep - 1"
+		:model="stepList"
+		:readonly="true"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -24,35 +28,30 @@ function $t(name: string) {
 }
 
 const stepList = computed(() => [
-	...(props.overview
-		? []
-		: [
-				{
-					label: <string>(<unknown>$t("general.settings")),
-					name: "first",
-					index: 1,
-				},
-			]),
 	{
 		label: <string>(<unknown>$t("ViewPrepare.steps.editTeams")),
 		name: "editTeams",
-		index: 2,
 	},
 	{
 		label: <string>(<unknown>$t("ViewPrepare.steps.assignMatches")),
 		name: "assignMatches",
-		index: 3,
 	},
 	{
 		label: <string>(<unknown>$t("ViewPrepare.steps.scheduleMatches")),
 		name: "scheduleMatches",
-		index: 4,
 	},
-	{
-		label: <string>(<unknown>$t("ViewPrepare.steps.done")),
-		name: "done",
-		index: 5,
-	},
+	...(props.overview
+		? [
+				{
+					label: <string>(<unknown>$t("ViewPrepare.steps.publishing")),
+					name: "publishing",
+				},
+				{
+					label: <string>(<unknown>$t("ViewPrepare.steps.done")),
+					name: "done",
+				},
+			]
+		: []),
 ])
 </script>
 

@@ -16,6 +16,11 @@
 					@submit="submit"
 				/>
 			</template>
+			<template #footer>
+				<div class="flex flex-row justify-content-end">
+					<Button :label="t('general.save')" severity="success" @click="save" />
+				</div>
+			</template>
 		</Card>
 	</div>
 </template>
@@ -68,15 +73,6 @@ function save() {
 function submit(server_data: CompetitionServer) {
 	mutate(server_data)
 }
-
-function nextPage() {
-	router.replace({
-		name: "editTeams",
-		params: { tourId: route.params.tourId, compId: route.params.compId },
-	})
-}
-
-defineExpose({ save, nextPage })
 </script>
 
 <style scoped>

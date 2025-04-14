@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { AnnotatedMatch } from "@/interfaces/match"
 import ViewCalendar from "@/calendar/ViewCalendar.vue"
-import MatchEvent from "@/components/views/prepare/scheduleMatches/MatchEvent.vue"
+import MatchEvent from "@/components/views/compManage/prepare/scheduleMatches/MatchEvent.vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
@@ -29,7 +29,7 @@ import {
 	getTournamentDetails,
 	getTournamentMatchEvents,
 } from "@/backend/tournament"
-import { MatchCalEvent } from "@/components/views/prepare/scheduleMatches/ScheduleMatchesHelper"
+import { MatchCalEvent } from "@/components/views/compManage/prepare/scheduleMatches/ScheduleMatchesHelper"
 
 const route = useRoute()
 const { t } = useI18n()

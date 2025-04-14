@@ -47,42 +47,71 @@ export default [
 			import("@/components/views/competition/ViewCompetition.vue"),
 	},
 	{
-		path: "/tournament/:tourId/prepare/:compId?",
-		name: "Prepare competition",
+		path: "/tournament/:tourId/manage",
+		name: "Manage competition",
 		component: () =>
-			import("@/components/views/prepare/ViewPrepareMatches.vue"),
+			import("@/components/views/compManage/ViewManageCompetitions.vue"),
 		children: [
 			{
-				path: "settings",
-				name: "settings",
+				path: "settings/:compId?",
+				name: "Manage settings",
 				component: () =>
-					import("@/components/views/prepare/ViewEditCompetition.vue"),
-				meta: { step: 1, reset: false },
+					import("@/components/views/compManage/settings/ViewSettings.vue"),
+				meta: {
+					overview: false,
+					mStep: "Manage settings",
+				},
 			},
 			{
-				path: "editTeams",
-				name: "editTeams",
-				component: () =>
-					import("@/components/views/prepare/editTeams/ViewEditTeams.vue"),
-				meta: { step: 2, reset: true },
-			},
-			{
-				path: "assignMatches",
-				name: "assignMatches",
+				path: "prepare/:compId?",
+				name: "Manage prepare",
 				component: () =>
 					import(
-						"@/components/views/prepare/assignMatches/ViewAssignMatches.vue"
+						"@/components/views/compManage/prepare/ViewPrepareMatches.vue"
 					),
-				meta: { step: 3, reset: true },
+				meta: {
+					overview: true,
+					mStep: "Manage prepare",
+				},
+				children: [
+					{
+						path: "editTeams",
+						name: "editTeams",
+						component: () =>
+							import(
+								"@/components/views/compManage/prepare/editTeams/ViewEditTeams.vue"
+							),
+						meta: { step: 1, reset: true },
+					},
+					{
+						path: "assignMatches",
+						name: "assignMatches",
+						component: () =>
+							import(
+								"@/components/views/compManage/prepare/assignMatches/ViewAssignMatches.vue"
+							),
+						meta: { step: 2, reset: true },
+					},
+					{
+						path: "scheduleMatches",
+						name: "scheduleMatches",
+						component: () =>
+							import(
+								"@/components/views/compManage/prepare/scheduleMatches/ViewScheduleMatches.vue"
+							),
+						meta: { step: 3, reset: false },
+					},
+				],
 			},
 			{
-				path: "scheduleMatches",
-				name: "scheduleMatches",
+				path: "execution/:compId",
+				name: "Manage execution",
 				component: () =>
-					import(
-						"@/components/views/prepare/scheduleMatches/ViewScheduleMatches.vue"
-					),
-				meta: { step: 4, reset: false },
+					import("@/components/views/compManage/settings/ViewSettings.vue"),
+				meta: {
+					overview: true,
+					mStep: "Manage execution",
+				},
 			},
 		],
 	},

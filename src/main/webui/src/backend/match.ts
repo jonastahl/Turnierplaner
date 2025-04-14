@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/vue-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 import {
 	AnnotatedMatch,
 	AnnotatedMatchServer,
@@ -16,11 +16,15 @@ export function useUpdateMatches(
 	t: (s: string) => string,
 	toast: ToastServiceMethods,
 ) {
+	const queryClient = useQueryClient()
 	return useMutation({
-		mutationFn: (matches: Match[]) =>
+		mutationFn: (data: { complete: boolean; matches: Match[] }) =>
 			axios.post(
-				`/tournament/${<string>route.params.tourId}/competition/${<string>route.params.compId}/match`,
-				matches.map(matchClientToServer),
+				`/tournament/${<string>route.params.tourId}/competition/${<string>route.params.compId}/updateSchedule`,
+				{
+					complete: data.complete,
+					data: data.matches.map(matchClientToServer),
+				},
 			),
 		onSuccess() {
 			toast.add({
@@ -28,6 +32,18 @@ export function useUpdateMatches(
 				summary: t("general.success"),
 				detail: t("general.saved"),
 				life: 3000,
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["competitionList", route.params.tourId],
+				refetchType: "all",
+			})
+			queryClient.invalidateQueries({
+				queryKey: [
+					"competitionDetails",
+					route.params.tourId,
+					route.params.compId,
+				],
+				refetchType: "all",
 			})
 		},
 		onError(error) {

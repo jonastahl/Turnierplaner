@@ -29,6 +29,8 @@ public class MatchRepository implements PanacheRepository<Match> {
     FinalOfGroupRepository finalOfGroups;
     @Inject
     MatchOfGroupRepository matchOfGroups;
+    @Inject
+    GroupRepository groups;
 
 
     public Match findById(UUID id) {
@@ -36,7 +38,20 @@ public class MatchRepository implements PanacheRepository<Match> {
     }
 
     public void deleteByComp(Competition competition) {
+        if (competition.getFinale() != null)
+            deleteMatch(competition.getFinale());
+        competition.setFinale(null);
+        competition.setThirdPlace(null);
         delete("#deleteByComp", Parameters.with("comp", competition));
+    }
+
+    private void deleteMatch(Match m) {
+        if (m.getDependentOn() != null) {
+            deleteMatch(m.getDependentOn().getPreviousA());
+            deleteMatch(m.getDependentOn().getPreviousB());
+        } else {
+            delete(m);
+        }
     }
 
     public List<Match> nonGroupMatches(Competition competition) {

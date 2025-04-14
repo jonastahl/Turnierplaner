@@ -81,13 +81,13 @@ import { Team } from "@/interfaces/team"
 import { getCompetitionDetails } from "@/backend/competition"
 import { getSignedUp } from "@/backend/signup"
 import { getGroupsDivision, useInitGroups } from "@/backend/group"
-import TeamContainerDraggable from "@/components/views/prepare/components/TeamContainerDraggable.vue"
+import TeamContainerDraggable from "@/components/views/compManage/prepare/components/TeamContainerDraggable.vue"
 import { sleep, track } from "@/backend/Tracker"
 import {
 	genRandomizeItems,
 	getDelays,
 	selectRandomElement,
-} from "@/components/views/prepare/assignMatches/AssginMatchesHelper"
+} from "@/components/views/compManage/prepare/assignMatches/AssginMatchesHelper"
 
 const route = useRoute()
 const toast = useToast()
@@ -182,7 +182,7 @@ async function reroll() {
 	await randomize()
 }
 
-function save() {
+function save(complete = false) {
 	if (isUpdating.value) return
 
 	if (data.value.groups.some((g) => g.length <= 1)) {
@@ -196,7 +196,7 @@ function save() {
 		return
 	}
 
-	initGroups(data.value.groups)
+	initGroups({ complete, groups: data.value.groups })
 }
 
 function adjustSize(size: number) {

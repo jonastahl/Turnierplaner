@@ -78,7 +78,7 @@ export function getCompetitionDetails(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("ViewEditCompetition.loadingDetailsFailed"),
+						summary: t("ViewSettings.loadingDetailsFailed"),
 						detail: error,
 						life: 3000,
 					})
@@ -294,4 +294,55 @@ function signUpOptions(
 				})
 		},
 	}
+}
+
+export function useResetPreparation(
+	route: RouteLocationNormalizedLoaded,
+	t: (s: string) => string,
+	toast: ToastServiceMethods,
+) {
+	const queryClient = useQueryClient()
+	return useMutation({
+		mutationFn: () =>
+			axios.post(
+				`/tournament/${<string>route.params.tourId}/competition/${<string>route.params.compId}/resetPreparation`,
+			),
+		onSuccess() {
+			toast.add({
+				severity: "success",
+				summary: t("general.success"),
+				detail: t("general.saved"),
+				life: 3000,
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["competitionList"],
+				refetchType: "all",
+			})
+			queryClient.invalidateQueries({
+				queryKey: [
+					"competitionDetails",
+					route.params.tourId,
+					route.params.compId,
+				],
+				refetchType: "all",
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["knockout", route.params.tourId, route.params.compId],
+				refetchType: "all",
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["groupsDivision", route.params.tourId, route.params.compId],
+				refetchType: "all",
+			})
+		},
+		onError(error) {
+			toast.add({
+				severity: "error",
+				summary: t("general.failure"),
+				detail: t("general.failure"),
+				life: 3000,
+			})
+			console.log(error)
+		},
+	})
 }

@@ -77,13 +77,16 @@ export function useInitGroups(
 ) {
 	const queryClient = useQueryClient()
 	return useMutation({
-		mutationFn: async (groups: Team[][]) => {
+		mutationFn: async (data: { complete: boolean; groups: Team[][] }) => {
 			return axios.post<boolean>(
 				`/tournament/${route.params.tourId}/competition/${route.params.compId}/initGroups`,
 				{
-					groups: groups.map((group) =>
-						group.map((t) => teamClientToServer(t)),
-					),
+					complete: data.complete,
+					data: {
+						groups: data.groups.map((group) =>
+							group.map((t) => teamClientToServer(t)),
+						),
+					},
 				},
 			)
 		},

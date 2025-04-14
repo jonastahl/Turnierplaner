@@ -89,12 +89,12 @@
 </template>
 
 <script lang="ts" setup>
-import TeamBox from "@/components/views/prepare/components/TeamBox.vue"
+import TeamBox from "@/components/views/compManage/prepare/components/TeamBox.vue"
 import { Competition } from "@/interfaces/competition"
 import { TransitionGroup } from "vue"
 import { v4 as uuidv4 } from "uuid"
 import DraggablePanel from "@/draggable/DraggablePanel.vue"
-import PlayerCard from "@/components/views/prepare/components/PlayerCard.vue"
+import PlayerCard from "@/components/views/compManage/prepare/components/PlayerCard.vue"
 import { Player, playerServerToClient } from "@/interfaces/player"
 import { TeamArray } from "@/interfaces/team"
 
