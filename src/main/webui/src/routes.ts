@@ -116,12 +116,6 @@ export default [
 		],
 	},
 	{
-		path: "/tournament/:tourId/prepareOverview",
-		name: "Prepare competition overview",
-		component: () =>
-			import("@/components/views/prepare/ViewPrepareMatches.vue"),
-	},
-	{
 		path: "/player/registration",
 		name: "Player registration",
 		component: () =>
