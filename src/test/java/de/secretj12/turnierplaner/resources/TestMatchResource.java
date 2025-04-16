@@ -1,7 +1,9 @@
 package de.secretj12.turnierplaner.resources;
 
-import de.secretj12.turnierplaner.db.entities.*;
-import de.secretj12.turnierplaner.db.entities.competition.*;
+import de.secretj12.turnierplaner.db.entities.Court;
+import de.secretj12.turnierplaner.db.entities.Match;
+import de.secretj12.turnierplaner.db.entities.Tournament;
+import de.secretj12.turnierplaner.db.entities.competition.Competition;
 import de.secretj12.turnierplaner.db.repositories.CompetitionRepository;
 import de.secretj12.turnierplaner.db.repositories.CourtRepositiory;
 import de.secretj12.turnierplaner.db.repositories.MatchRepository;
@@ -22,7 +24,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
-import static de.secretj12.turnierplaner.enums.CreationProgress.TEAMS;
+import static de.secretj12.turnierplaner.enums.CreationProgress.SCHEDULING;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -65,7 +67,7 @@ public class TestMatchResource {
         comp.setMode(CompetitionMode.SINGLE);
         comp.setType(CompetitionType.KNOCKOUT);
         comp.setPlayerASex(SexFilter.MALE);
-        comp.setcProgress(TEAMS);
+        comp.setcProgress(SCHEDULING);
         comp.setSignup(CompetitionSignUp.INDIVIDUAL);
         comp.setPlayerASex(SexFilter.ANY);
         comp.setTournament(tour);
@@ -78,7 +80,7 @@ public class TestMatchResource {
         comp2.setMode(CompetitionMode.SINGLE);
         comp2.setType(CompetitionType.KNOCKOUT);
         comp2.setPlayerASex(SexFilter.MALE);
-        comp2.setcProgress(TEAMS);
+        comp2.setcProgress(SCHEDULING);
         comp2.setSignup(CompetitionSignUp.INDIVIDUAL);
         comp2.setPlayerASex(SexFilter.ANY);
         comp2.setTournament(tour);
@@ -115,37 +117,41 @@ public class TestMatchResource {
 
     private String updateJSON() {
         return String.format("""
-            [
-              {
-                "id": "%s",
-                "court": "Court 2",
-                "begin": "%s",
-                "end": "%s"
-              },
-              {
-                "id": "%s",
-                "court": "Court 3",
-                "begin": "%s",
-                "end": "%s"
-              }
-            ]""", matchE.getId(), beginE, endE, matchF.getId(), beginF, endF);
+                                 {
+                                     "complete": false,
+                                     "data": [
+                                         {
+                                             "id": "%s",
+                                             "court": "Court 2",
+                                             "begin": "%s",
+                                             "end": "%s"
+                                         },
+                                         {
+                                             "id": "%s",
+                                             "court": "Court 3",
+                                             "begin": "%s",
+                                             "end": "%s"
+                                         }
+                                     ]
+                                 }""", matchE.getId(), beginE, endE, matchF.getId(), beginF, endF);
     }
 
     @Test
     @TestSecurity(user = "testUser", roles = {"director"})
-    public void testUpdateMatch() throws SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
+    public void testUpdateMatch() throws SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException,
+                                         RollbackException {
         given()
             .contentType(ContentType.JSON)
             .body(updateJSON())
-            .post("/tournament/Clubmeisterschaft/competition/Herren/match")
+            .post("/tournament/Clubmeisterschaft/competition/Herren/updateSchedule")
             .then().assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
         Panache.getTransactionManager().begin();
         Match matchE = matches.findById(this.matchE.getId());
         Match matchF = matches.findById(this.matchF.getId());
-        assertEquals(matchE.getCourt().getName(), "Court 2");
-        assertEquals(matchF.getCourt().getName(), "Court 3");
+        assertEquals("Court 2", matchE.getCourt().getName());
+        assertEquals("Court 3", matchF.getCourt().getName());
 
         assertEquals(matchE.getBegin(), beginE);
         assertEquals(matchF.getBegin(), beginF);
@@ -160,7 +166,7 @@ public class TestMatchResource {
         given()
             .contentType(ContentType.JSON)
             .body(updateJSON())
-            .post("/tournament/Clubmeisterschaft/competition/Herren/match")
+            .post("/tournament/Clubmeisterschaft/competition/Herren/updateSchedule")
             .then().assertThat()
             .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
@@ -172,7 +178,7 @@ public class TestMatchResource {
         given()
             .contentType(ContentType.JSON)
             .body(updateJSON())
-            .post("/tournament/Random turnier/competition/Herren/match")
+            .post("/tournament/Random turnier/competition/Herren/updateSchedule")
             .then().assertThat()
             .statusCode(Response.Status.NOT_FOUND.getStatusCode());
     }
@@ -183,7 +189,7 @@ public class TestMatchResource {
         given()
             .contentType(ContentType.JSON)
             .body(updateJSON())
-            .post("/tournament/Clubmeisterschaft/competition/Mixed/match")
+            .post("/tournament/Clubmeisterschaft/competition/Mixed/updateSchedule")
             .then().assertThat()
             .statusCode(Response.Status.NOT_FOUND.getStatusCode());
     }
@@ -194,7 +200,7 @@ public class TestMatchResource {
         given()
             .contentType(ContentType.JSON)
             .body(updateJSON())
-            .post("/tournament/Clubmeisterschaft/competition/Damen/match")
+            .post("/tournament/Clubmeisterschaft/competition/Damen/updateSchedule")
             .then().assertThat()
             .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }
@@ -205,15 +211,18 @@ public class TestMatchResource {
         given()
             .contentType(ContentType.JSON)
             .body(String.format("""
-                [
-                  {
-                    "id": "%s",
-                    "court": "Court 2",
-                    "begin": "%s",
-                    "end": "%s"
-                  }
-                ]""", UUID.randomUUID(), beginE, endE))
-            .post("/tournament/Clubmeisterschaft/competition/Damen/match")
+                                    {
+                                      "complete": false,
+                                      "data": [
+                                        {
+                                          "id": "%s",
+                                          "court": "Court 2",
+                                          "begin": "%s",
+                                          "end": "%s"
+                                        }
+                                      ]
+                                    }""", UUID.randomUUID(), beginE, endE))
+            .post("/tournament/Clubmeisterschaft/competition/Damen/updateSchedule")
             .then().assertThat()
             .statusCode(Response.Status.NOT_FOUND.getStatusCode());
     }

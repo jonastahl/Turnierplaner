@@ -1043,15 +1043,18 @@ public class TestCompetitionResource {
         given()
             .contentType(MediaType.APPLICATION_JSON)
             .body(String.format("""
-                [
-                    {
-                        "playerA": {
-                          "id": "%s",
-                          "firstName": "Anna",
-                          "lastName": "Gramm"
+                {
+                    "complete": false,
+                    "data": [
+                        {
+                            "playerA": {
+                              "id": "%s",
+                              "firstName": "Anna",
+                              "lastName": "Gramm"
+                            }
                         }
-                    }
-                ]
+                    ]
+                }
                 """, playerF.getId().toString()))
             .post("/tournament/Clubmeisterschaft 2021/competition/Herren/updateTeams")
             .then().assertThat()
@@ -1077,16 +1080,19 @@ public class TestCompetitionResource {
         given()
             .contentType(MediaType.APPLICATION_JSON)
             .body(String.format("""
-                [
-                    {
-                        "id": "%s",
-                        "playerA": {
-                          "id": "%s",
-                          "firstName": "Anna",
-                          "lastName": "Gramm"
+                {
+                    "complete": false,
+                    "data": [
+                        {
+                            "id": "%s",
+                            "playerA": {
+                              "id": "%s",
+                              "firstName": "Anna",
+                              "lastName": "Gramm"
+                            }
                         }
-                    }
-                ]
+                    ]
+                }
                 """, teamId, playerF.getId().toString()))
             .post("/tournament/Clubmeisterschaft 2021/competition/Herren/updateTeams")
             .then().assertThat()
