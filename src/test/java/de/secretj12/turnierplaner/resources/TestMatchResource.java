@@ -117,29 +117,28 @@ public class TestMatchResource {
 
     private String updateJSON() {
         return String.format("""
-                                 {
-                                     "complete": false,
-                                     "data": [
-                                         {
-                                             "id": "%s",
-                                             "court": "Court 2",
-                                             "begin": "%s",
-                                             "end": "%s"
-                                         },
-                                         {
-                                             "id": "%s",
-                                             "court": "Court 3",
-                                             "begin": "%s",
-                                             "end": "%s"
-                                         }
-                                     ]
-                                 }""", matchE.getId(), beginE, endE, matchF.getId(), beginF, endF);
+            {
+                "complete": false,
+                "data": [
+                    {
+                        "id": "%s",
+                        "court": "Court 2",
+                        "begin": "%s",
+                        "end": "%s"
+                    },
+                    {
+                        "id": "%s",
+                        "court": "Court 3",
+                        "begin": "%s",
+                        "end": "%s"
+                    }
+                ]
+            }""", matchE.getId(), beginE, endE, matchF.getId(), beginF, endF);
     }
 
     @Test
     @TestSecurity(user = "testUser", roles = {"director"})
-    public void testUpdateMatch() throws SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException,
-                                         RollbackException {
+    public void testUpdateMatch() throws SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
         given()
             .contentType(ContentType.JSON)
             .body(updateJSON())
@@ -211,17 +210,17 @@ public class TestMatchResource {
         given()
             .contentType(ContentType.JSON)
             .body(String.format("""
-                                    {
-                                      "complete": false,
-                                      "data": [
-                                        {
-                                          "id": "%s",
-                                          "court": "Court 2",
-                                          "begin": "%s",
-                                          "end": "%s"
-                                        }
-                                      ]
-                                    }""", UUID.randomUUID(), beginE, endE))
+                {
+                  "complete": false,
+                  "data": [
+                    {
+                      "id": "%s",
+                      "court": "Court 2",
+                      "begin": "%s",
+                      "end": "%s"
+                    }
+                  ]
+                }""", UUID.randomUUID(), beginE, endE))
             .post("/tournament/Clubmeisterschaft/competition/Damen/updateSchedule")
             .then().assertThat()
             .statusCode(Response.Status.NOT_FOUND.getStatusCode());
