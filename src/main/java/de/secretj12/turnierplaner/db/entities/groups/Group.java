@@ -17,7 +17,7 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
-    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
     private Set<MatchOfGroup> matchesOfGroup;
     @Column(name = "index")
     private byte index;
@@ -25,9 +25,9 @@ public class Group {
     @JoinColumn(name = "competition_id", nullable = false)
     private Competition competition;
 
-    @OneToMany(mappedBy = "groupA", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "groupA", cascade = CascadeType.REMOVE)
     private Set<FinalOfGroup> finalOfGroupA;
-    @OneToMany(mappedBy = "groupB", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "groupB", cascade = CascadeType.REMOVE)
     private Set<FinalOfGroup> finalOfGroupB;
 
     public UUID getId() {

@@ -6,6 +6,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
@@ -31,6 +32,8 @@ public class TestStartup {
     MatchOfGroupRepository matchOfGroupRepository;
     @Inject
     FinalOfGroupRepository finalOfGroupRepository;
+    @Inject
+    SetRepository setRepository;
 
     @Inject
     TestdataGenerator testdataGenerator;
@@ -43,6 +46,7 @@ public class TestStartup {
     @AfterEach
     @Transactional
     public void afterEach() {
+        setRepository.deleteAll();
         finalOfGroupRepository.deleteAll();
         nextMatchRepository.deleteAll();
         matchOfGroupRepository.deleteAll();

@@ -320,13 +320,9 @@ public class CompetitionResource {
     }
 
     private void checkGroupsCount(int count) {
-        int i = 1;
-        while (i <= 1024) {
-            if (i == count)
-                return;
-            i *= 2;
-        }
-        throw new BadRequestException("Invalid group count");
+        // has to be a power of 2
+        if ((count - 1 & count) != 0)
+            throw new BadRequestException("Invalid group count");
     }
 
     @GET
