@@ -71,12 +71,12 @@
 					v-if="openRegistration"
 					class="button"
 					:label="t('general.register') + ' >>'"
-					@click="router.push({ name: 'Player registration' })"
+					@click="router.push({ name: Routes.PlayerRegistration })"
 				/>
 				<Button
 					class="button"
 					:label="t('general.matches') + ' >>'"
-					@click="router.push({ name: 'Matches overview' })"
+					@click="router.push({ name: Routes.MatchesOverview })"
 				/>
 			</div>
 		</div>
@@ -96,6 +96,7 @@ import { getCanEdit } from "@/backend/security"
 import { getTournamentDetails } from "@/backend/tournament"
 import { useToast } from "primevue/usetoast"
 import { getCompetitionsList } from "@/backend/competition"
+import { Routes } from "@/routes"
 
 const { t } = useI18n()
 const toast = useToast()
@@ -170,7 +171,7 @@ function formatDate(d: Date) {
 
 function selected(competition: string) {
 	router.push({
-		name: "Competition",
+		name: Routes.Competition,
 		params: { tourId: route.params.tourId, compId: competition },
 	})
 }
@@ -178,21 +179,21 @@ function selected(competition: string) {
 function prepare() {
 	if (competitions.value)
 		router.push({
-			name: "Prepare competition",
+			name: Routes.ManagePrepare,
 			params: { tourId: route.params.tourId },
 		})
 }
 
 function settingsItem(competition: string) {
 	router.push({
-		name: "Prepare competition",
+		name: Routes.ManageSettings,
 		params: { tourId: route.params.tourId, compId: competition },
 	})
 }
 
 function addCompetition() {
 	router.push({
-		name: "Create competition",
+		name: Routes.CreateCompetition,
 		params: { tourId: route.params.tourId },
 	})
 }

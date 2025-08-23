@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 import { router } from "@/main"
+import { Routes } from "@/routes"
 
 const props = defineProps<{
 	tournament?: string
@@ -14,7 +15,7 @@ const props = defineProps<{
 function click() {
 	if (props.tournament)
 		router.push({
-			name: "Competitions",
+			name: Routes.Competitions,
 			params: {
 				tourId: props.tournament,
 			},

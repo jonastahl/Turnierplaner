@@ -14,6 +14,7 @@ import FormTournament from "@/components/views/tournaments/FormTournament.vue"
 import { TournamentServer } from "@/interfaces/tournament"
 import { useI18n } from "vue-i18n"
 import { useAddTournament } from "@/backend/tournament"
+import { Routes } from "@/routes"
 
 const { t } = useI18n()
 const toast = useToast()
@@ -23,7 +24,7 @@ const { mutate } = useAddTournament(t, toast, {
 	suc: () => {
 		if (!tourName) return
 		router.push({
-			name: "Competitions",
+			name: Routes.Competitions,
 			params: { tourId: tourName },
 		})
 	},

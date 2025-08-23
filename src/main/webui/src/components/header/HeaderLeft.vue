@@ -39,6 +39,7 @@ import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { getConfig } from "@/backend/config"
 import { inject, ref } from "vue"
+import { Routes } from "@/routes"
 
 const route = useRoute()
 const { t } = useI18n()
@@ -47,18 +48,18 @@ const isLoggedIn = inject("loggedIn", ref(false))
 const { data: config } = getConfig(isLoggedIn)
 
 function toHome() {
-	router.push({ name: "Tournaments" })
+	router.push({ name: Routes.Tournaments })
 }
 
 function toTournament() {
 	router.push({
-		name: "Competitions",
+		name: Routes.Competitions,
 	})
 }
 
 function toCompetition() {
 	router.push({
-		name: "Competition",
+		name: Routes.Competition,
 	})
 }
 </script>

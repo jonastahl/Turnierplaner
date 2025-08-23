@@ -30,6 +30,7 @@ import { useI18n } from "vue-i18n"
 import { getIsDirector } from "@/backend/security"
 import { getTournamentList } from "@/backend/tournament"
 import { useToast } from "primevue/usetoast"
+import { Routes } from "@/routes"
 
 const { t } = useI18n()
 const toast = useToast()
@@ -44,20 +45,20 @@ const {
 
 function selected(tournament: string) {
 	router.push({
-		name: "Competitions",
+		name: Routes.Competitions,
 		params: { tourId: tournament },
 	})
 }
 
 function settingsItem(tournament: string) {
 	router.push({
-		name: "Edit tournament",
+		name: Routes.EditTournament,
 		params: { tourId: tournament },
 	})
 }
 
 function addTournament() {
-	router.push({ name: "Create tournament" })
+	router.push({ name: Routes.CreateTournament })
 }
 </script>
 

@@ -11,6 +11,7 @@ import { useRoute, useRouter } from "vue-router"
 import { ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { TabMenuChangeEvent } from "primevue/tabmenu"
+import { Routes } from "@/routes"
 
 const { t } = useI18n()
 
@@ -19,16 +20,20 @@ const router = useRouter()
 const activeTab = ref<number>(0)
 
 const menuComps = [
-	{ label: t("general.settings"), icon: "pi pi-cog", route: "Manage settings" },
+	{
+		label: t("general.settings"),
+		icon: "pi pi-cog",
+		route: Routes.ManageSettings,
+	},
 	{
 		label: t("ViewPrepare.preparation"),
 		icon: "pi pi-hammer",
-		route: "Manage prepare",
+		route: Routes.ManagePrepare,
 	},
 	{
 		label: t("ViewManage.execution"),
 		icon: "pi pi-wave-pulse",
-		route: "Manage execution",
+		route: Routes.ManageExecution,
 	},
 ]
 

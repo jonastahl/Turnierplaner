@@ -40,6 +40,7 @@ import {
 } from "@/interfaces/competition"
 import { useToast } from "primevue/usetoast"
 import { useAddCompetition } from "@/backend/competition"
+import { Routes } from "@/routes"
 
 const { t } = useI18n()
 const toast = useToast()
@@ -75,7 +76,7 @@ const competition = reactive<Competition>({
 const { mutate } = useAddCompetition(route, t, toast, {
 	suc: () => {
 		router.push({
-			name: "Competitions",
+			name: Routes.Competitions,
 			params: { tourId: route.params.tourId },
 		})
 	},

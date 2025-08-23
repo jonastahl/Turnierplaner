@@ -26,7 +26,7 @@
 						:label="t('ViewManage.prepare')"
 						@click="
 							router.push({
-								name: 'Manage prepare',
+								name: Routes.ManagePrepare,
 								params: { tourId: route.params.tourId, compId: comp.name },
 							})
 						"
@@ -56,6 +56,7 @@ import { inject, ref } from "vue"
 import { useToast } from "primevue/usetoast"
 import ViewPrepareSteps from "@/components/views/compManage/prepare/ViewPrepareSteps.vue"
 import { Progress, progressOrder } from "@/interfaces/competition"
+import { Routes } from "@/routes"
 
 const route = useRoute()
 const router = useRouter()

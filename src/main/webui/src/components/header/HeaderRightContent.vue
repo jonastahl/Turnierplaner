@@ -34,6 +34,7 @@ import { inject, ref, watch } from "vue"
 import { router } from "@/main"
 import { useI18n } from "vue-i18n"
 import { useSaveLanguage } from "@/backend/config"
+import { Routes } from "@/routes"
 
 const currentUser = ref<string>("")
 const isLoggedIn = inject("loggedIn", ref(false))
@@ -43,7 +44,7 @@ const { mutate: saveLanguage } = useSaveLanguage(isLoggedIn)
 
 function settings() {
 	router.push({
-		name: "Settings",
+		name: Routes.Settings,
 	})
 }
 

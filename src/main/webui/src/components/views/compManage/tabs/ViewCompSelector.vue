@@ -18,6 +18,7 @@ import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
 import { TabMenuChangeEvent } from "primevue/tabmenu"
 import { getCompetitionsList } from "@/backend/competition"
+import { Routes } from "@/routes"
 
 const { t } = useI18n()
 
@@ -56,7 +57,7 @@ function tabChange(event: TabMenuChangeEvent) {
 			]
 	}
 	router.push({
-		name: <string>route.meta.mStep,
+		name: <Routes>route.meta.mStep,
 		params: {
 			compId: comp?.name,
 		},

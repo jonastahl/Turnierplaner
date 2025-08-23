@@ -30,10 +30,11 @@
 <script setup lang="ts">
 import { router } from "@/main"
 import { version } from "@/../package.json"
+import { Routes } from "@/routes"
 
 function selected() {
 	router.push({
-		name: "Impressum",
+		name: Routes.Impressum,
 	})
 }
 </script>
