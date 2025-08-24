@@ -95,36 +95,38 @@ watch(
 function save(complete = false) {
 	isUpdating.value = true
 	updateCourts(selectedCourts.value)
-	updateMatches({
-		complete,
-		matches: [
-			...scheduledMatches.value
-				.filter((event) => !event.secondary)
-				.map((event) => {
-					return {
-						...event.data,
-						begin: event.start,
-						end: event.end,
-						court: event.split,
-					}
+	updateMatches(
+		{
+			complete,
+			matches: [
+				...scheduledMatches.value
+					.filter((event) => !event.secondary)
+					.map((event) => {
+						return {
+							...event.data,
+							begin: event.start,
+							end: event.end,
+							court: event.split,
+						}
+					}),
+				...matches.value.map((match) => {
+					return match
 				}),
-			...matches.value.map((match) => {
-				return match
-			}),
-		],
-	},
-	{
-		onSettled() {
-			isUpdating.value = false
+			],
 		},
-		onSuccess() {
-		    if (complete) {
+		{
+			onSettled() {
+				isUpdating.value = false
+			},
+			onSuccess() {
+				if (complete) {
 					router.push({
-						name: Routes.ManagePrepare
+						name: Routes.ManagePrepare,
 					})
 				}
+			},
 		},
-	})
+	)
 }
 
 function complete() {

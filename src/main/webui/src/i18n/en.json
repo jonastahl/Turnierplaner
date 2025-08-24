@@ -21,6 +21,7 @@
 		"save": "Save",
 		"reset": "Reset",
 		"reload": "Reload",
+		"cancel": "Cancel",
 		"back": "Back",
 		"next": "Next",
 		"saveandcont": "Save and continue",
@@ -262,7 +263,13 @@
 		"restored": "Restored initial configuration",
 		"scheduleMatches": {
 			"error_cont_not_scheduled": "All matches need to be scheduled before continuing"
-		}
+		},
+		"publish_warning": "Publishing notifies all players via E-Mail.\nAfterwards, you are more limited in editing the competition.",
+		"publish_consider_all": "Consider using the function \"Publish all\".\nThis gives the players a combined E-Mail, leading to less spam.",
+		"published_single": "Competition has been published. All players were notified.",
+		"published_single_missing": "Competition has been published. Not all players could be notified, as they did not specify an email address.",
+		"published_all": "All competitions have been published. All players were notified.",
+		"published_all_missing": "All competitions have been published. Not all players could be notified, as they did not specify an email address."
 	},
 	"ViewManage": {
 		"execution": "Execution",

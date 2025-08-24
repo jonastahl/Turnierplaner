@@ -21,6 +21,7 @@
 		"save": "Speichern",
 		"reset": "Zurücksetzen",
 		"reload": "Neu laden",
+		"cancel": "Abbrechen",
 		"back": "Zurück",
 		"next": "Weiter",
 		"saveandcont": "Speichern und weiter",
@@ -261,7 +262,13 @@
 		"restored": "Ursprüngliche Konfiguration wieder hergestellt",
 		"scheduleMatches": {
 			"error_cont_not_scheduled": "Alle Spiele müssen verplant werden!"
-		}
+		},
+		"publish_warning": "Durch das Veröffentlichen werden alle Spieler per E-Mail benachrichtigt.\nDu kannst die Konkurrenz anschließend nur noch eingeschränkter bearbeiten.",
+		"publish_consider_all": "Bevorzuge die Funktion \"Alle veröffentlichen\".\nDadurch erhalten Spieler nur eine kombinierte E-Mail, wodurch es für die Teilnehmer übersichtlicher wird.",
+		"published_single": "Konkurrenz wurde veröffentlicht. Alle Spieler wurden benachrichtigt.",
+		"published_single_missing": "Konkurrenz wurde veröffentlicht. Manche Spieler konnten nicht benachrichtigt werden, da sie keine Email angegeben haben.",
+		"published_all": "Alle Konkurrenzen wurden veröffentlicht. Alle Spieler wurden benachrichtigt.",
+		"published_all_missing": "Alle Konkurrenzen wurden veröffentlicht. Manche Spieler konnten nicht benachrichtigt werden, da sie keine Email angegeben haben."
 	},
 	"ViewManage": {
 		"execution": "Durchführung",

@@ -2,12 +2,15 @@ package de.secretj12.turnierplaner.resources;
 
 import de.secretj12.turnierplaner.db.entities.Match;
 import de.secretj12.turnierplaner.db.entities.Player;
-import de.secretj12.turnierplaner.enums.*;
-import de.secretj12.turnierplaner.db.entities.competition.*;
+import de.secretj12.turnierplaner.db.entities.competition.Competition;
+import de.secretj12.turnierplaner.db.entities.competition.Team;
 import de.secretj12.turnierplaner.db.entities.groups.Group;
 import de.secretj12.turnierplaner.db.repositories.*;
+import de.secretj12.turnierplaner.enums.CompetitionType;
+import de.secretj12.turnierplaner.enums.CreationProgress;
 import de.secretj12.turnierplaner.logic.CompetitionLogic;
 import de.secretj12.turnierplaner.mails.MailTemplates;
+import de.secretj12.turnierplaner.model.director.JDirectorPublishCompetition;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorCompetitionAdd;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorCompetitionUpdate;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorGroupsDivision;
@@ -28,6 +31,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestResponse;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -438,5 +442,28 @@ public class CompetitionResource {
         competitions.persist(competition);
 
         return "Preparation progress was reset";
+    }
+
+    @POST
+    @Path("/publish")
+    @Transactional
+    @RolesAllowed("director")
+    public RestResponse<String> publishCompetition(@PathParam("tourName") String tourName,
+                                                   JDirectorPublishCompetition toPublish) {
+        List<Competition> publishComps = toPublish.competitions()
+            .stream().map(compName -> competitions.getByName(tourName, compName))
+            .toList();
+        if (publishComps.stream().anyMatch(comp -> comp.getcProgress() == null))
+            throw new NotFoundException("Competition could not be found");
+        if (publishComps.stream().anyMatch(comp -> comp.getcProgress() != CreationProgress.PUBLISHING))
+            throw new NotFoundException("Can only publish already scheduled competition");
+
+        // TODO need to do the real publishing
+        for (Competition comp : publishComps) {
+            comp.setcProgress(CreationProgress.DONE);
+            competitions.persist(comp);
+        }
+        return RestResponse.ResponseBuilder.ok("Everything pulished")
+            .build();
     }
 }

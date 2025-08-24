@@ -9,6 +9,7 @@
 				"
 				:severity="'success'"
 				:label="t('ViewManage.publishall')"
+				@click="publish(competitions.map((comp) => comp.name))"
 			/>
 		</div>
 		<div
@@ -35,6 +36,7 @@
 						:disabled="comp.cProgress !== Progress.PUBLISHING"
 						:severity="'secondary'"
 						:label="t('ViewManage.publish')"
+						@click="publish([comp.name])"
 					/>
 				</div>
 			</div>
@@ -46,10 +48,24 @@
 			</ViewPrepareSteps>
 		</div>
 	</div>
+	<ConfirmDialog group="publish">
+		<template #message="slotProps">
+			<div class="flex flex-row gap-3">
+				<i
+					:class="slotProps.message.icon"
+					class="text-5xl text-red-500 align-content-center"
+				></i>
+				<p style="white-space: pre-line">{{ slotProps.message.message }}</p>
+			</div>
+		</template>
+	</ConfirmDialog>
 </template>
 
 <script setup lang="ts">
-import { getCompetitionsList } from "@/backend/competition"
+import {
+	getCompetitionsList,
+	usePublishCompetitions,
+} from "@/backend/competition"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { inject, ref } from "vue"
@@ -57,15 +73,40 @@ import { useToast } from "primevue/usetoast"
 import ViewPrepareSteps from "@/components/views/compManage/prepare/ViewPrepareSteps.vue"
 import { Progress, progressOrder } from "@/interfaces/competition"
 import { Routes } from "@/routes"
+import { useConfirm } from "primevue/useconfirm"
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const toast = useToast()
+const confirm = useConfirm()
 
 const isLoggedIn = inject("loggedIn", ref(false))
 
 const { data: competitions } = getCompetitionsList(route, isLoggedIn, t, toast)
+const { mutate: publishCompetition } = usePublishCompetitions(route, t, toast)
+
+function publish(competitions: string[]) {
+	console.log("publish")
+	confirm.require({
+		header: t(
+			competitions.length === 1
+				? "ViewManage.publish"
+				: "ViewManage.publishall",
+		),
+		message:
+			t("ViewPrepare.publish_warning") +
+			(competitions.length > 1
+				? ""
+				: "\n\n" + t("ViewPrepare.publish_consider_all")),
+		icon: "pi pi-exclamation-triangle",
+		acceptClass: "p-button-success",
+		rejectLabel: t("general.cancel"),
+		acceptLabel: t("ViewManage.publish"),
+		accept: () => publishCompetition(competitions),
+		group: "publish",
+	})
+}
 </script>
 
 <style scoped></style>
