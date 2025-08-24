@@ -6,8 +6,8 @@
 		:tag="TransitionGroup"
 		:component-data="{
 			tag: 'div',
-			name: props.animated ? 'playerList' : 'default',
 			type: 'transition',
+			name: props.animated ? 'playerList' : 'default',
 		}"
 		group="teams"
 		class="flex flex-wrap gap-2 border-3 border-round border-dashed justify-content-start"

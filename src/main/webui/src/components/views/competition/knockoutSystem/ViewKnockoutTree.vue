@@ -321,18 +321,6 @@ function getMatch(level: number, index: number): KnockoutMatch {
 	const match = getMatches(level)[index]
 	if (!match) throw new Error("Match is undefined")
 	return match
-	// let curHeight = Math.pow(2, treeHeight.value)
-	// for (let i = 0; i < treeHeight.value - level - 1; i++) {
-	// 	curHeight /= 2
-	// 	if (!curMatch.prevMatch) throw new Error("prevMatch is undefined")
-	// 	if (index < curHeight) {
-	// 		curMatch = curMatch.prevMatch.a
-	// 	} else {
-	// 		curMatch = curMatch.prevMatch.b
-	// 		index -= curHeight
-	// 	}
-	// }
-	// return curMatch
 }
 </script>
 

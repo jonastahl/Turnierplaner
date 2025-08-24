@@ -10,7 +10,7 @@
 				}"
 				:list="teamA"
 				:tag="TransitionGroup"
-				group="team"
+				group="teams"
 				item-key="id"
 				style="width: 100%; height: 100%"
 				:wrap="updateA"
@@ -32,7 +32,7 @@
 				}"
 				:list="teamB"
 				:tag="TransitionGroup"
-				group="team"
+				group="teams"
 				item-key="id"
 				style="width: 100%; height: 100%"
 				:wrap="updateB"
@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { KnockoutMatch } from "@/interfaces/knockoutSystem"
-import { ref, TransitionGroup, watch } from "vue"
+import { ref, TransitionGroup, watchEffect } from "vue"
 import DraggablePanel from "@/draggable/DraggablePanel.vue"
 import TeamCard from "@/components/views/compManage/prepare/components/TeamCard.vue"
 import MatchBox from "@/components/views/compManage/prepare/components/MatchBox.vue"
@@ -79,7 +79,7 @@ function removeB() {
 	emit("update:teamB", null)
 }
 
-watch(props, () => {
+watchEffect(() => {
 	if (props.match.teamA === null) teamA.value = []
 	else if (teamA.value.length === 0 || teamA.value[0] !== props.match.teamA)
 		teamA.value = [props.match.teamA]
