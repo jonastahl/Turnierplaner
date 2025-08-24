@@ -25,13 +25,13 @@ public class MailTemplates {
                                                                                       String recipient,
                                                                                       String verificationCode);
 
-        public static native MailTemplate.MailTemplateInstance createRegistrationMail(
+        public static native MailTemplate.MailTemplateInstance createCompetitionRegistrationMail(
                                                                                       String url,
                                                                                       String firstName,
                                                                                       String recipient,
                                                                                       String competitionName,
                                                                                       String competitionDescription
-        );
+                                                                                                );
     }
 
     @TemplateContents("{msg:verifySubject()}")
@@ -52,8 +52,8 @@ public class MailTemplates {
 
     public void sendRegistrationMail(Player player, Competition competition) {
         if (player.isMailVerified())
-            Templates.createRegistrationMail(url, player.getFirstName(), player.getEmail(), competition.getName(),
-                competition.getDescription())
+            Templates.createCompetitionRegistrationMail(url, player.getFirstName(), player.getEmail(), competition.getName(),
+                                                        competition.getDescription())
                 .setAttribute("locale", player.getLanguage().getLanguageCode())
                 .to(player.getEmail())
                 .subject(new registrationSubject().setLocale(player.getLanguage().getLanguageCode()).render())

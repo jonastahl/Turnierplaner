@@ -1,6 +1,6 @@
 {#include MailTemplates/masterTemplateMail.html}
-    {#title}Anmeldung{/title}
-    {#preheader}Du wurdest zu einer Konkurrenz angemeldet{/preheader}
+    {#title}{msg:registerSubject()}{/title}
+    {#preheader}{msg:registeredFor(competitionName, competitionDescription)}{/preheader}
 
 	<p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
         {msg:helloName(firstName)}

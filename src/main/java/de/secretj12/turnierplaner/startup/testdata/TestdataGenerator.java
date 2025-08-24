@@ -226,7 +226,6 @@ public class TestdataGenerator {
             case FEMALE -> Sex.FEMALE;
             case ANY -> Math.random() > 0.5 ? Sex.MALE : Sex.FEMALE;
         });
-        player.setEmail(player.getFirstName() + "." + player.getLastName() + "@gmail.com");
         player.setPhone(faker.phoneNumber().cellPhone());
         player.setMailVerified(true);
         player.setAdminVerified(true);
