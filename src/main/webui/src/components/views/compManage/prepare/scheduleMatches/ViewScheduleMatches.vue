@@ -62,6 +62,8 @@ import { getTournamentDetails } from "@/backend/tournament"
 import { AnnotatedMatch } from "@/interfaces/match"
 import DialogResetProgress from "@/components/views/compManage/prepare/DialogResetProgress.vue"
 import NavigationButtons from "@/components/views/compManage/prepare/components/NavigationButtons.vue"
+import { router } from "@/main"
+import { Routes } from "@/routes"
 
 const route = useRoute()
 const { t } = useI18n()
@@ -92,6 +94,7 @@ watch(
 
 function save(complete = false) {
 	isUpdating.value = true
+	updateCourts(selectedCourts.value)
 	updateMatches({
 		complete,
 		matches: [
@@ -109,9 +112,19 @@ function save(complete = false) {
 				return match
 			}),
 		],
+	},
+	{
+		onSettled() {
+			isUpdating.value = false
+		},
+		onSuccess() {
+		    if (complete) {
+					router.push({
+						name: Routes.ManagePrepare
+					})
+				}
+		},
 	})
-	updateCourts(selectedCourts.value)
-	isUpdating.value = false
 }
 
 function complete() {

@@ -46,6 +46,7 @@ import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
 import { Progress, progressOrder } from "@/interfaces/competition"
 import DialogResetProgress from "@/components/views/compManage/prepare/DialogResetProgress.vue"
+import { Routes } from "@/routes"
 
 const route = useRoute()
 const router = useRouter()
@@ -64,22 +65,22 @@ watch(
 		switch (competition.value.cProgress) {
 			case Progress.TEAMS:
 				router.replace({
-					name: "editTeams",
+					name: Routes.EditTeams,
 				})
 				break
 			case Progress.GAMES:
 				router.replace({
-					name: "assignMatches",
+					name: Routes.AssignMatches,
 				})
 				break
 			case Progress.SCHEDULING:
 				router.replace({
-					name: "scheduleMatches",
+					name: Routes.ScheduleMatches,
 				})
 				break
 			default:
 				router.replace({
-					name: "Manage prepare",
+					name: Routes.ManagePrepare,
 					params: {
 						compId: route.params.compId,
 					},

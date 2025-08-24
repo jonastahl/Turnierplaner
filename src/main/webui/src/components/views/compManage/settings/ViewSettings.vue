@@ -37,6 +37,7 @@ import {
 } from "@/backend/competition"
 import { useToast } from "primevue/usetoast"
 import { ref, watch } from "vue"
+import { Routes } from "@/routes"
 
 const { t } = useI18n()
 const toast = useToast()
@@ -60,7 +61,7 @@ watch(competition, async () => {
 const { mutate } = useUpdateCompetition(route, t, toast, {
 	suc(competition) {
 		router.replace({
-			name: "settings",
+			name: Routes.Settings,
 			params: { tourId: route.params.tourid, compId: competition.name },
 		})
 	},
