@@ -1,5 +1,6 @@
 package de.secretj12.turnierplaner.mails;
 
+import de.secretj12.turnierplaner.db.entities.Match;
 import de.secretj12.turnierplaner.db.entities.Player;
 import de.secretj12.turnierplaner.db.entities.competition.Competition;
 import io.quarkus.mailer.MailTemplate;
@@ -8,6 +9,9 @@ import io.quarkus.qute.TemplateContents;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class MailTemplates {
@@ -59,5 +63,9 @@ public class MailTemplates {
                 .to(player.getEmail())
                 .subject(new registrationSubject().setLocale(player.getLanguage().getLanguageCode()).render())
                 .sendAndAwait();
+    }
+
+    public void sendPublishedMail(Player player, Map<Competition, List<Match>> matches) {
+
     }
 }

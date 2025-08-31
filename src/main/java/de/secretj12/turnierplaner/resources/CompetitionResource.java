@@ -34,11 +34,9 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestResponse;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Path("/tournament/{tourName}/competition")
 public class CompetitionResource {
@@ -454,15 +452,25 @@ public class CompetitionResource {
             .stream().map(compName -> competitions.getByName(tourName, compName))
             .toList();
         if (publishComps.stream().anyMatch(comp -> comp.getcProgress() == null))
-            throw new NotFoundException("Competition could not be found");
+            throw new BadRequestException("Competition has wrong state");
         if (publishComps.stream().anyMatch(comp -> comp.getcProgress() != CreationProgress.PUBLISHING))
             throw new NotFoundException("Can only publish already scheduled competition");
 
-        // TODO need to do the real publishing
+        Map<Player, Map<Competition, List<Match>>> players = new HashMap<>();
         for (Competition comp : publishComps) {
             comp.setcProgress(CreationProgress.DONE);
             competitions.persist(comp);
+
+            comp.getMatches().forEach(m -> Stream.of(m.getTeamA(), m.getTeamB())
+                .flatMap(t -> Stream.of(t.getPlayerA(), t.getPlayerB())).filter(Objects::nonNull)
+                .forEach(p -> players.computeIfAbsent(p, (P) -> new HashMap<>())
+                    .computeIfAbsent(comp, (C) -> new ArrayList<>())
+                    .add(m))
+            );
         }
+        for (var entry : players.entrySet())
+            mailTemplates.sendPublishedMail(entry.getKey(), entry.getValue());
+
         return RestResponse.ResponseBuilder.ok("Everything pulished")
             .build();
     }
