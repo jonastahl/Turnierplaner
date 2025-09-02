@@ -1,0 +1,35 @@
+{#include MailTemplates/masterTemplateMail.html}
+    {#title}{msg:preparationSubject(compName)}{/title}
+    {#preheader}
+			{#if multipleComps}
+				{msg:preparationDoneForMultiple(compName)}
+			{#else}
+				{msg:preparationDoneForSingle(compName)}
+			{/if}
+		{/preheader}
+
+	<p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
+    {msg:helloName(firstName)}
+	</p>
+	<p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
+		{#if multipleComps}
+				{msg:preparationDoneForMultiple(compName)}
+		{#else}
+				{msg:preparationDoneForSingle(compName)}
+		{/if}
+		{#if multipleMatches}
+				{msg:preparationDonePartOfMultiple()}
+		{#else}
+				{msg:preparationDonePartOfSingle()}
+		{/if}
+
+		{#for comp in competitions}
+				<h3>{comp.name}</h3>
+				{#for game in comp.games}
+					<p>{game.opponent} - {game.time} - {game.court}</p>
+				{/for}
+		{/for}
+
+		{msg:upcomingGameNotice()}
+	</p>
+{/include}

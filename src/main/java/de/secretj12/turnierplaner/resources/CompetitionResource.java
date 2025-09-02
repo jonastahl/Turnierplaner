@@ -461,17 +461,21 @@ public class CompetitionResource {
             comp.setcProgress(CreationProgress.DONE);
             competitions.persist(comp);
 
-            comp.getMatches().forEach(m -> Stream.of(m.getTeamA(), m.getTeamB())
-                .flatMap(t -> Stream.of(t.getPlayerA(), t.getPlayerB())).filter(Objects::nonNull)
-                .forEach(p -> players.computeIfAbsent(p, (P) -> new HashMap<>())
-                    .computeIfAbsent(comp, (C) -> new ArrayList<>())
-                    .add(m))
-            );
+            comp.getMatches()
+                .forEach(m -> Stream.of(m.getTeamA(), m.getTeamB())
+                    .filter(Objects::nonNull)
+                    .flatMap(t -> Stream.of(t.getPlayerA(), t.getPlayerB())).filter(Objects::nonNull)
+                    .forEach(p -> players.computeIfAbsent(p, (P) -> new HashMap<>())
+                        .computeIfAbsent(comp, (C) -> new ArrayList<>())
+                        .add(m))
+                );
         }
+        boolean allSuc = true;
         for (var entry : players.entrySet())
-            mailTemplates.sendPublishedMail(entry.getKey(), entry.getValue());
+            allSuc &= mailTemplates.sendPublishedMail(entry.getKey(), entry.getValue());
 
-        return RestResponse.ResponseBuilder.ok("Everything pulished")
+        return RestResponse.ResponseBuilder
+            .create(allSuc ? Response.Status.OK : Response.Status.PARTIAL_CONTENT, "Mails published")
             .build();
     }
 }

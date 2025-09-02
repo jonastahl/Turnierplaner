@@ -9,7 +9,7 @@ public interface MailMessages {
 
     String registerSubject();
 
-    String registeredFor(String compName, String compDescription);
+    String registeredFor(String compName);
 
     String verifySubject();
 
@@ -20,4 +20,16 @@ public interface MailMessages {
     String verifyIgnoreInvalid();
 
     String thanksForUsing();
+
+    String preparationSubject(String compName);
+
+    String preparationDoneForSingle(String compName);
+
+    String preparationDoneForMultiple(String compNames);
+
+    String preparationDonePartOfSingle();
+
+    String preparationDonePartOfMultiple();
+
+    String upcomingGameNotice();
 }
