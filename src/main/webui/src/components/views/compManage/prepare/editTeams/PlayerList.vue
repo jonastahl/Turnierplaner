@@ -12,6 +12,7 @@
 							:tournament="props.tournament"
 							class="flex-grow-1 w-1"
 							:is-updating="isUpdating"
+							:secondary="secondary"
 							@add-player="addPlayer"
 						/>
 						<DeleteBox :group="props.group" :secondary="secondary" />

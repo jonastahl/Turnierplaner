@@ -9,7 +9,13 @@
 				"
 				:severity="'success'"
 				:label="t('ViewManage.publishall')"
-				@click="publish(competitions.filter((comp) => comp.cProgress === Progress.PUBLISHING).map((comp) => comp.name))"
+				@click="
+					publish(
+						competitions
+							.filter((comp) => comp.cProgress === Progress.PUBLISHING)
+							.map((comp) => comp.name),
+					)
+				"
 			/>
 		</div>
 		<div

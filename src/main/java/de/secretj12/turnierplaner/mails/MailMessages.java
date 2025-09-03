@@ -32,4 +32,6 @@ public interface MailMessages {
     String preparationDonePartOfMultiple();
 
     String upcomingGameNotice();
+
+    String myGames();
 }

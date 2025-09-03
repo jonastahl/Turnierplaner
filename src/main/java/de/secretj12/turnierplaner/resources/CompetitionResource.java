@@ -472,7 +472,7 @@ public class CompetitionResource {
         }
         boolean allSuc = true;
         for (var entry : players.entrySet())
-            allSuc &= mailTemplates.sendPublishedMail(entry.getKey(), entry.getValue());
+            allSuc &= mailTemplates.sendPublishedMail(entry.getKey(), tourName, entry.getValue());
 
         return RestResponse.ResponseBuilder
             .create(allSuc ? Response.Status.OK : Response.Status.PARTIAL_CONTENT, "Mails published")

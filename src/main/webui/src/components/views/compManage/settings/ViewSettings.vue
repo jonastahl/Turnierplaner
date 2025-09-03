@@ -26,7 +26,6 @@
 </template>
 
 <script lang="ts" setup>
-import { router } from "@/main"
 import { useRoute } from "vue-router"
 import FormCompetition from "@/components/views/competitions/FormCompetition.vue"
 import { useI18n } from "vue-i18n"
@@ -37,7 +36,6 @@ import {
 } from "@/backend/competition"
 import { useToast } from "primevue/usetoast"
 import { ref, watch } from "vue"
-import { Routes } from "@/routes"
 
 const { t } = useI18n()
 const toast = useToast()
@@ -58,14 +56,7 @@ watch(competition, async () => {
 	isUpdating.value = false
 })
 
-const { mutate } = useUpdateCompetition(route, t, toast, {
-	suc(competition) {
-		router.replace({
-			name: Routes.Settings,
-			params: { tourId: route.params.tourid, compId: competition.name },
-		})
-	},
-})
+const { mutate } = useUpdateCompetition(route, t, toast, {})
 
 function save() {
 	form.value?.onSubmit()

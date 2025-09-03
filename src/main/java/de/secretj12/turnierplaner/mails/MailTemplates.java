@@ -3,6 +3,7 @@ package de.secretj12.turnierplaner.mails;
 import de.secretj12.turnierplaner.db.entities.Match;
 import de.secretj12.turnierplaner.db.entities.Player;
 import de.secretj12.turnierplaner.db.entities.competition.Competition;
+import de.secretj12.turnierplaner.db.entities.competition.Team;
 import io.quarkus.mailer.MailTemplate;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateContents;
@@ -40,7 +41,9 @@ public class MailTemplates {
         );
 
         public static native MailTemplate.MailTemplateInstance createPublishPreparation(
-                                                                                        String firstName,
+                                                                                        String url,
+                                                                                        Player player,
+                                                                                        String tourName,
                                                                                         String compName,
                                                                                         boolean multipleComps,
                                                                                         boolean multipleMatches,
@@ -74,26 +77,26 @@ public class MailTemplates {
                 .sendAndAwait();
     }
 
-    record PlayersMatches(String opponent, String time, String court) {
+    record PlayersMatches(Player opponentA, Player opponentB, String time, String court) {
     }
 
     record PlayersCompetitions(String name, List<PlayersMatches> games) {
     }
 
-    private String getOpponentTeam(Player player, Match match) {
+    private Team getOpponentTeam(Player player, Match match) {
         if (match.getTeamA().getPlayerA().getId() == player.getId()
             || (match.getTeamA().getPlayerB() != null && match.getTeamA().getPlayerB().getId() == player.getId())
         ) {
-            return match.getTeamB().getFullName();
+            return match.getTeamB();
         } else if (match.getTeamB().getPlayerA().getId() == player.getId()
             || (match.getTeamB().getPlayerB() != null && match.getTeamB().getPlayerB().getId() == player.getId())) {
-                return match.getTeamA().getFullName();
+                return match.getTeamA();
             } else {
                 throw new IllegalStateException("Player is not the match");
             }
     }
 
-    public boolean sendPublishedMail(Player player, Map<Competition, List<Match>> playersMatches) {
+    public boolean sendPublishedMail(Player player, String tourName, Map<Competition, List<Match>> playersMatches) {
         if (!player.isMailVerified() || player.getEmail() == null) return false;
 
         Locale loc = new Locale.Builder().setLanguage(player.getLanguage().getLanguageCode()).build();
@@ -107,7 +110,8 @@ public class MailTemplates {
             entry -> new PlayersCompetitions(
                                              entry.getKey().getName(), entry.getValue().stream().map(
                                                  m -> new PlayersMatches(
-                                                                         getOpponentTeam(player, m),
+                                                                         getOpponentTeam(player, m).getPlayerA(),
+                                                                         getOpponentTeam(player, m).getPlayerB(),
                                                                          dateFormat.format(Date.from(m.getBegin())),
                                                                          m.getCourt().getName())
                                              ).toList()
@@ -116,7 +120,9 @@ public class MailTemplates {
         // @formatter:on
 
         Templates.createPublishPreparation(
-            player.getFirstName(),
+            url,
+            player,
+            tourName,
             compName,
             multipleComps,
             multipleMatches,
