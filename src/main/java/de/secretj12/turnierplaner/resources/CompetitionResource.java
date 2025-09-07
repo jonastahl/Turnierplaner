@@ -412,6 +412,9 @@ public class CompetitionResource {
         return "Updated matches";
     }
 
+    private static boolean matchIsPlayed(Match m) {
+        return m.getDependentOn() != null || (m.getTeamA() != null && m.getTeamB() != null);
+    }
 
     @POST
     @Path("/{compName}/resetPreparation")
