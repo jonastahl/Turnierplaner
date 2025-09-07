@@ -28,7 +28,7 @@
 import { TransitionGroup } from "vue"
 import { Player } from "@/interfaces/player"
 import DraggablePanel from "@/draggable/DraggablePanel.vue"
-import PlayerCard from "@/components/views/prepare/components/PlayerCard.vue"
+import PlayerCard from "@/components/views/compManage/prepare/components/PlayerCard.vue"
 
 const props = withDefaults(
 	defineProps<{

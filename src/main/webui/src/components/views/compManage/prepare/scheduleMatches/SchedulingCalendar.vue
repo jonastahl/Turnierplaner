@@ -42,8 +42,8 @@ import {
 	extractGroupMatches,
 	extractKnockoutMatches,
 	MatchCalEvent,
-} from "@/components/views/prepare/scheduleMatches/ScheduleMatchesHelper"
-import EventMatch from "@/components/views/prepare/scheduleMatches/MatchEvent.vue"
+} from "@/components/views/compManage/prepare/scheduleMatches/ScheduleMatchesHelper"
+import EventMatch from "@/components/views/compManage/prepare/scheduleMatches/MatchEvent.vue"
 import ViewCalendar from "@/calendar/ViewCalendar.vue"
 import { v4 as uuidv4 } from "uuid"
 import { ComponentExposed } from "vue-component-type-helpers"

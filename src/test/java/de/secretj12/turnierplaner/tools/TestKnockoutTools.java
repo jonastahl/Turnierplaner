@@ -107,12 +107,15 @@ public class TestKnockoutTools {
             .contentType(ContentType.JSON)
             .body(String.format("""
                 {
-                  "teamA": {
-                    "id": "%s"
-                  },
-                  "teamB": {
-                    "id": "%s"
-                  }
+                    "complete": false,
+                    "data": {
+                        "teamA": {
+                            "id": "%s"
+                        },
+                        "teamB": {
+                            "id": "%s"
+                        }
+                    }
                 }
                 """, teams.stream().map(Team::getId).toArray()))
             .post("/tournament/Clubmeisterschaft/competition/Herren/initKnockout")
@@ -142,17 +145,20 @@ public class TestKnockoutTools {
             .contentType(ContentType.JSON)
             .body(String.format("""
                 {
-                  "previousA": {
-                    "teamA": {
-                      "id": "%s"
-                    }
-                  },
-                  "previousB": {
-                    "teamA": {
-                      "id": "%s"
+                  "complete": false,
+                  "data": {
+                    "previousA": {
+                      "teamA": {
+                        "id": "%s"
+                      }
                     },
-                    "teamB": {
-                      "id": "%s"
+                    "previousB": {
+                      "teamA": {
+                        "id": "%s"
+                      },
+                      "teamB": {
+                        "id": "%s"
+                      }
                     }
                   }
                 }
@@ -188,20 +194,23 @@ public class TestKnockoutTools {
             .contentType(ContentType.JSON)
             .body(String.format("""
                 {
-                  "previousA": {
-                    "teamA": {
-                      "id": "%s"
+                  "complete": false,
+                  "data": {
+                    "previousA": {
+                      "teamA": {
+                        "id": "%s"
+                      },
+                      "teamB": {
+                        "id": "%s"
+                      }
                     },
-                    "teamB": {
-                      "id": "%s"
-                    }
-                  },
-                  "previousB": {
-                    "teamA": {
-                      "id": "%s"
-                    },
-                    "teamB": {
-                      "id": "%s"
+                    "previousB": {
+                      "teamA": {
+                        "id": "%s"
+                      },
+                      "teamB": {
+                        "id": "%s"
+                      }
                     }
                   }
                 }
@@ -240,39 +249,42 @@ public class TestKnockoutTools {
             .contentType(ContentType.JSON)
             .body(String.format("""
                 {
-                  "previousA": {
+                  "complete": false,
+                  "data": {
                     "previousA": {
-                      "teamA": {
-                        "id": "%s"
+                      "previousA": {
+                        "teamA": {
+                          "id": "%s"
+                        },
+                        "teamB": {
+                          "id": "%s"
+                        }
                       },
-                      "teamB": {
-                        "id": "%s"
+                      "previousB": {
+                        "teamA": {
+                          "id": "%s"
+                        },
+                        "teamB": {
+                          "id": "%s"
+                        }
                       }
                     },
                     "previousB": {
-                      "teamA": {
-                        "id": "%s"
+                      "previousA": {
+                        "teamA": {
+                          "id": "%s"
+                        },
+                        "teamB": {
+                          "id": "%s"
+                        }
                       },
-                      "teamB": {
-                        "id": "%s"
-                      }
-                    }
-                  },
-                  "previousB": {
-                    "previousA": {
-                      "teamA": {
-                        "id": "%s"
-                      },
-                      "teamB": {
-                        "id": "%s"
-                      }
-                    },
-                    "previousB": {
-                      "teamA": {
-                        "id": "%s"
-                      },
-                      "teamB": {
-                        "id": "%s"
+                      "previousB": {
+                        "teamA": {
+                          "id": "%s"
+                        },
+                        "teamB": {
+                          "id": "%s"
+                        }
                       }
                     }
                   }
@@ -324,66 +336,69 @@ public class TestKnockoutTools {
             .contentType(ContentType.JSON)
             .body(String.format("""
                 {
-                  "previousA": {
+                  "complete": false,
+                  "data": {
                     "previousA": {
                       "previousA": {
-                        "teamA": {
-                          "id": "%s"
+                        "previousA": {
+                          "teamA": {
+                            "id": "%s"
+                          },
+                          "teamB": {
+                            "id": "%s"
+                          }
                         },
-                        "teamB": {
-                          "id": "%s"
+                        "previousB": {
+                          "teamA": {
+                            "id": "%s"
+                          }
                         }
                       },
                       "previousB": {
-                        "teamA": {
-                          "id": "%s"
+                        "previousA": {
+                          "teamB": {
+                            "id": "%s"
+                          }
+                        },
+                        "previousB": {
+                          "teamB": {
+                            "id": "%s"
+                          }
                         }
                       }
                     },
                     "previousB": {
                       "previousA": {
-                        "teamB": {
-                          "id": "%s"
+                        "previousA": {
+                          "teamA": {
+                            "id": "%s"
+                          },
+                          "teamB": {
+                            "id": "%s"
+                          }
+                        },
+                        "previousB": {
+                          "teamA": {
+                            "id": "%s"
+                          },
+                          "teamB": {
+                            "id": "%s"
+                          }
                         }
                       },
                       "previousB": {
-                        "teamB": {
-                          "id": "%s"
-                        }
-                      }
-                    }
-                  },
-                  "previousB": {
-                    "previousA": {
-                      "previousA": {
-                        "teamA": {
-                          "id": "%s"
+                        "previousA": {
+                          "teamA": {
+                            "id": "%s"
+                          }
                         },
-                        "teamB": {
-                          "id": "%s"
-                        }
-                      },
-                      "previousB": {
-                        "teamA": {
-                          "id": "%s"
-                        },
-                        "teamB": {
-                          "id": "%s"
-                        }
-                      }
-                    },
-                    "previousB": {
-                      "previousA": {
-                        "teamA": {
-                          "id": "%s"
-                        }
-                      },
-                      "previousB": {
-                        "teamA": {
-                          "id": "%s"
-                        },
-                        "teamB": {
-                          "id": "%s"
+                        "previousB": {
+                          "teamA": {
+                            "id": "%s"
+                          },
+                          "teamB": {
+                            "id": "%s"
+                          }
                         }
                       }
                     }
@@ -475,11 +490,14 @@ public class TestKnockoutTools {
             .contentType(ContentType.JSON)
             .body(String.format("""
                 {
-                  "teamA": {
-                    "id": "%s"
-                  },
-                  "teamB": {
-                    "id": "%s"
+                  "complete": false,
+                  "data": {
+                    "teamA": {
+                      "id": "%s"
+                    },
+                    "teamB": {
+                      "id": "%s"
+                    }
                   }
                 }
                 """, teams.stream().map(Team::getId).toArray()))

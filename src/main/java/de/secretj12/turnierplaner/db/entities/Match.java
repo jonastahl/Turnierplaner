@@ -69,25 +69,24 @@ public class Match {
     @Column(name = "number")
     private int number;
 
-    @OneToOne(mappedBy = "nextMatch", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(mappedBy = "nextMatch", cascade = CascadeType.REMOVE)
     private NextMatch dependentOn;
 
-    @OneToMany(mappedBy = "previousA", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "previousA", cascade = CascadeType.REMOVE)
     private Collection<NextMatch> previousOfA;
 
-    @OneToMany(mappedBy = "previousB", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "previousB", cascade = CascadeType.REMOVE)
     private Collection<NextMatch> previousOfB;
 
     @Fetch(FetchMode.SELECT)
-    @OneToOne(mappedBy = "nextMatch", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(mappedBy = "nextMatch", cascade = CascadeType.REMOVE)
     private FinalOfGroup finalOfGroup;
 
     @Fetch(FetchMode.SELECT)
-    @OneToOne(mappedBy = "match", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(mappedBy = "match", cascade = CascadeType.REMOVE)
     private MatchOfGroup group;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "key.match", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "key.match", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Set> sets;
 
     public UUID getId() {

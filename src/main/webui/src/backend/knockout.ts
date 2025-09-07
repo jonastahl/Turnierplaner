@@ -37,11 +37,14 @@ export function useInitKnockout(
 ) {
 	const queryClient = useQueryClient()
 	return useMutation({
-		mutationFn: async (tree: KnockoutMatch) =>
+		mutationFn: async (data: { complete: boolean; tree: KnockoutMatch }) =>
 			axios
 				.post<boolean>(
 					`/tournament/${route.params.tourId}/competition/${route.params.compId}/initKnockout`,
-					knockoutMatchClientToServer(tree),
+					{
+						complete: data.complete,
+						data: knockoutMatchClientToServer(data.tree),
+					},
 				)
 				.then(() => {
 					queryClient.invalidateQueries({

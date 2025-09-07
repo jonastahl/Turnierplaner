@@ -6,8 +6,8 @@
 		:tag="TransitionGroup"
 		:component-data="{
 			tag: 'div',
-			name: props.animated ? 'playerList' : 'default',
 			type: 'transition',
+			name: props.animated ? 'playerList' : 'default',
 		}"
 		group="teams"
 		class="flex flex-wrap gap-2 border-3 border-round border-dashed justify-content-start"
@@ -34,9 +34,9 @@
 import { TransitionGroup } from "vue"
 import { Competition, Mode } from "@/interfaces/competition"
 import { Team } from "@/interfaces/team"
-import PlayerCard from "@/components/views/prepare/components/PlayerCard.vue"
+import PlayerCard from "@/components/views/compManage/prepare/components/PlayerCard.vue"
 import DraggablePanel from "@/draggable/DraggablePanel.vue"
-import TeamCard from "@/components/views/prepare/components/TeamCard.vue"
+import TeamCard from "@/components/views/compManage/prepare/components/TeamCard.vue"
 
 const props = defineProps<{
 	teams: Team[]

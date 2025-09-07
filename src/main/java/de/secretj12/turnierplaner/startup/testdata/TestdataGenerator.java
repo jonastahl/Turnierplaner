@@ -226,10 +226,10 @@ public class TestdataGenerator {
             case FEMALE -> Sex.FEMALE;
             case ANY -> Math.random() > 0.5 ? Sex.MALE : Sex.FEMALE;
         });
-        player.setEmail(player.getFirstName() + "." + player.getLastName() + "@gmail.com");
         player.setPhone(faker.phoneNumber().cellPhone());
         player.setMailVerified(true);
         player.setAdminVerified(true);
+        player.setLanguage(Language.DE);
         switch (ageRestr) {
             case NONE -> player.setBirthday(LocalDate.now().minusYears(random.nextInt(50)));
             case U18 -> player.setBirthday(LocalDate.now().minusYears(random.nextInt(18)));

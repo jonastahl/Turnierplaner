@@ -50,7 +50,7 @@
 import DraggablePanel from "@/draggable/DraggablePanel.vue"
 import { ref } from "vue"
 import { Player } from "@/interfaces/player"
-import PlayerCard from "@/components/views/prepare/components/PlayerCard.vue"
+import PlayerCard from "@/components/views/compManage/prepare/components/PlayerCard.vue"
 import OverlayPanel from "primevue/overlaypanel"
 import { useI18n } from "vue-i18n"
 

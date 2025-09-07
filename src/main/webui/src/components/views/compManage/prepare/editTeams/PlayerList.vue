@@ -12,6 +12,7 @@
 							:tournament="props.tournament"
 							class="flex-grow-1 w-1"
 							:is-updating="isUpdating"
+							:secondary="secondary"
 							@add-player="addPlayer"
 						/>
 						<DeleteBox :group="props.group" :secondary="secondary" />
@@ -32,11 +33,11 @@
 <script setup lang="ts">
 import { Tournament } from "@/interfaces/tournament"
 import { Competition } from "@/interfaces/competition"
-import AddPlayer from "@/components/views/prepare/editTeams/AddPlayer.vue"
-import DeleteBox from "@/components/views/prepare/editTeams/DeleteBox.vue"
+import AddPlayer from "@/components/views/compManage/prepare/editTeams/AddPlayer.vue"
+import DeleteBox from "@/components/views/compManage/prepare/editTeams/DeleteBox.vue"
 import { ref } from "vue"
 import { Player } from "@/interfaces/player"
-import PlayerContainerDraggable from "@/components/views/prepare/components/PlayerContainerDraggable.vue"
+import PlayerContainerDraggable from "@/components/views/compManage/prepare/components/PlayerContainerDraggable.vue"
 
 const props = withDefaults(
 	defineProps<{

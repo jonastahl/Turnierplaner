@@ -35,8 +35,8 @@ import { CompType } from "@/interfaces/competition"
 import {
 	extractGroupMatches,
 	extractKnockoutMatches,
-} from "@/components/views/prepare/scheduleMatches/ScheduleMatchesHelper"
-import MatchEvent from "@/components/views/prepare/scheduleMatches/MatchEvent.vue"
+} from "@/components/views/compManage/prepare/scheduleMatches/ScheduleMatchesHelper"
+import MatchEvent from "@/components/views/compManage/prepare/scheduleMatches/MatchEvent.vue"
 
 const route = useRoute()
 const { t } = useI18n()

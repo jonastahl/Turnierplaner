@@ -20,8 +20,12 @@
 		"error_saving": "Error while saving",
 		"save": "Save",
 		"reset": "Reset",
+		"reload": "Reload",
+		"cancel": "Cancel",
 		"back": "Back",
 		"next": "Next",
+		"saveandcont": "Save and continue",
+		"saveandcomp": "Save and complete",
 		"saved": "Changes saved",
 		"save_failed": "Something went wrong while saving",
 		"loading_failed": "Something went wrong while loading",
@@ -226,6 +230,8 @@
 			"editTeams": "Edit teams",
 			"assignMatches": "Assign matches",
 			"scheduleMatches": "Schedule matches",
+			"done": "Completed",
+			"publishing": "Publishing",
 			"previous": "Previous",
 			"next": "Next",
 			"invalid_step": {
@@ -233,6 +239,7 @@
 				"detail": "Previous steps need to be fulfilled first"
 			}
 		},
+		"preparation": "Preparation",
 		"editTeams": {
 			"deleteBox": "Drop to delete",
 			"randomize": "Randomize",
@@ -248,7 +255,27 @@
 			"teams": "Teams",
 			"ranking": "Ranking",
 			"knockout_not_assigned": "Not all players have been assigned yet"
-		}
+		},
+		"overview": "Overview",
+		"prepared_not_published": "The competition has been prepared, but not published so far. You can reset the progress to restart the preparation.",
+		"prepare_reset_warning": "All drawn and scheduled matches will be reset. Only assigned teams will be kept. Do you really want to reset the preparation?",
+		"prepared_published": "The competition has been prepared and published. You can no longer revoke preparation.",
+		"restored": "Restored initial configuration",
+		"scheduleMatches": {
+			"error_cont_not_scheduled": "All matches need to be scheduled before continuing"
+		},
+		"publish_warning": "Publishing notifies all players via E-Mail.\nAfterwards, you are more limited in editing the competition.",
+		"publish_consider_all": "Consider using the function \"Publish all\".\nThis gives the players a combined E-Mail, leading to less spam.",
+		"published_single": "Competition has been published. All players were notified.",
+		"published_single_missing": "Competition has been published. Not all players could be notified, as they did not specify an email address.",
+		"published_all": "All competitions have been published. All players were notified.",
+		"published_all_missing": "All competitions have been published. Not all players could be notified, as they did not specify an email address."
+	},
+	"ViewManage": {
+		"execution": "Execution",
+		"publish": "Publish",
+		"publishall": "Publish all",
+		"prepare": "Prepare"
 	},
 	"validation": {
 		"field_invalid": "Field is invalid",

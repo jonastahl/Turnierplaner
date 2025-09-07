@@ -57,6 +57,7 @@ import { Player } from "@/interfaces/player"
 import { Sex } from "@/interfaces/competition"
 import LinkPlayerName from "@/components/links/LinkPlayerName.vue"
 import { router } from "@/main"
+import { Routes } from "@/routes"
 
 const { t } = useI18n()
 const toast = useToast()
@@ -77,7 +78,7 @@ const { data: playerPage, isLoading: isLoading } = findPlayers(
 
 function edit(player: Player) {
 	router.push({
-		name: "Update player",
+		name: Routes.UpdatePlayer,
 		params: {
 			playerId: player.id,
 		},

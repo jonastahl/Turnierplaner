@@ -182,4 +182,8 @@ public class Player {
     public void setLanguage(Language language) {
         this.language = language;
     }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

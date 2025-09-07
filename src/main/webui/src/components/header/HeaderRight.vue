@@ -36,6 +36,7 @@ import { inject, ref } from "vue"
 import { router } from "@/main"
 import { getConfig } from "@/backend/config"
 import { useI18n } from "vue-i18n"
+import { Routes } from "@/routes"
 
 const { t } = useI18n()
 
@@ -50,7 +51,7 @@ window.addEventListener("resize", () => {
 })
 
 function toHome() {
-	router.push({ name: "Tournaments" })
+	router.push({ name: Routes.Tournaments })
 }
 </script>
 

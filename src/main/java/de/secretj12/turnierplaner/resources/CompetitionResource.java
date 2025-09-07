@@ -2,12 +2,15 @@ package de.secretj12.turnierplaner.resources;
 
 import de.secretj12.turnierplaner.db.entities.Match;
 import de.secretj12.turnierplaner.db.entities.Player;
-import de.secretj12.turnierplaner.enums.*;
-import de.secretj12.turnierplaner.db.entities.competition.*;
+import de.secretj12.turnierplaner.db.entities.competition.Competition;
+import de.secretj12.turnierplaner.db.entities.competition.Team;
 import de.secretj12.turnierplaner.db.entities.groups.Group;
 import de.secretj12.turnierplaner.db.repositories.*;
+import de.secretj12.turnierplaner.enums.CompetitionType;
+import de.secretj12.turnierplaner.enums.CreationProgress;
 import de.secretj12.turnierplaner.logic.CompetitionLogic;
 import de.secretj12.turnierplaner.mails.MailTemplates;
+import de.secretj12.turnierplaner.model.director.JDirectorPublishCompetition;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorCompetitionAdd;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorCompetitionUpdate;
 import de.secretj12.turnierplaner.model.director.competition.jDirectorGroupsDivision;
@@ -28,13 +31,12 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestResponse;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Path("/tournament/{tourName}/competition")
 public class CompetitionResource {
@@ -57,6 +59,8 @@ public class CompetitionResource {
     TeamRepository teams;
     @Inject
     CourtRepositiory courts;
+    @Inject
+    GroupRepository groups;
 
     @Inject
     KnockoutTools knockoutTools;
@@ -183,6 +187,9 @@ public class CompetitionResource {
         return "Team deleted";
     }
 
+    public record PreparationConfig<T>(boolean complete, T data) {
+    }
+
     @POST
     @Transactional
     @RolesAllowed("director")
@@ -190,11 +197,15 @@ public class CompetitionResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String updateTeams(@PathParam("tourName") String tourName, @PathParam("compName") String compName,
-                              List<jUserTeam> teams) {
+                              PreparationConfig<List<jUserTeam>> config) {
         common.checkTournamentAccessibility(tourName);
+        var teams = config.data;
 
         Competition competition = competitions.getByName(tourName, compName);
         if (competition == null) throw new BadRequestException("Competition doesn't exist");
+        if (competition.getcProgress() != CreationProgress.TEAMS && competition
+            .getcProgress() != CreationProgress.GAMES)
+            throw new BadRequestException("Cannot update teams after assigning matches");
 
         List<Team> curTeams = competition.getTeams();
         for (var cTeam : curTeams) {
@@ -222,8 +233,10 @@ public class CompetitionResource {
             }
         }
 
-        competition.setcProgress(CreationProgress.GAMES);
-        competitions.persist(competition);
+        if (config.complete) {
+            competition.setcProgress(CreationProgress.GAMES);
+            competitions.persist(competition);
+        }
 
         return "Teams updated";
     }
@@ -273,15 +286,24 @@ public class CompetitionResource {
     @Path("/{compName}/initKnockout")
     @Produces(MediaType.TEXT_PLAIN)
     public boolean initializeMatchesKnockout(@PathParam("tourName") String tourName,
-                                             @PathParam("compName") String compName, jUserKnockoutMatch tree) {
+                                             @PathParam("compName") String compName,
+                                             PreparationConfig<jUserKnockoutMatch> config) {
         common.checkTournamentAccessibility(tourName);
 
         Competition competition = competitions.getByName(tourName, compName);
+        if (competition == null) throw new NotFoundException("Could not find competition");
+        if (competition.getcProgress() != CreationProgress.GAMES && competition
+            .getcProgress() != CreationProgress.SCHEDULING)
+            throw new BadRequestException("Cannot update teams after scheduling");
+        if (competition.getType() != CompetitionType.KNOCKOUT)
+            throw new WebApplicationException("Competition does not have type knockout", Response.Status.METHOD_NOT_ALLOWED);
 
-        knockoutTools.updateKnockoutTree(competition, tree);
+        knockoutTools.updateKnockoutTree(competition, config.data);
 
-        competition.setcProgress(CreationProgress.SCHEDULING);
-        competitions.persist(competition);
+        if (config.complete) {
+            competition.setcProgress(CreationProgress.SCHEDULING);
+            competitions.persist(competition);
+        }
         return true;
     }
 
@@ -291,7 +313,9 @@ public class CompetitionResource {
     @Path("/{compName}/initGroups")
     @Produces(MediaType.TEXT_PLAIN)
     public boolean initializeMatchesGroups(@PathParam("tourName") String tourName,
-                                           @PathParam("compName") String compName, jDirectorGroupsDivision division) {
+                                           @PathParam("compName") String compName,
+                                           PreparationConfig<jDirectorGroupsDivision> config) {
+        var division = config.data;
         if (division.getGroups().stream().anyMatch(g -> g.size() <= 1))
             throw new BadRequestException("At least 2 groups per team needed");
 
@@ -311,22 +335,26 @@ public class CompetitionResource {
         checkGroupsCount(groups.size());
 
         Competition competition = competitions.getByName(tourName, compName);
+        if (competition == null) throw new NotFoundException("Could not find competition");
+        if (competition.getcProgress() != CreationProgress.GAMES && competition
+            .getcProgress() != CreationProgress.SCHEDULING)
+            throw new BadRequestException("Cannot update teams after scheduling");
+        if (competition.getType() != CompetitionType.GROUPS)
+            throw new WebApplicationException("Competition does not have type knockout", Response.Status.METHOD_NOT_ALLOWED);
 
         groupTools.generateMatches(competition, groups);
 
-        competition.setcProgress(CreationProgress.SCHEDULING);
-        competitions.persist(competition);
+        if (config.complete) {
+            competition.setcProgress(CreationProgress.SCHEDULING);
+            competitions.persist(competition);
+        }
         return true;
     }
 
     private void checkGroupsCount(int count) {
-        int i = 1;
-        while (i <= 1024) {
-            if (i == count)
-                return;
-            i *= 2;
-        }
-        throw new BadRequestException("Invalid group count");
+        // has to be a power of 2
+        if ((count - 1 & count) != 0)
+            throw new BadRequestException("Invalid group count");
     }
 
     @GET
@@ -344,14 +372,17 @@ public class CompetitionResource {
     }
 
     @POST
-    @Path("/{compName}/match")
+    @Path("/{compName}/updateSchedule")
     @Transactional
     @RolesAllowed("director")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String updateMatches(@PathParam("tourName") String tourName, @PathParam("compName") String compName,
-                                List<jDirectorScheduleMatch> matches) {
+    public String updateSchedule(@PathParam("tourName") String tourName, @PathParam("compName") String compName,
+                                 PreparationConfig<List<jDirectorScheduleMatch>> config) {
         Competition competition = competitions.getByName(tourName, compName);
+        var matches = config.data;
         if (competition == null) throw new NotFoundException("Competition could not be found");
+        if (competition.getcProgress() != CreationProgress.SCHEDULING)
+            throw new BadRequestException("Cannot update teams after publishing");
 
         for (var cMatch : matches) {
             Match match = this.matches.findById(cMatch.getId());
@@ -365,6 +396,90 @@ public class CompetitionResource {
 
             this.matches.persist(match);
         }
+        if (config.complete) {
+            boolean complete = true;
+            for (var match : competition.getMatches()) {
+                if (match.getBegin() == null || match.getEnd() == null) {
+                    complete = false;
+                    break;
+                }
+            }
+            if (complete) {
+                competition.setcProgress(CreationProgress.PUBLISHING);
+                competitions.persist(competition);
+            }
+        }
         return "Updated matches";
+    }
+
+    private static boolean matchIsPlayed(Match m) {
+        return m.getDependentOn() != null || (m.getTeamA() != null && m.getTeamB() != null);
+    }
+
+    @POST
+    @Path("/{compName}/resetPreparation")
+    @Transactional
+    @RolesAllowed("director")
+    public String resetPreparation(@PathParam("tourName") String tourName, @PathParam("compName") String compName) {
+        Competition competition = competitions.getByName(tourName, compName);
+        if (competition == null) throw new NotFoundException("Competition could not be found");
+        switch (competition.getcProgress()) {
+            case TEAMS:
+                return "Could not reset anything";
+            case DONE:
+                throw new BadRequestException("Cannot reset a published competition");
+        }
+
+        if (!competition.getGroups().isEmpty()) {
+            competition.getGroups().forEach(g -> groups.delete(g));
+            competition.setGroups(List.of());
+            competition.setFinale(null);
+            competition.setThirdPlace(null);
+        } else {
+            matches.deleteByComp(competition);
+        }
+
+        competition.setcProgress(CreationProgress.TEAMS);
+        competitions.persist(competition);
+
+        return "Preparation progress was reset";
+    }
+
+    @POST
+    @Path("/publish")
+    @Transactional
+    @RolesAllowed("director")
+    public RestResponse<String> publishCompetition(@PathParam("tourName") String tourName,
+                                                   JDirectorPublishCompetition toPublish) {
+        List<Competition> publishComps = toPublish.competitions()
+            .stream().map(compName -> competitions.getByName(tourName, compName))
+            .toList();
+        if (publishComps.stream().anyMatch(comp -> comp.getcProgress() == null))
+            throw new BadRequestException("Competition has wrong state");
+        if (publishComps.stream().anyMatch(comp -> comp.getcProgress() != CreationProgress.PUBLISHING))
+            throw new NotFoundException("Can only publish already scheduled competition");
+
+        Map<Player, Map<Competition, List<Match>>> players = new HashMap<>();
+        for (Competition comp : publishComps) {
+            comp.setcProgress(CreationProgress.DONE);
+            competitions.persist(comp);
+
+            comp.getMatches()
+                .stream().filter(CompetitionResource::matchIsPlayed)
+                .forEach(m -> Stream.of(m.getTeamA(), m.getTeamB())
+                    .filter(Objects::nonNull)
+                    .flatMap(t -> Stream.of(t.getPlayerA(), t.getPlayerB())).filter(Objects::nonNull)
+                    .forEach(p -> players.computeIfAbsent(p, (P) -> new HashMap<>())
+                        .computeIfAbsent(comp, (C) -> new ArrayList<>())
+                        .add(m))
+                );
+        }
+        boolean allSuc = true;
+        for (var entry : players.entrySet())
+            allSuc &= mailTemplates.sendPublishedMail(entry.getKey(), tourName, entry.getValue());
+
+        return RestResponse.ResponseBuilder
+            .create(allSuc ? Response.Status.OK : Response.Status.PARTIAL_CONTENT, "Mails published")
+            .build();
     }
 }

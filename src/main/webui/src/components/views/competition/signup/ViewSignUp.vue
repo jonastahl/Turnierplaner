@@ -28,7 +28,7 @@
 						</span>
 						<Button
 							:label="t('general.register')"
-							@click="router.push({ name: 'Player registration' })"
+							@click="router.push({ name: Routes.PlayerRegistration })"
 						/>
 					</div>
 					<divider />
@@ -53,6 +53,7 @@ import { Competition } from "@/interfaces/competition"
 import { useI18n } from "vue-i18n"
 import { router } from "@/main"
 import Button from "primevue/button"
+import { Routes } from "@/routes"
 
 const { t } = useI18n()
 

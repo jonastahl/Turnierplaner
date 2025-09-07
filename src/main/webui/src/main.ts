@@ -20,6 +20,7 @@ import Toast from "primevue/toast"
 import Tooltip from "primevue/tooltip"
 import FocusTrap from "primevue/focustrap"
 import InputGroup from "primevue/inputgroup"
+import ConfirmationService from "primevue/confirmationservice"
 
 /* Primevue styling */
 import "primeflex/primeflex.css"
@@ -33,6 +34,7 @@ import "material-symbols/outlined.css"
 /* yup validation */
 import { setLocale } from "yup"
 import { VueQueryPlugin, VueQueryPluginOptions } from "@tanstack/vue-query"
+import ConfirmDialog from "primevue/confirmdialog"
 
 axios.defaults.baseURL = settings.BACKEND
 
@@ -117,8 +119,10 @@ app
 	/* Primevue */
 	.use(PrimeVue, { ripple: true })
 	.use(ToastService)
+	.use(ConfirmationService)
 	.component("Toast", Toast)
 	.component("InputGroup", InputGroup)
+	.component("ConfirmDialog", ConfirmDialog)
 	.directive("tooltip", Tooltip)
 	.directive("focustrap", FocusTrap)
 	.use(VueQueryPlugin, vueQueryPluginOptions)

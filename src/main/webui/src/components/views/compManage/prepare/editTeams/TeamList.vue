@@ -52,7 +52,7 @@
 							</template>
 							<template #playerB>
 								<DraggablePanel
-									:id="competition.playerB.different ? 'playersB' : 'playersA'"
+									:id="competition.playerB.different ? 'playerB' : 'playerA'"
 									:component-data="{
 										tag: 'div',
 										name: props.animated ? 'teamBox' : 'default',
@@ -89,13 +89,13 @@
 </template>
 
 <script lang="ts" setup>
-import TeamBox from "@/components/views/prepare/components/TeamBox.vue"
+import TeamBox from "@/components/views/compManage/prepare/components/TeamBox.vue"
 import { Competition } from "@/interfaces/competition"
 import { TransitionGroup } from "vue"
 import { v4 as uuidv4 } from "uuid"
 import DraggablePanel from "@/draggable/DraggablePanel.vue"
-import PlayerCard from "@/components/views/prepare/components/PlayerCard.vue"
-import { Player, playerServerToClient } from "@/interfaces/player"
+import PlayerCard from "@/components/views/compManage/prepare/components/PlayerCard.vue"
+import { Player } from "@/interfaces/player"
 import { TeamArray } from "@/interfaces/team"
 
 const props = defineProps<{
@@ -118,15 +118,15 @@ function memberRemoved(i: number) {
 		props.teams.splice(i + 1, 1)
 }
 
-function wrap(el: Player, from: string): TeamArray {
-	if (from === "playerA") {
+function wrap(el: Player, fromId: string): TeamArray {
+	if (fromId === "playerA") {
 		return {
 			id: uuidv4(),
 			playerA: [el],
 			playerB: [],
 		}
 	}
-	if (from === "playerB") {
+	if (fromId === "playerB") {
 		return {
 			id: uuidv4(),
 			playerA: [],
@@ -134,23 +134,7 @@ function wrap(el: Player, from: string): TeamArray {
 		}
 	}
 
-	return {
-		id: uuidv4(),
-		playerA: [
-			playerServerToClient({
-				id: uuidv4(),
-				firstName: "error",
-				lastName: "error",
-			}),
-		],
-		playerB: [
-			playerServerToClient({
-				id: uuidv4(),
-				firstName: "error",
-				lastName: "error",
-			}),
-		],
-	}
+	throw new Error("Must be from playerA or playerB")
 }
 </script>
 

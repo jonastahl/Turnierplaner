@@ -1,120 +1,173 @@
+export enum Routes {
+	Tournaments = "tournaments",
+	Settings = "settings",
+	CreateTournament = "createTournament",
+	EditTournament = "editTournament",
+	Competitions = "competitions",
+	CreateCompetition = "createCompetition",
+	MatchesOverview = "matchesOverview",
+	Competition = "competition",
+	ManageCompetition = "manageCompetition",
+	ManageSettings = "manageSettings",
+	ManagePrepare = "managePrepare",
+	EditTeams = "editTeams",
+	AssignMatches = "assignMatches",
+	ScheduleMatches = "scheduleMatches",
+	ManageExecution = "manageExecution",
+	PlayerRegistration = "playerRegistration",
+	UpdatePlayer = "updatePlayer",
+	PlayerVerified = "playerVerified",
+	PlayerOverview = "playerOverview",
+	Templates = "templates",
+	Impressum = "impressum",
+}
+
 export default [
 	{
 		path: "/",
-		name: "Tournaments",
+		name: Routes.Tournaments,
 		component: () =>
 			import("@/components/views/tournaments/ViewTournaments.vue"),
 	},
 	{
 		path: "/settings",
-		name: "Settings",
+		name: Routes.Settings,
 		component: () => import("@/components/views/settings/ViewSettings.vue"),
 	},
 	{
 		path: "/createTournament",
-		name: "Create tournament",
+		name: Routes.CreateTournament,
 		component: () =>
 			import("@/components/views/tournaments/ViewCreateTournament.vue"),
 	},
 	{
 		path: "/tournament/:tourId/edit",
-		name: "Edit tournament",
+		name: Routes.EditTournament,
 		component: () =>
 			import("@/components/views/tournaments/ViewEditTournament.vue"),
 	},
 	{
 		path: "/tournament/:tourId",
-		name: "Competitions",
+		name: Routes.Competitions,
 		component: () =>
 			import("@/components/views/competitions/ViewCompetitions.vue"),
 	},
 	{
 		path: "/tournament/:tourId/createCompetition",
-		name: "Create competition",
+		name: Routes.CreateCompetition,
 		component: () =>
 			import("@/components/views/competitions/ViewCreateCompetition.vue"),
 	},
 	{
 		path: "/tournament/:tourId/overview",
-		name: "Matches overview",
+		name: Routes.MatchesOverview,
 		component: () =>
 			import("@/components/views/overview/ViewTournamentOverview.vue"),
 	},
 	{
 		path: "/tournament/:tourId/competition/:compId",
-		name: "Competition",
+		name: Routes.Competition,
 		component: () =>
 			import("@/components/views/competition/ViewCompetition.vue"),
 	},
 	{
-		path: "/tournament/:tourId/prepare/:compId?",
-		name: "Edit competition",
+		path: "/tournament/:tourId/manage",
+		name: Routes.ManageCompetition,
 		component: () =>
-			import("@/components/views/prepare/ViewPrepareMatches.vue"),
+			import("@/components/views/compManage/ViewManageCompetitions.vue"),
 		children: [
 			{
-				path: "settings",
-				name: "settings",
+				path: "settings/:compId?",
+				name: Routes.ManageSettings,
 				component: () =>
-					import("@/components/views/prepare/ViewEditCompetition.vue"),
-				meta: { step: 1, reset: false },
+					import("@/components/views/compManage/settings/ViewSettings.vue"),
+				meta: {
+					overview: false,
+					mStep: Routes.ManageSettings,
+				},
 			},
 			{
-				path: "editTeams",
-				name: "editTeams",
-				component: () =>
-					import("@/components/views/prepare/editTeams/ViewEditTeams.vue"),
-				meta: { step: 2, reset: true },
-			},
-			{
-				path: "assignMatches",
-				name: "assignMatches",
+				path: "prepare/:compId?",
+				name: Routes.ManagePrepare,
 				component: () =>
 					import(
-						"@/components/views/prepare/assignMatches/ViewAssignMatches.vue"
+						"@/components/views/compManage/prepare/ViewPrepareMatches.vue"
 					),
-				meta: { step: 3, reset: true },
+				meta: {
+					overview: true,
+					mStep: Routes.ManagePrepare,
+				},
+				children: [
+					{
+						path: "editTeams",
+						name: Routes.EditTeams,
+						component: () =>
+							import(
+								"@/components/views/compManage/prepare/editTeams/ViewEditTeams.vue"
+							),
+						meta: { step: 1, reset: true },
+					},
+					{
+						path: "assignMatches",
+						name: Routes.AssignMatches,
+						component: () =>
+							import(
+								"@/components/views/compManage/prepare/assignMatches/ViewAssignMatches.vue"
+							),
+						meta: { step: 2, reset: true },
+					},
+					{
+						path: "scheduleMatches",
+						name: Routes.ScheduleMatches,
+						component: () =>
+							import(
+								"@/components/views/compManage/prepare/scheduleMatches/ViewScheduleMatches.vue"
+							),
+						meta: { step: 3, reset: false },
+					},
+				],
 			},
 			{
-				path: "scheduleMatches",
-				name: "scheduleMatches",
+				path: "execution/:compId?",
+				name: Routes.ManageExecution,
 				component: () =>
-					import(
-						"@/components/views/prepare/scheduleMatches/ViewScheduleMatches.vue"
-					),
-				meta: { step: 4, reset: false },
+					import("@/components/views/compManage/execution/ViewExecution.vue"),
+				meta: {
+					overview: true,
+					mStep: Routes.ManageExecution,
+				},
 			},
 		],
 	},
 	{
 		path: "/player/registration",
-		name: "Player registration",
+		name: Routes.PlayerRegistration,
 		component: () =>
 			import("@/components/views/player/ViewPlayerRegistration.vue"),
 	},
 	{
 		path: "/player/update/:playerId",
-		name: "Update player",
+		name: Routes.UpdatePlayer,
 		component: () => import("@/components/views/player/ViewPlayerUpdate.vue"),
 	},
 	{
 		path: "/verification",
-		name: "Player verified",
+		name: Routes.PlayerVerified,
 		component: () => import("@/components/views/player/ViewVerification.vue"),
 	},
 	{
 		path: "/player/overview/:playerId",
-		name: "Player overview",
+		name: Routes.PlayerOverview,
 		component: () => import("@/components/views/player/ViewPlayerOverview.vue"),
 	},
 	{
 		path: "/templates",
-		name: "Templates",
+		name: Routes.Templates,
 		component: () => import("@/components/views/ViewTemplates.vue"),
 	},
 	{
 		path: "/impressum",
-		name: "Impressum",
+		name: Routes.Impressum,
 		component: () => import("@/components/views/ViewImpressum.vue"),
 	},
 ]

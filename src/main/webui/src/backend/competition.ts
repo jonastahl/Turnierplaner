@@ -1,6 +1,6 @@
 import { ToastServiceMethods } from "primevue/toastservice"
 import { computed, Ref } from "vue"
-import axios from "axios"
+import axios, { AxiosResponse } from "axios"
 import {
 	Competition,
 	CompetitionDefault,
@@ -78,7 +78,7 @@ export function getCompetitionDetails(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("ViewEditCompetition.loadingDetailsFailed"),
+						summary: t("ViewSettings.loadingDetailsFailed"),
 						detail: error,
 						life: 3000,
 					})
@@ -119,7 +119,11 @@ export function useUpdateCompetition(
 					refetchType: "all",
 				}),
 				queryClient.invalidateQueries({
-					queryKey: ["competitionDetails", route.params.tourId, competition.id],
+					queryKey: [
+						"competitionDetails",
+						route.params.tourId,
+						competition.name,
+					],
 					refetchType: "all",
 				}),
 			]).then(() => {
@@ -294,4 +298,113 @@ function signUpOptions(
 				})
 		},
 	}
+}
+
+export function useResetPreparation(
+	route: RouteLocationNormalizedLoaded,
+	t: (s: string) => string,
+	toast: ToastServiceMethods,
+) {
+	const queryClient = useQueryClient()
+	return useMutation({
+		mutationFn: () =>
+			axios.post(
+				`/tournament/${<string>route.params.tourId}/competition/${<string>route.params.compId}/resetPreparation`,
+			),
+		onSuccess() {
+			toast.add({
+				severity: "success",
+				summary: t("general.success"),
+				detail: t("general.saved"),
+				life: 3000,
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["competitionList"],
+				refetchType: "all",
+			})
+			queryClient.invalidateQueries({
+				queryKey: [
+					"competitionDetails",
+					route.params.tourId,
+					route.params.compId,
+				],
+				refetchType: "all",
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["knockout", route.params.tourId, route.params.compId],
+				refetchType: "all",
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["groupsDivision", route.params.tourId, route.params.compId],
+				refetchType: "all",
+			})
+		},
+		onError(error) {
+			toast.add({
+				severity: "error",
+				summary: t("general.failure"),
+				detail: t("general.failure"),
+				life: 3000,
+			})
+			console.log(error)
+		},
+	})
+}
+
+export function usePublishCompetitions(
+	route: RouteLocationNormalizedLoaded,
+	t: (s: string) => string,
+	toast: ToastServiceMethods,
+) {
+	const queryClient = useQueryClient()
+	return useMutation({
+		mutationFn: (competitions: string[]) =>
+			axios.post(
+				`/tournament/${<string>route.params.tourId}/competition/publish`,
+				{ competitions },
+			),
+		onSuccess(data: AxiosResponse, competitions: string[]) {
+			let message
+			if (data.status == 200) {
+				if (competitions.length === 1) {
+					message = "ViewPrepare.published_all"
+				} else {
+					message = "ViewPrepare.published_single"
+				}
+			} else {
+				if (competitions.length === 1) {
+					message = "ViewPrepare.published_all_missing"
+				} else {
+					message = "ViewPrepare.published_single_missing"
+				}
+			}
+			toast.add({
+				severity: data.status == 200 ? "success" : "warn",
+				summary: t("general.success"),
+				detail: t(message),
+				life: 3000,
+			})
+
+			if (competitions.length === 1)
+				queryClient.invalidateQueries({
+					queryKey: ["competitionList"],
+					refetchType: "all",
+				})
+			for (const comp of competitions) {
+				queryClient.invalidateQueries({
+					queryKey: ["competitionDetails", route.params.tourId, comp],
+					refetchType: "all",
+				})
+			}
+		},
+		onError(error) {
+			toast.add({
+				severity: "error",
+				summary: t("general.failure"),
+				detail: t("general.failure"),
+				life: 3000,
+			})
+			console.log(error)
+		},
+	})
 }

@@ -1,14 +1,15 @@
 package de.secretj12.turnierplaner.model;
 
 import de.secretj12.turnierplaner.db.entities.Match;
-import de.secretj12.turnierplaner.enums.*;
+import de.secretj12.turnierplaner.db.entities.Set;
 import de.secretj12.turnierplaner.db.entities.Tournament;
-import de.secretj12.turnierplaner.db.entities.competition.*;
+import de.secretj12.turnierplaner.db.entities.competition.Competition;
 import de.secretj12.turnierplaner.db.entities.groups.FinalOfGroup;
 import de.secretj12.turnierplaner.db.entities.groups.Group;
 import de.secretj12.turnierplaner.db.entities.groups.MatchOfGroup;
 import de.secretj12.turnierplaner.db.entities.knockout.NextMatch;
 import de.secretj12.turnierplaner.db.repositories.*;
+import de.secretj12.turnierplaner.enums.*;
 import io.quarkus.hibernate.orm.panache.Panache;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -40,6 +41,8 @@ public class TestDeletionBehaviour {
     GroupRepository groupRepository;
     @Inject
     MatchOfGroupRepository matchOfGroupRepository;
+    @Inject
+    SetRepository setRepository;
 
     @BeforeEach
     @Transactional
@@ -218,5 +221,30 @@ public class TestDeletionBehaviour {
         Panache.getEntityManager().clear();
 
         assertEquals(4, matchRepository.listAll().size());
+    }
+
+    @Test
+    @Transactional
+    public void matchDeletesSets() {
+        Competition competition = competitionRepository.getByName("Clubmeisterschaft", "Herren");
+
+        Match m = new Match();
+        m.setCompetition(competition);
+        matchRepository.persist(m);
+
+        Set.SetKey setKey = new Set.SetKey();
+        setKey.setMatch(m);
+        setKey.setIndex((byte) 0);
+        Set s = new Set();
+        s.setKey(setKey);
+        setRepository.persist(s);
+
+        Panache.getEntityManager().flush();
+        Panache.getEntityManager().clear();
+
+        List<Match> all = matchRepository.findAll().list();
+        assertEquals(1, all.size());
+        matchRepository.delete(all.getFirst());
+        assertEquals(0, setRepository.findAll().count());
     }
 }

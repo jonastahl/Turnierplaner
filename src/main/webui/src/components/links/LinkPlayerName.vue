@@ -15,6 +15,7 @@
 import { Player } from "@/interfaces/player"
 import { router } from "@/main"
 import { computed } from "vue"
+import { Routes } from "@/routes"
 
 const props = withDefaults(
 	defineProps<{
@@ -38,7 +39,7 @@ const firstShort = computed(() => {
 function click() {
 	if (props.player)
 		router.push({
-			name: "Player overview",
+			name: Routes.PlayerOverview,
 			params: {
 				playerId: props.player.id,
 			},

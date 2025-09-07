@@ -20,8 +20,12 @@
 		"error_saving": "Fehler beim Speichern",
 		"save": "Speichern",
 		"reset": "Zurücksetzen",
+		"reload": "Neu laden",
+		"cancel": "Abbrechen",
 		"back": "Zurück",
 		"next": "Weiter",
+		"saveandcont": "Speichern und weiter",
+		"saveandcomp": "Speichern und abschließen",
 		"saved": "Änderungen gespeichert",
 		"save_failed": "Während dem Speichern ist etwas schiefgelaufen",
 		"loading_failed": "Während dem Laden ist etwas schiefgelaufen",
@@ -225,6 +229,8 @@
 			"editTeams": "Teams auslosen",
 			"assignMatches": "Spiele auslosen",
 			"scheduleMatches": "Zeiteinteilung",
+			"done": "Abgeschlossen",
+			"publishing": "Veröffentlichen",
 			"previous": "Zurück",
 			"next": "Weiter",
 			"invalid_step": {
@@ -232,6 +238,7 @@
 				"detail": "Vorherige Schritte wurden noch nicht erledigt"
 			}
 		},
+		"preparation": "Vorbereitung",
 		"editTeams": {
 			"deleteBox": "Löschen",
 			"randomize": "Auslosen",
@@ -247,7 +254,27 @@
 			"teams": "Teams",
 			"ranking": "Rangliste",
 			"knockout_not_assigned": "Es wurden noch nicht alle Spieler zugeteilt"
-		}
+		},
+		"overview": "Übersicht",
+		"prepared_not_published": "Die Konkurrenz wurde bereits vorbereitet, aber noch nicht veröffentlicht. Du kannst die Vorbereitung zurücksetzen um erneut zu beginnen.",
+		"prepare_reset_warning": "Alles ausgelosten und eingeteilten Spiele werden zurückgesetzt. Nur zugeteilte Teams bleiben erhalten. Möchtest du die Vorbereitung wirklich zurücksetzen?",
+		"prepared_published": "Die Konkurrenz wurde fertig vorbereitet und veröffentlicht. Du kannst sie hier nicht länger bearbeiten.",
+		"restored": "Ursprüngliche Konfiguration wieder hergestellt",
+		"scheduleMatches": {
+			"error_cont_not_scheduled": "Alle Spiele müssen verplant werden!"
+		},
+		"publish_warning": "Durch das Veröffentlichen werden alle Spieler per E-Mail benachrichtigt.\nDu kannst die Konkurrenz anschließend nur noch eingeschränkter bearbeiten.",
+		"publish_consider_all": "Bevorzuge die Funktion \"Alle veröffentlichen\".\nDadurch erhalten Spieler nur eine kombinierte E-Mail, wodurch es für die Teilnehmer übersichtlicher wird.",
+		"published_single": "Konkurrenz wurde veröffentlicht. Alle Spieler wurden benachrichtigt.",
+		"published_single_missing": "Konkurrenz wurde veröffentlicht. Manche Spieler konnten nicht benachrichtigt werden, da sie keine Email angegeben haben.",
+		"published_all": "Alle Konkurrenzen wurden veröffentlicht. Alle Spieler wurden benachrichtigt.",
+		"published_all_missing": "Alle Konkurrenzen wurden veröffentlicht. Manche Spieler konnten nicht benachrichtigt werden, da sie keine Email angegeben haben."
+	},
+	"ViewManage": {
+		"execution": "Durchführung",
+		"publish": "Veröffentlichen",
+		"publishall": "Alle veröffentlichen",
+		"prepare": "Vorbereiten"
 	},
 	"validation": {
 		"field_invalid": "Feld ist ungültig",

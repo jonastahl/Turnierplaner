@@ -36,32 +36,45 @@
 			</div>
 		</div>
 	</div>
+	<NavigationButtons
+		:loading="isUpdating"
+		is-complete
+		@reset="resetDialog = true"
+		@save="save"
+		@complete="complete"
+	/>
+	<DialogResetProgress v-model="resetDialog" />
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from "vue-router"
+import { useRoute } from "vue-router"
 import { useToast } from "primevue/usetoast"
-import SchedulingCalendar from "@/components/views/prepare/scheduleMatches/SchedulingCalendar.vue"
+import SchedulingCalendar from "@/components/views/compManage/prepare/scheduleMatches/SchedulingCalendar.vue"
 import { ref, watch } from "vue"
 import { Court } from "@/interfaces/court"
-import MatchesContainerDraggable from "@/components/views/prepare/scheduleMatches/MatchesContainerDraggable.vue"
-import { MatchCalEvent } from "@/components/views/prepare/scheduleMatches/ScheduleMatchesHelper"
+import MatchesContainerDraggable from "@/components/views/compManage/prepare/scheduleMatches/MatchesContainerDraggable.vue"
+import { MatchCalEvent } from "@/components/views/compManage/prepare/scheduleMatches/ScheduleMatchesHelper"
 import { useUpdateMatches } from "@/backend/match"
 import { useI18n } from "vue-i18n"
-import CourtChooser from "@/components/views/prepare/scheduleMatches/CourtChooser.vue"
+import CourtChooser from "@/components/views/compManage/prepare/scheduleMatches/CourtChooser.vue"
 import { getTournamentCourts, useUpdateTournamentCourts } from "@/backend/court"
 import { getTournamentDetails } from "@/backend/tournament"
 import { AnnotatedMatch } from "@/interfaces/match"
+import DialogResetProgress from "@/components/views/compManage/prepare/DialogResetProgress.vue"
+import NavigationButtons from "@/components/views/compManage/prepare/components/NavigationButtons.vue"
+import { router } from "@/main"
+import { Routes } from "@/routes"
 
 const route = useRoute()
-const router = useRouter()
 const { t } = useI18n()
 const toast = useToast()
 
-const isUpdating = defineModel<boolean>("isUpdating", { default: false })
+const isUpdating = ref(false)
 
 const matches = ref<AnnotatedMatch[]>([])
 const scheduledMatches = ref<MatchCalEvent[]>([])
+
+const resetDialog = ref(false)
 
 const { data: tournament } = getTournamentDetails(route, t, toast)
 const { data: tournamentCourts } = getTournamentCourts(route)
@@ -79,42 +92,54 @@ watch(
 	{ immediate: true },
 )
 
-function prevPage() {
-	router.replace({
-		name: "assignMatches",
-		params: { tourId: route.params.tourId, compId: route.params.compId },
-	})
-}
-
-function nextPage() {
-	// TODO
-	toast.add({
-		severity: "success",
-		summary: "Competition updated",
-		detail: "TODO",
-		life: 3000,
-	})
-}
-
-function save() {
+function save(complete = false) {
 	isUpdating.value = true
-	updateMatches([
-		...scheduledMatches.value
-			.filter((event) => !event.secondary)
-			.map((event) => {
-				return {
-					...event.data,
-					begin: event.start,
-					end: event.end,
-					court: event.split,
-				}
-			}),
-		...matches.value.map((match) => {
-			return match
-		}),
-	])
 	updateCourts(selectedCourts.value)
-	isUpdating.value = false
+	updateMatches(
+		{
+			complete,
+			matches: [
+				...scheduledMatches.value
+					.filter((event) => !event.secondary)
+					.map((event) => {
+						return {
+							...event.data,
+							begin: event.start,
+							end: event.end,
+							court: event.split,
+						}
+					}),
+				...matches.value.map((match) => {
+					return match
+				}),
+			],
+		},
+		{
+			onSettled() {
+				isUpdating.value = false
+			},
+			onSuccess() {
+				if (complete) {
+					router.push({
+						name: Routes.ManagePrepare,
+					})
+				}
+			},
+		},
+	)
+}
+
+function complete() {
+	if (matches.value.length) {
+		toast.add({
+			severity: "error",
+			summary: t("general.failure"),
+			detail: t("ViewPrepare.scheduleMatches.error_cont_not_scheduled"),
+			life: 3000,
+		})
+		return
+	}
+	save(true)
 }
 
 function remSchedule(match: AnnotatedMatch) {
@@ -123,8 +148,6 @@ function remSchedule(match: AnnotatedMatch) {
 	match.court = null
 	return match
 }
-
-defineExpose({ prevPage, save, nextPage })
 </script>
 
 <style scoped></style>

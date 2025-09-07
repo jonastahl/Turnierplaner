@@ -74,14 +74,22 @@
 			</div>
 		</div>
 	</div>
+	<NavigationButtons
+		:reset="false"
+		reload
+		:loading="isUpdating"
+		@reload="reload"
+		@save="save"
+		@complete="save(true)"
+	/>
 </template>
 
 <script lang="ts" setup>
-import { useRoute, useRouter } from "vue-router"
+import { useRoute } from "vue-router"
 import { useToast } from "primevue/usetoast"
 import { useI18n } from "vue-i18n"
 import { getTournamentDetails } from "@/backend/tournament"
-import PlayerList from "@/components/views/prepare/editTeams/PlayerList.vue"
+import PlayerList from "@/components/views/compManage/prepare/editTeams/PlayerList.vue"
 import { computed, ref, Ref, watch } from "vue"
 import { Player } from "@/interfaces/player"
 import {
@@ -89,14 +97,14 @@ import {
 	teamArrayClientToServer,
 	teamToArray,
 } from "@/interfaces/team"
-import { Mode, Progress } from "@/interfaces/competition"
-import TeamList from "@/components/views/prepare/editTeams/TeamList.vue"
+import { Mode } from "@/interfaces/competition"
+import TeamList from "@/components/views/compManage/prepare/editTeams/TeamList.vue"
 import { v4 as uuidv4 } from "uuid"
 import { getCompetitionDetails } from "@/backend/competition"
 import { getSignedUpSeparated, useUpdateTeams } from "@/backend/signup"
+import NavigationButtons from "@/components/views/compManage/prepare/components/NavigationButtons.vue"
 
 const route = useRoute()
-const router = useRouter()
 const toast = useToast()
 const { t } = useI18n()
 
@@ -104,7 +112,7 @@ function $t(name: string) {
 	return computed(() => t(name))
 }
 
-const isUpdating = defineModel<boolean>("isUpdating", { default: false })
+const isUpdating = ref(false)
 
 const teams = ref<TeamArray[]>([])
 const playersA = ref<Player[]>([])
@@ -239,29 +247,18 @@ const randomizeItems = ref([
 	},
 ])
 
-async function reset() {
+async function reload() {
 	await loadFromServer()
 
 	toast.add({
 		severity: "info",
-		summary: "Reset",
-		detail: "Restored initial configuration",
+		summary: t("general.reload"),
+		detail: t("ViewPrepare.restored"),
 		life: 3000,
 	})
 }
 
-function save() {
-	if (competition.value?.cProgress === Progress.SCHEDULING) {
-		toast.add({
-			severity: "error",
-			summary: "Matches already assigned",
-			detail: "Editing teams afterwards not yet implemented",
-			life: 3000,
-			closable: false,
-		})
-		return
-	}
-
+function save(complete = false) {
 	const t = teams.value.map(teamArrayClientToServer)
 	playersA.value.forEach((player) =>
 		t.push({
@@ -277,22 +274,7 @@ function save() {
 			playerB: player,
 		}),
 	)
-	updateTeams(t)
-}
-
-function prevPage() {
-	router.replace({
-		name: "settings",
-		params: { tourId: route.params.tourId, compId: route.params.compId },
-	})
-}
-
-function nextPage() {
-	// TODO only if every player was assigned to a team
-	router.replace({
-		name: "assignMatches",
-		params: { tourId: route.params.tourId, compId: route.params.compId },
-	})
+	updateTeams({ complete, teams: t })
 }
 
 let firstUpdate = true
@@ -334,8 +316,6 @@ async function loadFromServer() {
 
 watch(signedUpTeams, loadFromServer)
 if (!signedUpPlaceholder.value) loadFromServer()
-
-defineExpose({ prevPage, reset, save, nextPage })
 </script>
 
 <style scoped></style>

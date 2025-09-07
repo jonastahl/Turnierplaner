@@ -41,7 +41,7 @@ public class Tournament {
     )
     private Set<Court> courts;
 
-    @OneToMany(mappedBy = "tournament", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tournament", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Competition> competitions;
 
     public UUID getId() {

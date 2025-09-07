@@ -172,10 +172,13 @@ export function useUpdateTeams(
 ) {
 	const queryClient = useQueryClient()
 	return useMutation({
-		mutationFn: async (req: TeamServer[]) => {
+		mutationFn: async (data: { complete: boolean; teams: TeamServer[] }) => {
 			return axios.post(
 				`/tournament/${route.params.tourId}/competition/${route.params.compId}/updateTeams`,
-				req,
+				{
+					complete: data.complete,
+					data: data.teams,
+				},
 			)
 		},
 		onSuccess() {

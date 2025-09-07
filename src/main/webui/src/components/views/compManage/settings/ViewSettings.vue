@@ -16,12 +16,16 @@
 					@submit="submit"
 				/>
 			</template>
+			<template #footer>
+				<div class="flex flex-row justify-content-end">
+					<Button :label="t('general.save')" severity="success" @click="save" />
+				</div>
+			</template>
 		</Card>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { router } from "@/main"
 import { useRoute } from "vue-router"
 import FormCompetition from "@/components/views/competitions/FormCompetition.vue"
 import { useI18n } from "vue-i18n"
@@ -52,14 +56,7 @@ watch(competition, async () => {
 	isUpdating.value = false
 })
 
-const { mutate } = useUpdateCompetition(route, t, toast, {
-	suc(competition) {
-		router.replace({
-			name: "settings",
-			params: { tourId: route.params.tourid, compId: competition.name },
-		})
-	},
-})
+const { mutate } = useUpdateCompetition(route, t, toast, {})
 
 function save() {
 	form.value?.onSubmit()
@@ -68,15 +65,6 @@ function save() {
 function submit(server_data: CompetitionServer) {
 	mutate(server_data)
 }
-
-function nextPage() {
-	router.replace({
-		name: "editTeams",
-		params: { tourId: route.params.tourId, compId: route.params.compId },
-	})
-}
-
-defineExpose({ save, nextPage })
 </script>
 
 <style scoped>

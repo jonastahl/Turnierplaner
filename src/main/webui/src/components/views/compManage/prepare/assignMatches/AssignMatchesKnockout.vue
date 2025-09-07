@@ -75,20 +75,20 @@ import { useToast } from "primevue/usetoast"
 import { useI18n } from "vue-i18n"
 import { computed, Ref, ref } from "vue"
 import { getCompetitionDetails } from "@/backend/competition"
-import TeamContainerDraggable from "@/components/views/prepare/components/TeamContainerDraggable.vue"
+import TeamContainerDraggable from "@/components/views/compManage/prepare/components/TeamContainerDraggable.vue"
 import { Team } from "@/interfaces/team"
 import { KnockoutMatch, KnockoutSystem } from "@/interfaces/knockoutSystem"
 import { getSignedUp } from "@/backend/signup"
 import ViewKnockoutTree from "@/components/views/competition/knockoutSystem/ViewKnockoutTree.vue"
 import ViewMatch from "@/components/views/competition/knockoutSystem/ViewMatch.vue"
-import ViewMatchEdit from "@/components/views/prepare/assignMatches/ViewMatchEdit.vue"
+import ViewMatchEdit from "@/components/views/compManage/prepare/assignMatches/ViewMatchEdit.vue"
 import { Match } from "@/interfaces/match"
 import { getKnockout, useInitKnockout } from "@/backend/knockout"
 import { Mode } from "@/interfaces/competition"
 import {
 	genRandomizeItems,
 	selectRandomElement,
-} from "@/components/views/prepare/assignMatches/AssginMatchesHelper"
+} from "@/components/views/compManage/prepare/assignMatches/AssginMatchesHelper"
 import { sleep, track } from "@/backend/Tracker"
 import { knockoutTitle } from "@/components/views/competition/knockoutSystem/KnockoutTitleGenerator"
 
@@ -227,6 +227,7 @@ async function reset() {
 		m.teamB = null
 	})
 	await sleep(400)
+	isUpdating.value = false
 }
 
 async function reroll() {
@@ -234,7 +235,7 @@ async function reroll() {
 	await randomize()
 }
 
-function save() {
+function save(complete = false) {
 	if (!allPlayersAssigned()) {
 		toast.add({
 			severity: "error",
@@ -246,7 +247,7 @@ function save() {
 		return
 	}
 
-	initKnockout(data.value.tree)
+	initKnockout({ complete, tree: data.value.tree })
 }
 
 function allPlayersAssigned(): boolean {

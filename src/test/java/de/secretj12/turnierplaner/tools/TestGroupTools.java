@@ -144,9 +144,12 @@ public class TestGroupTools {
         String groupTemp = "[ %s ]";
         String bodyTemp = """
             {
-              "groups": [
-                %s
-              ]
+                "complete": false,
+                "data": {
+                    "groups": [
+                        %s
+                    ]
+                }
             }
             """;
         given()
@@ -217,11 +220,14 @@ public class TestGroupTools {
             .contentType(ContentType.JSON)
             .body(String.format("""
                 {
-                  "groups": [
-                    [
-                      { "id": "%s" }, { "id": "%s" }
-                    ]
-                  ]
+                    "complete": false,
+                    "data": {
+                        "groups": [
+                            [
+                                { "id": "%s" }, { "id": "%s" }
+                            ]
+                        ]
+                    }
                 }
                 """, teams.stream().map(Team::getId).toArray()))
             .post("/tournament/Clubmeisterschaft/competition/Herren/initGroups")

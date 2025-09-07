@@ -2,7 +2,7 @@
 	<div v-if="tournament && competition" class="flex flex-column gap-2">
 		<ViewConditions
 			:begin-game-phase="tournament.game_phase.begin"
-			:second="competition.mode === Mode.DOUBLE"
+			:second="props.secondary"
 		/>
 		<div class="p-inputgroup">
 			<Dropdown
@@ -37,7 +37,6 @@ import ViewConditions from "@/components/views/competition/signup/ViewConditions
 import { useI18n } from "vue-i18n"
 import { DropdownFilterEvent } from "primevue/dropdown"
 import { Player } from "@/interfaces/player"
-import { Mode } from "@/interfaces/competition"
 import { ref } from "vue"
 import { useToast } from "primevue/usetoast"
 import { findCompPlayers } from "@/backend/player"
@@ -50,6 +49,7 @@ const toast = useToast()
 
 const props = defineProps<{
 	isUpdating: boolean
+	secondary?: boolean
 }>()
 const emit = defineEmits(["addPlayer"])
 
@@ -61,7 +61,7 @@ const search = ref<string>("")
 const { data: suggestionsPlayer, isFetching: loading } = findCompPlayers(
 	search,
 	route,
-	false,
+	props.secondary,
 	t,
 	toast,
 )

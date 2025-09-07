@@ -84,4 +84,8 @@ public class Team extends PanacheEntityBase {
     public static Team findById(UUID id) {
         return find("id", id).firstResult();
     }
+
+    public String getFullName() {
+        return playerA.getFullName() + (playerB != null ? "\n" + playerB.getFullName() : "");
+    }
 }
