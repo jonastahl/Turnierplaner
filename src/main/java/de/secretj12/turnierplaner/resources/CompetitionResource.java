@@ -399,17 +399,13 @@ public class CompetitionResource {
             this.matches.persist(match);
         }
         if (config.complete) {
-            boolean complete = true;
             for (var match : competition.getMatches()) {
-                if (match.getBegin() == null || match.getEnd() == null) {
-                    complete = false;
-                    break;
+                if (matchIsPlayed(match) && (match.getBegin() == null || match.getEnd() == null)) {
+                    throw new BadRequestException("Played match is not scheduled");
                 }
             }
-            if (complete) {
-                competition.setcProgress(CreationProgress.PUBLISHING);
-                competitions.persist(competition);
-            }
+            competition.setcProgress(CreationProgress.PUBLISHING);
+            competitions.persist(competition);
         }
         return "Updated matches";
     }
