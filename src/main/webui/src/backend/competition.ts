@@ -119,7 +119,7 @@ export function useUpdateCompetition(
 					refetchType: "all",
 				}),
 				queryClient.invalidateQueries({
-					queryKey: ["competitionDetails", route.params.tourId, competition.id],
+					queryKey: ["competitionDetails", route.params.tourId, competition.name],
 					refetchType: "all",
 				}),
 			]).then(() => {
