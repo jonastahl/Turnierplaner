@@ -229,6 +229,7 @@ public class TestdataGenerator {
         player.setPhone(faker.phoneNumber().cellPhone());
         player.setMailVerified(true);
         player.setAdminVerified(true);
+        player.setLanguage(Language.DE);
         switch (ageRestr) {
             case NONE -> player.setBirthday(LocalDate.now().minusYears(random.nextInt(50)));
             case U18 -> player.setBirthday(LocalDate.now().minusYears(random.nextInt(18)));

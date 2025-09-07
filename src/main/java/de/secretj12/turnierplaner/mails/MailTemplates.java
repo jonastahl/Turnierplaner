@@ -68,7 +68,7 @@ public class MailTemplates {
     }
 
     public void sendRegistrationMail(Player player, Competition competition) {
-        if (player.isMailVerified())
+        if (player.getEmail() != null && player.isMailVerified())
             Templates.createCompetitionRegistrationMail(url, player.getFirstName(), player.getEmail(), competition
                 .getName())
                 .setAttribute("locale", player.getLanguage().getLanguageCode())
