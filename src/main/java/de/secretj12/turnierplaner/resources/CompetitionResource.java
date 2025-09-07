@@ -376,8 +376,8 @@ public class CompetitionResource {
     @Transactional
     @RolesAllowed("director")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String updateMatches(@PathParam("tourName") String tourName, @PathParam("compName") String compName,
-                                PreparationConfig<List<jDirectorScheduleMatch>> config) {
+    public String updateSchedule(@PathParam("tourName") String tourName, @PathParam("compName") String compName,
+                                 PreparationConfig<List<jDirectorScheduleMatch>> config) {
         Competition competition = competitions.getByName(tourName, compName);
         var matches = config.data;
         if (competition == null) throw new NotFoundException("Competition could not be found");
@@ -462,6 +462,7 @@ public class CompetitionResource {
             competitions.persist(comp);
 
             comp.getMatches()
+                .stream().filter(CompetitionResource::matchIsPlayed)
                 .forEach(m -> Stream.of(m.getTeamA(), m.getTeamB())
                     .filter(Objects::nonNull)
                     .flatMap(t -> Stream.of(t.getPlayerA(), t.getPlayerB())).filter(Objects::nonNull)

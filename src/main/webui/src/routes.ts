@@ -128,10 +128,10 @@ export default [
 				],
 			},
 			{
-				path: "execution/:compId",
+				path: "execution/:compId?",
 				name: Routes.ManageExecution,
 				component: () =>
-					import("@/components/views/compManage/settings/ViewSettings.vue"),
+					import("@/components/views/compManage/execution/ViewExecution.vue"),
 				meta: {
 					overview: true,
 					mStep: Routes.ManageExecution,
