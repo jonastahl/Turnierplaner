@@ -251,14 +251,9 @@ function save(complete = false) {
 }
 
 function allPlayersAssigned(): boolean {
-	// check that tree is correctly assigned
-	function checkTree(m: KnockoutMatch): boolean {
-		if (m.prevMatch) {
-			return checkTree(m.prevMatch.a) && checkTree(m.prevMatch.b)
-		} else return m.teamA !== null || m.teamB !== null
-	}
-
-	return checkTree(data.value.tree) && data.value.teams.length === 0
+	// Only check that all available teams are assigned
+	// Empty matches (byes) are allowed and should not prevent saving
+	return data.value.teams.length === 0
 }
 
 function getMatches(tree?: KnockoutMatch, treeDepth?: number): Match[] {
