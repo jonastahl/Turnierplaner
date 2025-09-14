@@ -2,7 +2,7 @@
 	<div class="w-full p-2">
 		<Card style="margin-top: -10px !important">
 			<template #content>
-				<SelectButton v-model="calendarView" class="pb-2" :options="views">
+				<SelectButton v-model="calendarView" class="mb-2" :options="views">
 					<template #option="{ option }">
 						{{ t(option.label) }}
 					</template>

@@ -7,6 +7,7 @@
 		:min-date="tournament.game_phase.begin"
 		:max-date="tournament.game_phase.end"
 		:split-days="splitDays"
+		:editable-events="true"
 		@on-view-change="onViewChange"
 	>
 		<template #event="{ event }">
@@ -24,11 +25,9 @@ import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
 import { computed, ref, watch } from "vue"
 import { getTournamentCourts } from "@/backend/court"
-import {
-	getTournamentMatchEvents,
-	getTournamentDetails,
-} from "@/backend/tournament"
+import { getTournamentDetails } from "@/backend/tournament"
 import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
+import { getAllMatchesEvents } from "@/backend/match"
 
 const route = useRoute()
 const { t } = useI18n()
@@ -39,7 +38,7 @@ const curEnd = ref<Date | undefined>()
 
 const { data: courts } = getTournamentCourts(route)
 const { data: tournament } = getTournamentDetails(route, t, toast)
-const { data: matches } = getTournamentMatchEvents(route, t, curStart, curEnd)
+const { data: matches } = getAllMatchesEvents(curStart, curEnd)
 
 function onViewChange(startDate: Date, endDate: Date) {
 	curStart.value = startDate
@@ -54,7 +53,15 @@ watch(matches, () => {
 	if (!matches.value) return
 
 	matches.value.forEach((match) => {
-		events.value.push(match)
+		const otherTour = match.data.tourName !== route.params.tourId
+		events.value.push({
+			draggable: !otherTour,
+			resizable: !otherTour,
+			deletable: !otherTour,
+			secondary: otherTour,
+			class: otherTour ? "superextern" : "",
+			...match,
+		})
 	})
 })
 

@@ -148,7 +148,6 @@ export function getAllScheduledMatches(
 
 export function getAllMatchesEventsExceptCompetition(
 	route: RouteLocationNormalizedLoaded,
-	t: (_: string) => string,
 	from: Ref<Date | undefined>,
 	to: Ref<Date | undefined>,
 ) {
@@ -160,16 +159,33 @@ export function getAllMatchesEventsExceptCompetition(
 			if (!matches.data.value) return undefined
 			return matches.data.value
 				.filter((match) => match.compName !== route.params.compId)
-				.map((match) => {
-					return {
-						id: match.id || uuidv4(),
-						start: match.begin ?? new Date(),
-						end: match.end ?? new Date(),
-						split: match.court ?? "undefined court",
-						data: match,
-					}
-				})
+				.map(matchToEvent)
 		}),
+	}
+}
+
+export function getAllMatchesEvents(
+	from: Ref<Date | undefined>,
+	to: Ref<Date | undefined>,
+) {
+	const matches = getAllScheduledMatches(from, to)
+
+	return {
+		...matches,
+		data: computed(() => {
+			if (!matches.data.value) return undefined
+			return matches.data.value.map(matchToEvent)
+		}),
+	}
+}
+
+export function matchToEvent(match: AnnotatedMatch) {
+	return {
+		id: match.id || uuidv4(),
+		start: match.begin ?? new Date(),
+		end: match.end ?? new Date(),
+		split: match.court ?? "undefined court",
+		data: match,
 	}
 }
 
@@ -178,10 +194,10 @@ export function genTitle(
 	t: (_: string) => string,
 ) {
 	switch (title.type) {
-	case CompType.GROUPS:
-		return t("ViewGroupSystem.group") + " " + (title.number + 1)
-	case CompType.KNOCKOUT:
-		if (!title.isFinal) return t("ViewKnockout.thirdPlace")
-		else return knockoutTitle(t)(title.number, title.total)
+		case CompType.GROUPS:
+			return t("ViewGroupSystem.group") + " " + (title.number + 1)
+		case CompType.KNOCKOUT:
+			if (!title.isFinal) return t("ViewKnockout.thirdPlace")
+			else return knockoutTitle(t)(title.number, title.total)
 	}
 }

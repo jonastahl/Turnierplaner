@@ -195,7 +195,7 @@ import { useToast } from "primevue/usetoast"
 import ViewTeamNames from "@/components/links/LinkTeamNames.vue"
 import LinkTournament from "@/components/links/LinkTournament.vue"
 import LinkCompetition from "@/components/links/LinkCompetition.vue"
-import { getPlayerScheduledMatches } from "@/backend/match"
+import { getTournamentScheduledMatches } from "@/backend/match"
 
 const route = useRoute()
 const { t } = useI18n()
@@ -246,7 +246,7 @@ function titleFilter(
 	return titleValue.toLowerCase().includes(filterValue)
 }
 
-const { data: matches } = getPlayerScheduledMatches(
+const { data: matches } = getTournamentScheduledMatches(
 	route,
 	computed(() => (<DataTableFilterMetaData>filters.value.begin).value) ||
 		new Date(),
