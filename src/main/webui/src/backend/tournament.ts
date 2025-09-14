@@ -10,7 +10,7 @@ import { RouteLocationNormalizedLoaded } from "vue-router"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 import { AnnotatedMatch } from "@/interfaces/match"
 import { CompType } from "@/interfaces/competition"
-import { knockoutTitle } from "@/components/views/competition/knockoutSystem/KnockoutTitleGenerator"
+import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
 import { v4 as uuidv4 } from "uuid"
 import { getFilteredMatches } from "@/backend/match"
 
