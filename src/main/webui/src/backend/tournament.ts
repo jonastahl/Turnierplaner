@@ -12,7 +12,10 @@ import { AnnotatedMatch } from "@/interfaces/match"
 import { CompType } from "@/interfaces/competition"
 import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
 import { v4 as uuidv4 } from "uuid"
-import { getFilteredMatches } from "@/backend/match"
+import {
+	getAllScheduledMatches,
+	getTournamentScheduledMatches,
+} from "@/backend/match"
 
 export function getTournamentList(
 	isLoggedIn: Ref<boolean>,
@@ -159,7 +162,7 @@ export function getTournamentMatchEvents(
 	from: Ref<Date | undefined>,
 	to: Ref<Date | undefined>,
 ) {
-	const matches = getFilteredMatches(route, t, from, to)
+	const matches = getTournamentScheduledMatches(route, from, to)
 
 	return {
 		...matches,

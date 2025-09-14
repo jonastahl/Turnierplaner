@@ -1,8 +1,9 @@
 <template>
-	<span>Coming soon: Calendar</span>
-	<span>Shows all the matches of a tournament and lets you move it around</span>
+	<ViewTournamentMatches />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ViewTournamentMatches from "@/components/pages/matches/ViewTournamentMatches.vue"
+</script>
 
 <style scoped></style>

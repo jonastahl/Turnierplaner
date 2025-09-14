@@ -1,7 +1,9 @@
 package de.secretj12.turnierplaner.tools;
 
+import de.secretj12.turnierplaner.db.entities.Match;
 import de.secretj12.turnierplaner.db.entities.Tournament;
 import de.secretj12.turnierplaner.db.repositories.TournamentRepository;
+import de.secretj12.turnierplaner.enums.CreationProgress;
 import io.quarkus.security.UnauthorizedException;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,5 +30,10 @@ public class CommonHelpers {
 
     public boolean isTournamentAccessible(Tournament tournament) {
         return securityIdentity.hasRole("director") || tournament.isVisible();
+    }
+
+    public boolean isMatchAccessible(Match match) {
+        return isTournamentAccessible(match.getCompetition().getTournament()) &&
+            (securityIdentity.hasRole("director") || match.getCompetition().getcProgress() == CreationProgress.DONE);
     }
 }

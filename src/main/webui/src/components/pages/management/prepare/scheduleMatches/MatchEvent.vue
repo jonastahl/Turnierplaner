@@ -1,6 +1,9 @@
 <template>
 	<div class="w-full flex flex-column p-1 text-left">
 		<strong>{{ genTitle(props.match.title, t) }}</strong>
+		<i v-if="props.match.tourName !== tournament?.name">
+			<LinkTournament :tournament="props.match.tourName" />
+		</i>
 		<i>
 			<LinkCompetition
 				:tournament="props.match.tourName"
@@ -23,18 +26,19 @@
 </template>
 
 <script setup lang="ts">
-import { Competition } from "@/interfaces/competition"
 import { AnnotatedMatch } from "@/interfaces/match"
 import { genTitle } from "@/backend/tournament"
 import { useI18n } from "vue-i18n"
 import ViewTeamNames from "@/components/links/LinkTeamNames.vue"
 import LinkCompetition from "@/components/links/LinkCompetition.vue"
+import LinkTournament from "@/components/links/LinkTournament.vue"
+import { Tournament } from "@/interfaces/tournament"
 
 const { t } = useI18n()
 
 const props = defineProps<{
 	match: AnnotatedMatch
-	competition?: Competition
+	tournament?: Tournament
 }>()
 </script>
 

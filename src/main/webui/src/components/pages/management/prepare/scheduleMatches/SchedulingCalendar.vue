@@ -17,7 +17,7 @@
 		<template #event="{ event }">
 			<EventMatch
 				:match="<AnnotatedMatch>event.data"
-				:competition="competition"
+				:tournament="tournament"
 			/>
 		</template>
 	</ViewCalendar>
@@ -26,10 +26,7 @@
 <script setup lang="ts">
 import { Court } from "@/interfaces/court"
 import { computed, ref, watch } from "vue"
-import {
-	getTournamentDetails,
-	getTournamentMatchEvents,
-} from "@/backend/tournament"
+import { getTournamentDetails } from "@/backend/tournament"
 import { useRoute } from "vue-router"
 import { useToast } from "primevue/usetoast"
 import { useI18n } from "vue-i18n"
@@ -47,6 +44,7 @@ import EventMatch from "@/components/pages/management/prepare/scheduleMatches/Ma
 import ViewCalendar from "@/calendar/ViewCalendar.vue"
 import { v4 as uuidv4 } from "uuid"
 import { ComponentExposed } from "vue-component-type-helpers"
+import { getAllMatchesEventsExceptCompetition } from "@/backend/match"
 
 const calendar = ref<ComponentExposed<typeof ViewCalendar> | null>(null)
 
@@ -79,7 +77,12 @@ const { data: groups } = getGroup(
 
 const curStart = ref<Date | undefined>()
 const curEnd = ref<Date | undefined>()
-const { data: exMatches } = getTournamentMatchEvents(route, t, curStart, curEnd)
+const { data: exMatches } = getAllMatchesEventsExceptCompetition(
+	route,
+	t,
+	curStart,
+	curEnd,
+)
 
 const events = defineModel<MatchCalEvent[]>({ default: [] })
 watch(
@@ -100,24 +103,32 @@ watch(
 	{ immediate: true },
 )
 
-watch(exMatches, updateExisting)
+watch([exMatches, props], updateExisting)
 
 function updateExisting() {
+	console.log("update")
 	for (let i = events.value.length - 1; i >= 0; i--) {
 		if (events.value[i].secondary) events.value.splice(i, 1)
 	}
 
 	if (exMatches.value) {
-		exMatches.value.forEach((match) => {
-			events.value.push({
-				draggable: false,
-				resizable: false,
-				deletable: false,
-				secondary: true,
-				class: "extern",
-				...match,
+		exMatches.value
+			.filter((match) =>
+				props.courts.some((court) => court.name === match.data.court),
+			)
+			.forEach((match) => {
+				events.value.push({
+					draggable: false,
+					resizable: false,
+					deletable: false,
+					secondary: true,
+					class:
+						match.data.tourName == route.params.tourId
+							? "extern"
+							: "superextern",
+					...match,
+				})
 			})
-		})
 	}
 }
 
