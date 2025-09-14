@@ -3,7 +3,8 @@
 		<Card style="margin-top: -10px !important">
 			<template #header>
 				<ViewMenuSelector />
-				<ViewCompSelector />
+				<ViewExecutionMenuSelector v-if="route.meta.executionMenu" />
+				<ViewCompSelector v-if="route.meta.compSelector" />
 			</template>
 			<template #content>
 				<router-view />
@@ -15,9 +16,12 @@
 <script setup lang="ts">
 import ViewCompSelector from "@/components/views/compManage/tabs/ViewCompSelector.vue"
 import ViewMenuSelector from "@/components/views/compManage/tabs/ViewMenuSelector.vue"
+import ViewExecutionMenuSelector from "@/components/views/compManage/tabs/ViewExecutionMenuSelector.vue"
 import { inject, ref } from "vue"
 import { auth } from "@/security/AuthService"
+import { useRoute } from "vue-router"
 
+const route = useRoute()
 const isLoggedIn = inject("loggedIn", ref(false))
 if (!isLoggedIn.value) {
 	auth.login()

@@ -14,6 +14,8 @@ export enum Routes {
 	AssignMatches = "assignMatches",
 	ScheduleMatches = "scheduleMatches",
 	ManageExecution = "manageExecution",
+	ManageExecutionCalendar = "manageExecutionCalendar",
+	ManageExecutionPlans = "manageExecutionPlans",
 	PlayerRegistration = "playerRegistration",
 	UpdatePlayer = "updatePlayer",
 	PlayerVerified = "playerVerified",
@@ -83,7 +85,9 @@ export default [
 					import("@/components/views/compManage/settings/ViewSettings.vue"),
 				meta: {
 					overview: false,
-					mStep: Routes.ManageSettings,
+					compSelector: true,
+					managesel: Routes.ManageSettings,
+					managepage: Routes.ManageSettings,
 				},
 			},
 			{
@@ -95,7 +99,9 @@ export default [
 					),
 				meta: {
 					overview: true,
-					mStep: Routes.ManagePrepare,
+					compSelector: true,
+					managesel: Routes.ManagePrepare,
+					managepage: Routes.ManagePrepare,
 				},
 				children: [
 					{
@@ -128,14 +134,53 @@ export default [
 				],
 			},
 			{
-				path: "execution/:compId?",
-				name: Routes.ManageExecution,
+				path: "execution",
 				component: () =>
 					import("@/components/views/compManage/execution/ViewExecution.vue"),
 				meta: {
-					overview: true,
-					mStep: Routes.ManageExecution,
+					overview: false,
+					compSelector: false,
+					managesel: Routes.ManageExecution,
+					executionsel: Routes.ManageExecution,
+					executionMenu: true,
 				},
+				children: [
+					{
+						path: "overview/:compId?",
+						name: Routes.ManageExecution,
+						meta: {
+							executionsel: Routes.ManageExecution,
+						},
+						component: () =>
+							import(
+								"@/components/views/compManage/execution/ViewExecutionOverview.vue"
+							),
+					},
+					{
+						path: "calendar/:compId?",
+						name: Routes.ManageExecutionCalendar,
+						meta: {
+							executionsel: Routes.ManageExecutionCalendar,
+						},
+						component: () =>
+							import(
+								"@/components/views/compManage/execution/ViewExecutionCalendar.vue"
+							),
+					},
+					{
+						path: "plans/:compId?",
+						name: Routes.ManageExecutionPlans,
+						meta: {
+							compSelector: true,
+							executionsel: Routes.ManageExecutionPlans,
+							managepage: Routes.ManageExecutionPlans,
+						},
+						component: () =>
+							import(
+								"@/components/views/compManage/execution/ViewExecutionPlans.vue"
+							),
+					},
+				],
 			},
 		],
 	},
