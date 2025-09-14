@@ -1,5 +1,5 @@
 <template>
-	<span>Execution is not yet implemented</span>
+	<router-view />
 </template>
 
 <script setup lang="ts"></script>

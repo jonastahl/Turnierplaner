@@ -1,6 +1,7 @@
 <template>
 	<template v-if="!!route.params.compId">
 		<ViewPrepareSteps
+			v-if="route.meta.step"
 			class="antiCard mb-6"
 			:active-step="<number>route.meta.step"
 		/>
@@ -78,13 +79,6 @@ watch(
 					name: Routes.ScheduleMatches,
 				})
 				break
-			default:
-				router.replace({
-					name: Routes.ManagePrepare,
-					params: {
-						compId: route.params.compId,
-					},
-				})
 		}
 	},
 	{ immediate: true },

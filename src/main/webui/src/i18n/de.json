@@ -49,7 +49,8 @@
 		"sex": "Geschlecht",
 		"male": "Männlich",
 		"female": "Weiblich",
-		"serverside_error": "Serverseitiger Fehler"
+		"serverside_error": "Serverseitiger Fehler",
+		"gameplans": "Spielpläne"
 	},
 	"DialogUpdateScore": {
 		"header": "Punkte Eintragung",

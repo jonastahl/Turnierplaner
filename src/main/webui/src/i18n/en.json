@@ -49,7 +49,8 @@
 		"sex": "Sex",
 		"male": "Male",
 		"female": "Female",
-		"serverside_error": "Serverside error"
+		"serverside_error": "Serverside error",
+		"gameplans": "Game plans"
 	},
 	"DialogUpdateScore": {
 		"header": "Score Update",

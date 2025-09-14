@@ -3,14 +3,7 @@
 		v-model:active-index="activeTab"
 		:model="menuComps"
 		@tab-change="tabChange"
-	>
-		<template #item="{ label, props }: { label: any; props: any }">
-			<a v-bind="props.action" :class="props.class">
-				<span :class="props.icon.class"></span>
-				<span :class="props.label.class">{{ t(String(label)) }}</span>
-			</a>
-		</template>
-	</TabMenu>
+	/>
 </template>
 
 <script setup lang="ts">
@@ -28,19 +21,19 @@ const activeTab = ref<number>(0)
 
 const menuComps = [
 	{
-		label: "general.settings",
-		icon: "pi pi-cog",
-		route: Routes.ManageSettings,
-	},
-	{
-		label: "ViewPrepare.preparation",
-		icon: "pi pi-hammer",
-		route: Routes.ManagePrepare,
-	},
-	{
-		label: "ViewManage.execution",
-		icon: "pi pi-wave-pulse",
+		label: t("ViewPrepare.overview"),
+		icon: "pi pi-crown",
 		route: Routes.ManageExecution,
+	},
+	{
+		label: t("general.calendar"),
+		icon: "pi pi-calendar-clock",
+		route: Routes.ManageExecutionCalendar,
+	},
+	{
+		label: t("general.gameplans"),
+		icon: "pi pi-sitemap",
+		route: Routes.ManageExecutionPlans,
 	},
 ]
 
@@ -57,7 +50,7 @@ watch(
 	route,
 	() => {
 		activeTab.value = menuComps.findIndex(
-			(menu) => menu.route === route.meta.managesel,
+			(menu) => menu.route === route.meta.executionsel,
 		)
 	},
 	{ immediate: true },

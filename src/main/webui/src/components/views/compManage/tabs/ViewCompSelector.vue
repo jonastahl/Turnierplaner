@@ -57,7 +57,7 @@ function tabChange(event: TabMenuChangeEvent) {
 			]
 	}
 	router.push({
-		name: <Routes>route.meta.mStep,
+		name: <Routes>route.meta.managepage,
 		params: {
 			compId: comp?.name,
 		},
