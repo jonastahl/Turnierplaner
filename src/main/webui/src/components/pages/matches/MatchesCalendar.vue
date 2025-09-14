@@ -26,8 +26,8 @@ import { useToast } from "primevue/usetoast"
 import { computed, ref, watch } from "vue"
 import { getTournamentCourts } from "@/backend/court"
 import {
-	getTournamentDetails,
 	getTournamentMatchEvents,
+	getTournamentDetails,
 } from "@/backend/tournament"
 import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
 
@@ -40,7 +40,12 @@ const curEnd = ref<Date | undefined>()
 
 const { data: courts } = getTournamentCourts(route)
 const { data: tournament } = getTournamentDetails(route, t, toast)
-const { data: matches } = getTournamentMatchEvents(route, t, curStart, curEnd)
+const { data: matches } = getTournamentMatchEvents(
+	route,
+	t,
+	curStart,
+	curEnd,
+)
 
 function onViewChange(startDate: Date, endDate: Date) {
 	curStart.value = startDate

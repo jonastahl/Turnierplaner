@@ -241,6 +241,10 @@ async function onViewChange({
 	background-color: #fd9c42b9 !important;
 }
 
+.vuecal__event.superextern {
+	background-color: #FBF582BA !important;
+}
+
 .vuecal__cell--disabled {
 	background-color: #a0a0a0 !important; /* Light grey background */
 	color: #a0a0a0 !important; /* Grey text */

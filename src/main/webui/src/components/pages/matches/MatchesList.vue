@@ -191,11 +191,11 @@ import {
 } from "primevue/datatable"
 import { Team } from "@/interfaces/team"
 import { AnnotatedMatch } from "@/interfaces/match"
-import { getFilteredMatches } from "@/backend/match"
 import { useToast } from "primevue/usetoast"
 import ViewTeamNames from "@/components/links/LinkTeamNames.vue"
 import LinkTournament from "@/components/links/LinkTournament.vue"
 import LinkCompetition from "@/components/links/LinkCompetition.vue"
+import { getPlayerScheduledMatches } from "@/backend/match"
 
 const route = useRoute()
 const { t } = useI18n()
@@ -246,9 +246,8 @@ function titleFilter(
 	return titleValue.toLowerCase().includes(filterValue)
 }
 
-const { data: matches } = getFilteredMatches(
+const { data: matches } = getPlayerScheduledMatches(
 	route,
-	t,
 	computed(() => (<DataTableFilterMetaData>filters.value.begin).value) ||
 		new Date(),
 	computed(() => (<DataTableFilterMetaData>filters.value.end).value) ||

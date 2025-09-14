@@ -10,6 +10,9 @@ import axios from "axios"
 import { RouteLocationNormalizedLoaded } from "vue-router"
 import { ToastServiceMethods } from "primevue/toastservice"
 import { computed, Ref } from "vue"
+import { v4 as uuidv4 } from "uuid"
+import { CompType } from "@/interfaces/competition"
+import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
 
 export function useUpdateMatches(
 	route: RouteLocationNormalizedLoaded,
@@ -58,20 +61,15 @@ export function useUpdateMatches(
 	})
 }
 
-export function getFilteredMatches(
+export function getTournamentScheduledMatches(
 	route: RouteLocationNormalizedLoaded,
-	t: (_: string) => string,
 	from: Ref<Date | undefined>,
 	to: Ref<Date | undefined>,
 ) {
 	return useQuery({
-		enabled: computed(
-			() => (!!from.value && !!to.value) || !!route.params.playerId,
-		),
+		enabled: computed(() => !!from.value && !!to.value),
 		queryKey: [
-			"tournamentMatches",
-			computed(() => route.params.tourId),
-			computed(() => route.params.compId),
+			"tournamentScheduledMatches",
 			computed(() => route.params.playerId),
 			from,
 			to,
@@ -81,6 +79,36 @@ export function getFilteredMatches(
 				.get(`/matches`, {
 					params: {
 						tour: route.params.tourId,
+						from: from.value,
+						to: to.value,
+					},
+				})
+				.then<AnnotatedMatchServer[]>((data) => data.data)
+				.then<AnnotatedMatch[]>((matches) => {
+					return matches.map(annotatedMatchServerToClient)
+				})
+		},
+		placeholderData: (data) => data,
+	})
+}
+
+export function getPlayerScheduledMatches(
+	route: RouteLocationNormalizedLoaded,
+	from: Ref<Date | undefined>,
+	to: Ref<Date | undefined>,
+) {
+	return useQuery({
+		enabled: computed(() => !!route.params.playerId),
+		queryKey: [
+			"playerScheduledMatches",
+			computed(() => route.params.playerId),
+			from,
+			to,
+		],
+		queryFn: async () => {
+			return axios
+				.get(`/matches`, {
+					params: {
 						player: route.params.playerId,
 						from: from.value,
 						to: to.value,
@@ -93,4 +121,67 @@ export function getFilteredMatches(
 		},
 		placeholderData: (data) => data,
 	})
+}
+
+export function getAllScheduledMatches(
+	from: Ref<Date | undefined>,
+	to: Ref<Date | undefined>,
+) {
+	return useQuery({
+		queryKey: ["scheduledMatches", from, to],
+		queryFn: async () => {
+			return axios
+				.get(`/matches`, {
+					params: {
+						from: from.value,
+						to: to.value,
+					},
+				})
+				.then<AnnotatedMatchServer[]>((data) => data.data)
+				.then<AnnotatedMatch[]>((matches) => {
+					return matches.map(annotatedMatchServerToClient)
+				})
+		},
+		placeholderData: (data) => data,
+	})
+}
+
+export function getAllMatchesEventsExceptCompetition(
+	route: RouteLocationNormalizedLoaded,
+	t: (_: string) => string,
+	from: Ref<Date | undefined>,
+	to: Ref<Date | undefined>,
+) {
+	const matches = getAllScheduledMatches(from, to)
+
+	return {
+		...matches,
+		data: computed(() => {
+			if (!matches.data.value) return undefined
+			return matches.data.value
+				.filter((match) => match.compName !== route.params.compId)
+				.map((match) => {
+					return {
+						id: match.id || uuidv4(),
+						start: match.begin ?? new Date(),
+						end: match.end ?? new Date(),
+						split: match.court ?? "undefined court",
+						data: match,
+					}
+				})
+		}),
+	}
+}
+
+export function genTitle(
+	title: AnnotatedMatch["title"],
+	t: (_: string) => string,
+) {
+	switch (title.type) {
+	case CompType.GROUPS:
+		return t("ViewGroupSystem.group") + " " + (title.number + 1)
+	case CompType.KNOCKOUT:
+		if (!title.isFinal) return t("ViewKnockout.thirdPlace")
+		else return knockoutTitle(t)(title.number, title.total)
+	}
 }

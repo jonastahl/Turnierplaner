@@ -201,7 +201,7 @@
 		"playerA": "Player A",
 		"playerB": "Player B",
 		"prepare": "Prepare tournament",
-        "manage": "Manage tournament",
+		"manage": "Manage tournament",
 		"selectPlayer": "Select a player",
 		"searchPlayer": "Search for players...",
 		"warning_register_before_signup": "Players need to be registered before signup"

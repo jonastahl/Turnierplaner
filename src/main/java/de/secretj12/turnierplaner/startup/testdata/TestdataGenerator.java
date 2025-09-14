@@ -1,6 +1,7 @@
 package de.secretj12.turnierplaner.startup.testdata;
 
 import de.secretj12.turnierplaner.db.entities.*;
+import de.secretj12.turnierplaner.db.entities.Set;
 import de.secretj12.turnierplaner.db.entities.competition.*;
 import de.secretj12.turnierplaner.db.entities.groups.FinalOfGroup;
 import de.secretj12.turnierplaner.db.entities.groups.Group;
@@ -18,9 +19,7 @@ import net.datafaker.providers.base.Name;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @ApplicationScoped
 public class TestdataGenerator {
@@ -55,7 +54,7 @@ public class TestdataGenerator {
     private final Faker faker = new Faker();
 
     private final static int NUMBEROFCOURTS = 4;
-    private Court[] courts = new Court[4];
+    private Court[] courts = new Court[NUMBEROFCOURTS];
 
     @Transactional
     public void generateData() {
@@ -125,6 +124,7 @@ public class TestdataGenerator {
             }
         }
         tournament.setDescription(description);
+        tournament.setCourts(new HashSet<>(Arrays.asList(courts)));
         tournaments.persist(tournament);
 
         addCompetition(tournament, tDate, compSettings);
@@ -262,7 +262,8 @@ public class TestdataGenerator {
         return teams;
     }
 
-    private void addTeamsAndMatchesToGroup(Competition competition, CompetitionSettings compSettings) {
+    private void addTeamsAndMatchesToGroup(Tournament tournament, Competition competition,
+                                           CompetitionSettings compSettings) {
         Team[] groupTeams = createTeams(competition, compSettings);
 
         Group[] groups = new Group[compSettings.getNumberOfGroups()];
@@ -275,17 +276,12 @@ public class TestdataGenerator {
                 .getTeamNumbers() / compSettings.getNumberOfGroups() * (k + 1); i++) {
                 for (int j = i + 1; j < compSettings.getTeamNumbers() / compSettings
                     .getNumberOfGroups() * (k + 1); j++) {
-                    Match match = createMatch(courts[i * j % 4], competition);
+                    Match match = createMatch(courts[i * j % 4], competition, tournament);
                     match.setTeamA(groupTeams[i]);
                     match.setTeamB(groupTeams[j]);
                     int matchBegin = random.nextInt(3);
                     if (matchBegin != 0) {
-                        match.setBegin(Instant.now());
-                        match.setEnd(Instant.now().plus(1, ChronoUnit.HOURS));
                         createSets(match);
-                    } else {
-                        match.setBegin(Instant.now().plus(random.nextInt(60), ChronoUnit.MINUTES));
-                        match.setEnd(Instant.now().plus(2, ChronoUnit.HOURS));
                     }
                     matchRepository.persist(match);
                     MatchOfGroup matchOfGroup = new MatchOfGroup();
@@ -296,7 +292,7 @@ public class TestdataGenerator {
             }
         }
         // TODO support more than 2 groups ? How is the tree supposed to look like again with Nextmatch? @Jonas
-        Match finalOfGroupMatch1 = createMatch(courts[random.nextInt(4)], competition);
+        Match finalOfGroupMatch1 = createMatch(courts[random.nextInt(4)], competition, tournament);
         competition.setFinale(finalOfGroupMatch1);
         competitions.persist(competition);
         matchRepository.persist(finalOfGroupMatch1);
@@ -307,7 +303,7 @@ public class TestdataGenerator {
         finalOfGroup1.setPos(1);
         finalOfGroupRepository.persist(finalOfGroup1);
 
-        Match finalOfGroupMatch2 = createMatch(courts[random.nextInt(4)], competition);
+        Match finalOfGroupMatch2 = createMatch(courts[random.nextInt(4)], competition, tournament);
         competition.setThirdPlace(finalOfGroupMatch2);
         competitions.persist(competition);
         matchRepository.persist(finalOfGroupMatch2);
@@ -319,8 +315,8 @@ public class TestdataGenerator {
         finalOfGroupRepository.persist(finalOfGroup2);
     }
 
-    private void addTeamsAndMatchesToKnockout(Competition competition, CompetitionSettings compSettings,
-                                              boolean finished) {
+    private void addTeamsAndMatchesToKnockout(Tournament tournament, Competition competition,
+                                              CompetitionSettings compSettings, boolean finished) {
         Team[] knockoutTeams = createTeams(competition, compSettings);
 
         // CREATE KNOCKOUT MATCHES
@@ -328,7 +324,7 @@ public class TestdataGenerator {
         Match[] previousMatches = new Match[compSettings.getTeamNumbers() / 2];
         for (int i = compSettings.getTeamNumbers() / 2; i > 0; i /= 2) {
             for (int j = 0; j < i; j++) {
-                currentMatches[j] = createMatch(courts[j % 4], competition);
+                currentMatches[j] = createMatch(courts[j % 4], competition, tournament);
 
                 if (i == compSettings.getTeamNumbers() / 2) {
                     currentMatches[j].setFinished(true);
@@ -359,7 +355,7 @@ public class TestdataGenerator {
             }
 
             if (i == 1) {
-                currentMatches[1] = createMatch(courts[0 % 4], competition);
+                currentMatches[1] = createMatch(courts[0 % 4], competition, tournament);
                 currentMatches[1].setTeamA(getLooserOfMatchIfExists(previousMatches[0]));
                 currentMatches[1].setTeamB(getLooserOfMatchIfExists(previousMatches[1]));
 
@@ -397,12 +393,18 @@ public class TestdataGenerator {
         }
     }
 
-    private Match createMatch(Court c, Competition competition) {
+    private final Map<UUID, Integer> noMatch = new HashMap<>();
+
+    private Match createMatch(Court c, Competition competition, Tournament tournament) {
+        int matchIndex = noMatch.getOrDefault(tournament.getId(), 0);
+        noMatch.put(tournament.getId(), matchIndex + 1);
+        Instant begin = tournament.getBeginGamePhase().plus(90L * (matchIndex / NUMBEROFCOURTS), ChronoUnit.MINUTES);
+
         Match match = new Match();
         match.setCompetition(competition);
-        match.setCourt(c);
-        match.setBegin(Instant.now());
-        match.setEnd(Instant.now().plus(2, ChronoUnit.HOURS));
+        match.setBegin(begin);
+        match.setCourt(courts[matchIndex % NUMBEROFCOURTS]);
+        match.setEnd(begin.plus(90, ChronoUnit.MINUTES));
         match.setFinished(false);
         matchRepository.persist(match);
         return match;
@@ -522,9 +524,9 @@ public class TestdataGenerator {
                 case REGISTRATION_OPEN, BEFORE_GAMEPHASE -> createTeams(competition, compSetting);
                 case GAMEPHASE_OPEN, AFTER_GAMEPHASE -> {
                     if (compSetting.getCompetitionType() == CompetitionType.KNOCKOUT) {
-                        addTeamsAndMatchesToKnockout(competition, compSetting, tDate == TDate.AFTER_GAMEPHASE);
+                        addTeamsAndMatchesToKnockout(t, competition, compSetting, tDate == TDate.AFTER_GAMEPHASE);
                     } else {
-                        addTeamsAndMatchesToGroup(competition, compSetting);
+                        addTeamsAndMatchesToGroup(t, competition, compSetting);
                     }
                 }
             }
