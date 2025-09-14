@@ -22,11 +22,13 @@ import { useI18n } from "vue-i18n"
 import { rebuildAuthSettings } from "@/security/settings"
 import { settings } from "@/settings"
 import AppFooter from "@/components/footer/AppFooter.vue"
+import { useQueryClient } from "@tanstack/vue-query"
 
 const { data: lConfig } = getConfig(ref(false))
 const silentLoginCompleted = ref(false)
 const loggedIn = ref(false)
 provide("loggedIn", loggedIn)
+const queryClient = useQueryClient()
 watch(
 	lConfig,
 	() => {
@@ -45,6 +47,7 @@ watch(
 				})
 			auth.addUserLoadedListener(() => {
 				auth.getUser().then((user) => {
+					queryClient.invalidateQueries()
 					if (user !== null) {
 						access_token.value = user.access_token
 						loggedIn.value = true
@@ -54,6 +57,7 @@ watch(
 				})
 			})
 			auth.addUserUnloadedListener(() => {
+				queryClient.invalidateQueries()
 				access_token.value = null
 				loggedIn.value = false
 			})

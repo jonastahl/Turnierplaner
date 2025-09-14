@@ -133,7 +133,7 @@ export function useUpdateCompetition(
 		onError(error) {
 			toast.add({
 				severity: "error",
-				summary: t("ViewEditCompetition.tournamentUpdateFailed"),
+				summary: t("ViewEditCompetition.competitionUpdateFailed"),
 				detail: error,
 				life: 3000,
 			})
