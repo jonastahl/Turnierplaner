@@ -199,6 +199,7 @@
 		"playerA": "Spieler A",
 		"playerB": "Spieler B",
 		"prepare": "Turnier vorbereiten",
+        "manage": "Turnier verwalten",
 		"selectPlayer": "Wähle einen Spieler aus",
 		"searchPlayer": "Suche nach Spielern...",
 		"warning_register_before_signup": "Spieler müssen vor der Anmeldung registriert werden"

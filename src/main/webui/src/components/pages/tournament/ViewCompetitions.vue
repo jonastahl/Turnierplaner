@@ -64,8 +64,8 @@
 				<Button
 					v-if="isLoggedIn"
 					class="button"
-					:label="t('ViewCompetition.prepare') + ' >>'"
-					@click="prepare"
+					:label="t('ViewCompetition.manage') + ' >>'"
+					@click="gotoManage"
 				/>
 				<Button
 					v-if="openRegistration"
@@ -176,10 +176,10 @@ function selected(competition: string) {
 	})
 }
 
-function prepare() {
+function gotoManage() {
 	if (competitions.value)
 		router.push({
-			name: Routes.ManagePrepare,
+			name: Routes.ManageCompetition,
 			params: { tourId: route.params.tourId },
 		})
 }

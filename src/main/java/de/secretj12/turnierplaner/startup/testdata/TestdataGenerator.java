@@ -509,7 +509,7 @@ public class TestdataGenerator {
                 case BEFORE_REGISTRATION, REGISTRATION_OPEN, BEFORE_GAMEPHASE -> competition.setcProgress(
                     CreationProgress.TEAMS);
                 case GAMEPHASE_OPEN, AFTER_GAMEPHASE -> competition.setcProgress(
-                    CreationProgress.SCHEDULING);
+                    CreationProgress.DONE);
             }
             if (Math.random() > 0.9) {
                 competition.setNumberSets(NumberSets.FIVE);
