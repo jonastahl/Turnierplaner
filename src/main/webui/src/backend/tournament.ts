@@ -11,11 +11,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 import { AnnotatedMatch } from "@/interfaces/match"
 import { CompType } from "@/interfaces/competition"
 import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
-import { v4 as uuidv4 } from "uuid"
-import {
-	getAllScheduledMatches,
-	getTournamentScheduledMatches,
-} from "@/backend/match"
+import { getTournamentScheduledMatches, matchToEvent } from "@/backend/match"
 
 export function getTournamentList(
 	isLoggedIn: Ref<boolean>,
@@ -168,17 +164,7 @@ export function getTournamentMatchEvents(
 		...matches,
 		data: computed(() => {
 			if (!matches.data.value) return undefined
-			return matches.data.value
-				.filter((match) => match.compName !== route.params.compId)
-				.map((match) => {
-					return {
-						id: match.id || uuidv4(),
-						start: match.begin ?? new Date(),
-						end: match.end ?? new Date(),
-						split: match.court ?? "undefined court",
-						data: match,
-					}
-				})
+			return matches.data.value.map(matchToEvent)
 		}),
 	}
 }

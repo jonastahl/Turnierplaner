@@ -163,7 +163,7 @@ export default [
 						},
 						component: () =>
 							import(
-								"@/components/pages/management/execution/ViewExecutionCalendar.vue"
+								"@/components/pages/management/execution/calendar/ViewExecutionCalendar.vue"
 							),
 					},
 					{

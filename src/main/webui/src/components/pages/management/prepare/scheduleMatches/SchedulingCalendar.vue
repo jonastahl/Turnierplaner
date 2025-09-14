@@ -79,7 +79,6 @@ const curStart = ref<Date | undefined>()
 const curEnd = ref<Date | undefined>()
 const { data: exMatches } = getAllMatchesEventsExceptCompetition(
 	route,
-	t,
 	curStart,
 	curEnd,
 )
