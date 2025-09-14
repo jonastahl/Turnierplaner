@@ -8,7 +8,7 @@
 		<div>
 			<RouterView />
 		</div>
-		<AppFooter />
+		<ViewFooter />
 	</div>
 	<Toast />
 </template>
@@ -21,7 +21,7 @@ import { getConfig } from "@/backend/config"
 import { useI18n } from "vue-i18n"
 import { rebuildAuthSettings } from "@/security/settings"
 import { settings } from "@/settings"
-import AppFooter from "@/components/footer/AppFooter.vue"
+import ViewFooter from "@/components/footer/ViewFooter.vue"
 import { useQueryClient } from "@tanstack/vue-query"
 
 const { data: lConfig } = getConfig(ref(false))
