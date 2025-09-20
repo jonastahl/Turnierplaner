@@ -44,7 +44,7 @@ import EventMatch from "@/components/pages/management/prepare/scheduleMatches/Ma
 import ViewCalendar from "@/calendar/ViewCalendar.vue"
 import { v4 as uuidv4 } from "uuid"
 import { ComponentExposed } from "vue-component-type-helpers"
-import { getAllMatchesEventsExceptCompetition } from "@/backend/match"
+import { getScheduledMatchEventsExceptCompetition } from "@/backend/match"
 
 const calendar = ref<ComponentExposed<typeof ViewCalendar> | null>(null)
 
@@ -77,7 +77,7 @@ const { data: groups } = getGroup(
 
 const curStart = ref<Date | undefined>()
 const curEnd = ref<Date | undefined>()
-const { data: exMatches } = getAllMatchesEventsExceptCompetition(
+const { data: exMatches } = getScheduledMatchEventsExceptCompetition(
 	route,
 	curStart,
 	curEnd,

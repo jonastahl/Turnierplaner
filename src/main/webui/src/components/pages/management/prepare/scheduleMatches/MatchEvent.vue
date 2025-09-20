@@ -27,12 +27,12 @@
 
 <script setup lang="ts">
 import { AnnotatedMatch } from "@/interfaces/match"
-import { genTitle } from "@/backend/tournament"
 import { useI18n } from "vue-i18n"
 import ViewTeamNames from "@/components/links/LinkTeamNames.vue"
 import LinkCompetition from "@/components/links/LinkCompetition.vue"
 import LinkTournament from "@/components/links/LinkTournament.vue"
 import { Tournament } from "@/interfaces/tournament"
+import { genTitle } from "@/backend/match"
 
 const { t } = useI18n()
 

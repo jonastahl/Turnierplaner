@@ -11,7 +11,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 import { AnnotatedMatch } from "@/interfaces/match"
 import { CompType } from "@/interfaces/competition"
 import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
-import { getTournamentScheduledMatches, matchToEvent } from "@/backend/match"
+import {
+	getScheduledMatches,
+	getScheduledTournamentMatches,
+	matchToEvent,
+} from "@/backend/match"
 
 export function getTournamentList(
 	isLoggedIn: Ref<boolean>,
@@ -150,34 +154,4 @@ export function useAddTournament(
 			if (handler.err) handler.err()
 		},
 	})
-}
-
-export function getTournamentMatchEvents(
-	route: RouteLocationNormalizedLoaded,
-	t: (_: string) => string,
-	from: Ref<Date | undefined>,
-	to: Ref<Date | undefined>,
-) {
-	const matches = getTournamentScheduledMatches(route, from, to)
-
-	return {
-		...matches,
-		data: computed(() => {
-			if (!matches.data.value) return undefined
-			return matches.data.value.map(matchToEvent)
-		}),
-	}
-}
-
-export function genTitle(
-	title: AnnotatedMatch["title"],
-	t: (_: string) => string,
-) {
-	switch (title.type) {
-		case CompType.GROUPS:
-			return t("ViewGroupSystem.group") + " " + (title.number + 1)
-		case CompType.KNOCKOUT:
-			if (!title.isFinal) return t("ViewKnockout.thirdPlace")
-			else return knockoutTitle(t)(title.number, title.total)
-	}
 }

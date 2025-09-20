@@ -179,7 +179,7 @@
 </template>
 
 <script setup lang="ts">
-import { genTitle, getTournamentDetails } from "@/backend/tournament"
+import { getTournamentDetails } from "@/backend/tournament"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { computed, ref } from "vue"
@@ -195,7 +195,15 @@ import { useToast } from "primevue/usetoast"
 import ViewTeamNames from "@/components/links/LinkTeamNames.vue"
 import LinkTournament from "@/components/links/LinkTournament.vue"
 import LinkCompetition from "@/components/links/LinkCompetition.vue"
-import { getTournamentScheduledMatches } from "@/backend/match"
+import {
+	genTitle,
+	getScheduledMatches,
+} from "@/backend/match"
+
+const props = defineProps<{
+	tourId?: string
+	playerId?: string
+}>()
 
 const route = useRoute()
 const { t } = useI18n()
@@ -246,12 +254,13 @@ function titleFilter(
 	return titleValue.toLowerCase().includes(filterValue)
 }
 
-const { data: matches } = getTournamentScheduledMatches(
-	route,
+const { data: matches } = getScheduledMatches(
 	computed(() => (<DataTableFilterMetaData>filters.value.begin).value) ||
 		new Date(),
 	computed(() => (<DataTableFilterMetaData>filters.value.end).value) ||
 		new Date().setMonth(new Date().getMonth() + 2),
+	computed(() => props.playerId),
+	computed(() => props.tourId),
 )
 
 const dateOptions: Intl.DateTimeFormatOptions = {

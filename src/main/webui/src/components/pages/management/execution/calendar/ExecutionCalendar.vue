@@ -11,7 +11,7 @@
 		@on-view-change="onViewChange"
 	>
 		<template #event="{ event }">
-			<MatchEvent :match="<AnnotatedMatch>event.data" />
+			<MatchEvent :match="<AnnotatedMatch>event.data" :tournament="tournament" />
 		</template>
 	</ViewCalendar>
 </template>
@@ -27,7 +27,7 @@ import { computed, ref, watch } from "vue"
 import { getTournamentCourts } from "@/backend/court"
 import { getTournamentDetails } from "@/backend/tournament"
 import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
-import { getAllMatchesEvents } from "@/backend/match"
+import { getScheduledMatchesEvents } from "@/backend/match"
 
 const route = useRoute()
 const { t } = useI18n()
@@ -38,7 +38,7 @@ const curEnd = ref<Date | undefined>()
 
 const { data: courts } = getTournamentCourts(route)
 const { data: tournament } = getTournamentDetails(route, t, toast)
-const { data: matches } = getAllMatchesEvents(curStart, curEnd)
+const { data: matches } = getScheduledMatchesEvents(curStart, curEnd)
 
 function onViewChange(startDate: Date, endDate: Date) {
 	curStart.value = startDate
