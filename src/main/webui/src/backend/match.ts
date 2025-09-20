@@ -9,7 +9,7 @@ import {
 import axios from "axios"
 import { RouteLocationNormalizedLoaded } from "vue-router"
 import { ToastServiceMethods } from "primevue/toastservice"
-import { computed, Ref } from "vue"
+import { computed, ref, Ref } from "vue"
 import { v4 as uuidv4 } from "uuid"
 import { CompType } from "@/interfaces/competition"
 import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
@@ -61,24 +61,20 @@ export function useUpdateMatches(
 	})
 }
 
-export function getTournamentScheduledMatches(
-	route: RouteLocationNormalizedLoaded,
+export function getScheduledMatches(
 	from: Ref<Date | undefined>,
 	to: Ref<Date | undefined>,
+	playerId?: Ref<string | undefined>,
+	tourId?: Ref<string | undefined>,
 ) {
 	return useQuery({
-		enabled: computed(() => !!from.value && !!to.value),
-		queryKey: [
-			"tournamentScheduledMatches",
-			computed(() => route.params.playerId),
-			from,
-			to,
-		],
+		queryKey: ["scheduledMatches", from, to, playerId, tourId],
 		queryFn: async () => {
 			return axios
 				.get(`/matches`, {
 					params: {
-						tour: route.params.tourId,
+						player: playerId?.value,
+						tour: tourId?.value,
 						from: from.value,
 						to: to.value,
 					},
@@ -91,67 +87,52 @@ export function getTournamentScheduledMatches(
 		placeholderData: (data) => data,
 	})
 }
+export function getScheduledMatchesEvents(
+	from: Ref<Date | undefined>,
+	to: Ref<Date | undefined>,
+	playerId?: Ref<string | undefined>,
+	tourId?: Ref<string | undefined>,
+) {
+	const matches = getScheduledMatches(from, to, playerId, tourId)
 
-export function getPlayerScheduledMatches(
+	return {
+		...matches,
+		data: computed(() => {
+			if (!matches.data.value) return undefined
+			return matches.data.value.map(matchToEvent)
+		}),
+	}
+}
+export function getScheduledTournamentMatches(
 	route: RouteLocationNormalizedLoaded,
 	from: Ref<Date | undefined>,
 	to: Ref<Date | undefined>,
 ) {
-	return useQuery({
-		enabled: computed(() => !!route.params.playerId),
-		queryKey: [
-			"playerScheduledMatches",
-			computed(() => route.params.playerId),
-			from,
-			to,
-		],
-		queryFn: async () => {
-			return axios
-				.get(`/matches`, {
-					params: {
-						player: route.params.playerId,
-						from: from.value,
-						to: to.value,
-					},
-				})
-				.then<AnnotatedMatchServer[]>((data) => data.data)
-				.then<AnnotatedMatch[]>((matches) => {
-					return matches.map(annotatedMatchServerToClient)
-				})
-		},
-		placeholderData: (data) => data,
-	})
+	return getScheduledMatches(from, to, ref(undefined), computed(() => <string>route.params.tourId))
 }
-
-export function getAllScheduledMatches(
+export function getScheduledTournamentMatchEvents(
+	route: RouteLocationNormalizedLoaded,
+	t: (_: string) => string,
 	from: Ref<Date | undefined>,
 	to: Ref<Date | undefined>,
 ) {
-	return useQuery({
-		queryKey: ["scheduledMatches", from, to],
-		queryFn: async () => {
-			return axios
-				.get(`/matches`, {
-					params: {
-						from: from.value,
-						to: to.value,
-					},
-				})
-				.then<AnnotatedMatchServer[]>((data) => data.data)
-				.then<AnnotatedMatch[]>((matches) => {
-					return matches.map(annotatedMatchServerToClient)
-				})
-		},
-		placeholderData: (data) => data,
-	})
+	const matches = getScheduledTournamentMatches(route, from, to)
+
+	return {
+		...matches,
+		data: computed(() => {
+			if (!matches.data.value) return undefined
+			return matches.data.value.map(matchToEvent)
+		}),
+	}
 }
 
-export function getAllMatchesEventsExceptCompetition(
+export function getScheduledMatchEventsExceptCompetition(
 	route: RouteLocationNormalizedLoaded,
 	from: Ref<Date | undefined>,
 	to: Ref<Date | undefined>,
 ) {
-	const matches = getAllScheduledMatches(from, to)
+	const matches = getScheduledMatches(from, to)
 
 	return {
 		...matches,
@@ -160,21 +141,6 @@ export function getAllMatchesEventsExceptCompetition(
 			return matches.data.value
 				.filter((match) => match.compName !== route.params.compId)
 				.map(matchToEvent)
-		}),
-	}
-}
-
-export function getAllMatchesEvents(
-	from: Ref<Date | undefined>,
-	to: Ref<Date | undefined>,
-) {
-	const matches = getAllScheduledMatches(from, to)
-
-	return {
-		...matches,
-		data: computed(() => {
-			if (!matches.data.value) return undefined
-			return matches.data.value.map(matchToEvent)
 		}),
 	}
 }

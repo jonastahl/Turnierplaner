@@ -22,7 +22,7 @@
 					/>
 				</div>
 				<ExecutionCalendar v-if="calendarView.id === 'calendar'" />
-				<MatchesList v-else-if="calendarView.id === 'list'" />
+				<MatchesList v-else-if="calendarView.id === 'list'" :tour-id="tournament?.id || undefined" />
 			</template>
 		</Card>
 	</div>
@@ -35,9 +35,14 @@ import { ref } from "vue"
 import MatchesList from "@/components/pages/matches/MatchesList.vue"
 import ExecutionCalendar from "@/components/pages/management/execution/calendar/ExecutionCalendar.vue"
 import { useToast } from "primevue/usetoast"
+import { getTournamentDetails } from "@/backend/tournament"
+import { useRoute } from "vue-router"
 
+const route = useRoute()
 const { t } = useI18n()
 const toast = useToast()
+
+const {data: tournament} = getTournamentDetails(route, t, toast)
 
 const views = [
 	{

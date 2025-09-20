@@ -7,8 +7,8 @@
 						{{ t(option.label) }}
 					</template>
 				</SelectButton>
-				<MatchesCalendar v-if="calendarView.id === 'calendar'" />
-				<MatchesList v-else-if="calendarView.id === 'list'" />
+				<MatchesCalendar v-if="calendarView.id === 'calendar'" :tour-id="props.tourId" :player-id="props.playerId" />
+				<MatchesList v-else-if="calendarView.id === 'list'" :tour-id="props.tourId" :player-id="props.playerId" />
 			</template>
 		</Card>
 	</div>
@@ -19,6 +19,11 @@ import { ref } from "vue"
 import MatchesCalendar from "@/components/pages/matches/MatchesCalendar.vue"
 import MatchesList from "@/components/pages/matches/MatchesList.vue"
 import { useI18n } from "vue-i18n"
+
+const props = defineProps<{
+	tourId?: string
+	playerId?: string
+}>()
 
 const { t } = useI18n()
 
