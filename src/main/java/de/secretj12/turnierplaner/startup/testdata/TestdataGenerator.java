@@ -107,8 +107,8 @@ public class TestdataGenerator {
             case BEFORE_GAMEPHASE -> {
                 tournament.setBeginRegistration(Instant.now().minus(2, ChronoUnit.DAYS));
                 tournament.setEndRegistration(Instant.now().minus(1, ChronoUnit.DAYS));
-                tournament.setBeginGamePhase(Instant.now().plus(10, ChronoUnit.DAYS));
-                tournament.setEndGamePhase(Instant.now().plus(11, ChronoUnit.DAYS));
+                tournament.setBeginGamePhase(Instant.now().plus(11, ChronoUnit.DAYS));
+                tournament.setEndGamePhase(Instant.now().plus(15, ChronoUnit.DAYS));
             }
             case GAMEPHASE_OPEN -> {
                 tournament.setBeginRegistration(Instant.now().minus(3, ChronoUnit.DAYS));
@@ -119,7 +119,7 @@ public class TestdataGenerator {
             case AFTER_GAMEPHASE -> {
                 tournament.setBeginRegistration(Instant.now().minus(4, ChronoUnit.DAYS));
                 tournament.setEndRegistration(Instant.now().minus(3, ChronoUnit.DAYS));
-                tournament.setBeginGamePhase(Instant.now().minus(2, ChronoUnit.DAYS));
+                tournament.setBeginGamePhase(Instant.now().minus(5, ChronoUnit.DAYS));
                 tournament.setEndGamePhase(Instant.now().minus(1, ChronoUnit.DAYS));
             }
         }
@@ -322,6 +322,7 @@ public class TestdataGenerator {
         // CREATE KNOCKOUT MATCHES
         Match[] currentMatches = new Match[compSettings.getTeamNumbers() / 2];
         Match[] previousMatches = new Match[compSettings.getTeamNumbers() / 2];
+        int round = 0;
         for (int i = compSettings.getTeamNumbers() / 2; i > 0; i /= 2) {
             for (int j = 0; j < i; j++) {
                 currentMatches[j] = createMatch(courts[j % 4], competition, tournament);
@@ -332,6 +333,7 @@ public class TestdataGenerator {
                     currentMatches[j].setTeamB(knockoutTeams[j * 2 + 1]);
                 }
                 currentMatches[j].setFinished(false);
+                currentMatches[j].setNumber(round);
 
                 matchRepository.persist(currentMatches[j]);
                 if (i == 1) {
@@ -358,6 +360,7 @@ public class TestdataGenerator {
                 currentMatches[1] = createMatch(courts[0 % 4], competition, tournament);
                 currentMatches[1].setTeamA(getLooserOfMatchIfExists(previousMatches[0]));
                 currentMatches[1].setTeamB(getLooserOfMatchIfExists(previousMatches[1]));
+                currentMatches[1].setNumber(round);
 
                 matchRepository.persist(currentMatches[1]);
                 competition.setThirdPlace(currentMatches[1]);
@@ -373,6 +376,7 @@ public class TestdataGenerator {
 
             previousMatches = currentMatches;
             currentMatches = new Match[compSettings.getTeamNumbers() / 2];
+            round++;
         }
         competitions.persist(competition);
     }
@@ -517,6 +521,7 @@ public class TestdataGenerator {
                 competition.setNumberSets(NumberSets.FIVE);
             } else
                 competition.setNumberSets(NumberSets.THREE);
+            competition.setTotal(Integer.numberOfTrailingZeros(compSetting.getTeamNumbers()));
             competitions.persist(competition);
             switch (tDate) {
                 case BEFORE_REGISTRATION -> {
