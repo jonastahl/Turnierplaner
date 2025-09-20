@@ -195,10 +195,7 @@ import { useToast } from "primevue/usetoast"
 import ViewTeamNames from "@/components/links/LinkTeamNames.vue"
 import LinkTournament from "@/components/links/LinkTournament.vue"
 import LinkCompetition from "@/components/links/LinkCompetition.vue"
-import {
-	genTitle,
-	getScheduledMatches,
-} from "@/backend/match"
+import { genTitle, getScheduledMatches } from "@/backend/match"
 
 const props = defineProps<{
 	tourId?: string

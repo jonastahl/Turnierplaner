@@ -9,20 +9,23 @@
 						</template>
 					</SelectButton>
 					<Button
+						v-if="calendarView.id === CALENDAR"
 						:size="'small'"
 						:label="t('general.saveandpublish')"
-						@click="
-							toast.add({
-								severity: 'info',
-								summary: 'Coming soon',
-								detail: 'Not yet implemented',
-								life: 3000,
-							})
-						"
+						:disabled="changeSize === 0"
+						:badge="changeSize.toString()"
+						@click="calendar?.save()"
 					/>
 				</div>
-				<ExecutionCalendar v-if="calendarView.id === 'calendar'" />
-				<MatchesList v-else-if="calendarView.id === 'list'" :tour-id="tournament?.id || undefined" />
+				<ExecutionCalendar
+					v-if="calendarView.id === CALENDAR"
+					ref="calendar"
+					v-model:change-size="changeSize"
+				/>
+				<MatchesList
+					v-else-if="calendarView.id === LIST"
+					:tour-id="tournament?.id || undefined"
+				/>
 			</template>
 		</Card>
 	</div>
@@ -42,15 +45,21 @@ const route = useRoute()
 const { t } = useI18n()
 const toast = useToast()
 
-const {data: tournament} = getTournamentDetails(route, t, toast)
+const { data: tournament } = getTournamentDetails(route, t, toast)
 
+const calendar = ref<InstanceType<typeof ExecutionCalendar>>()
+
+const changeSize = ref(0)
+
+const CALENDAR = "calendar"
+const LIST = "list"
 const views = [
 	{
-		id: "calendar",
+		id: CALENDAR,
 		label: "general.calendar",
 	},
 	{
-		id: "list",
+		id: LIST,
 		label: "general.list",
 	},
 ]
