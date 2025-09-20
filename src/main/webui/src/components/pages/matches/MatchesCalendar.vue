@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { AnnotatedMatch } from "@/interfaces/match"
 import ViewCalendar from "@/calendar/ViewCalendar.vue"
-import MatchEvent from "@/components/pages/management/prepare/scheduleMatches/MatchEvent.vue"
+import MatchEvent from "@/components/items/MatchEvent.vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
@@ -26,10 +26,7 @@ import { computed, ref, watch } from "vue"
 import { getTournamentCourts } from "@/backend/court"
 import { getTournamentDetails } from "@/backend/tournament"
 import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
-import {
-	getScheduledMatchesEvents,
-	getScheduledTournamentMatchEvents,
-} from "@/backend/match"
+import { getScheduledMatchesEvents } from "@/backend/match"
 
 const props = defineProps<{
 	tourId?: string
@@ -45,7 +42,13 @@ const curEnd = ref<Date | undefined>()
 
 const { data: courts } = getTournamentCourts(route)
 const { data: tournament } = getTournamentDetails(route, t, toast)
-const { data: matches } = getScheduledMatchesEvents(t, curStart, curEnd, props.playerId, props.tourId)
+const { data: matches } = getScheduledMatchesEvents(
+	t,
+	curStart,
+	curEnd,
+	props.playerId,
+	props.tourId,
+)
 
 function onViewChange(startDate: Date, endDate: Date) {
 	curStart.value = startDate

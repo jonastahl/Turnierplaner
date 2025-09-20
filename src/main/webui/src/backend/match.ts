@@ -108,7 +108,12 @@ export function getScheduledTournamentMatches(
 	from: Ref<Date | undefined>,
 	to: Ref<Date | undefined>,
 ) {
-	return getScheduledMatches(from, to, ref(undefined), computed(() => <string>route.params.tourId))
+	return getScheduledMatches(
+		from,
+		to,
+		ref(undefined),
+		computed(() => <string>route.params.tourId),
+	)
 }
 export function getScheduledTournamentMatchEvents(
 	route: RouteLocationNormalizedLoaded,
@@ -148,8 +153,8 @@ export function getScheduledMatchEventsExceptCompetition(
 export function matchToEvent(match: AnnotatedMatch) {
 	return {
 		id: match.id || uuidv4(),
-		start: match.begin ?? new Date(),
-		end: match.end ?? new Date(),
+		start: new Date(match.begin ?? new Date()),
+		end: new Date(match.end ?? new Date()),
 		split: match.court ?? "undefined court",
 		data: match,
 	}

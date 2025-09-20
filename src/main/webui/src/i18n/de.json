@@ -39,6 +39,7 @@
 		"competition": "Konkurrenz",
 		"court": "Platz",
 		"begin": "Beginn",
+		"end": "Ende",
 		"team": "Team",
 		"result": "Ergebnis",
 		"options": "Optionen",
@@ -277,7 +278,8 @@
 		"execution": "Durchführung",
 		"publish": "Veröffentlichen",
 		"publishall": "Alle veröffentlichen",
-		"prepare": "Vorbereiten"
+		"prepare": "Vorbereiten",
+		"update_schedule_header": "Die folgenden Spiele wurden verschoben"
 	},
 	"validation": {
 		"field_invalid": "Feld ist ungültig",

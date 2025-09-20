@@ -40,6 +40,7 @@
 		"competition": "Competition",
 		"court": "Court",
 		"begin": "Begin",
+		"end": "End",
 		"team": "Team",
 		"result": "Result",
 		"courts": "Courts",
@@ -278,7 +279,8 @@
 		"execution": "Execution",
 		"publish": "Publish",
 		"publishall": "Publish all",
-		"prepare": "Prepare"
+		"prepare": "Prepare",
+		"update_schedule_header": "The following matches were changed"
 	},
 	"validation": {
 		"field_invalid": "Field is invalid",

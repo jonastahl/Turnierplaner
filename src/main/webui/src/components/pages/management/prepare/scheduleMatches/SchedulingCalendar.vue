@@ -40,7 +40,7 @@ import {
 	extractKnockoutMatches,
 	MatchCalEvent,
 } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
-import EventMatch from "@/components/pages/management/prepare/scheduleMatches/MatchEvent.vue"
+import EventMatch from "@/components/items/MatchEvent.vue"
 import ViewCalendar from "@/calendar/ViewCalendar.vue"
 import { v4 as uuidv4 } from "uuid"
 import { ComponentExposed } from "vue-component-type-helpers"

@@ -1,25 +1,29 @@
 <template>
 	<ViewCalendar
 		v-if="tournament"
-		v-model:events="events"
+		v-model="events"
 		style="height: 800px"
 		:selected-date="tournament.game_phase.begin"
 		:min-date="tournament.game_phase.begin"
 		:max-date="tournament.game_phase.end"
 		:split-days="splitDays"
-		:editable-events="true"
+		editable-events
 		@on-view-change="onViewChange"
 	>
 		<template #event="{ event }">
-			<MatchEvent :match="<AnnotatedMatch>event.data" :tournament="tournament" />
+			<MatchEvent
+				:match="<AnnotatedMatch>event.data"
+				:tournament="tournament"
+			/>
 		</template>
 	</ViewCalendar>
+	<ChangeDialog v-model:visible="chgoverviewvisible" :change-set="changeSet" />
 </template>
 
 <script setup lang="ts">
 import { AnnotatedMatch } from "@/interfaces/match"
 import ViewCalendar from "@/calendar/ViewCalendar.vue"
-import MatchEvent from "@/components/pages/management/prepare/scheduleMatches/MatchEvent.vue"
+import MatchEvent from "@/components/items/MatchEvent.vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
@@ -28,6 +32,10 @@ import { getTournamentCourts } from "@/backend/court"
 import { getTournamentDetails } from "@/backend/tournament"
 import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
 import { getScheduledMatchesEvents } from "@/backend/match"
+import ChangeDialog from "@/components/pages/management/execution/calendar/ChangeDialog.vue"
+
+const changeSize = defineModel<number>("changeSize", { default: 0 })
+const chgoverviewvisible = ref(false)
 
 const route = useRoute()
 const { t } = useI18n()
@@ -76,6 +84,24 @@ const splitDays = computed(() => {
 		}
 	})
 })
+
+const changeSet = computed<MatchCalEvent[]>(() => {
+	return events.value.filter(
+		(event) =>
+			event.start.getTime() !== event.data.begin?.getTime() ||
+			event.end.getTime() !== event.data.end?.getTime() ||
+			event.split !== event.data.court,
+	)
+})
+watch(changeSet, () => {
+	changeSize.value = changeSet.value.length
+})
+
+function save() {
+	chgoverviewvisible.value = true
+}
+
+defineExpose({ save })
 </script>
 
 <style scoped></style>

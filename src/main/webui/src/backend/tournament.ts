@@ -8,14 +8,6 @@ import {
 import { ToastServiceMethods } from "primevue/toastservice"
 import { RouteLocationNormalizedLoaded } from "vue-router"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
-import { AnnotatedMatch } from "@/interfaces/match"
-import { CompType } from "@/interfaces/competition"
-import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
-import {
-	getScheduledMatches,
-	getScheduledTournamentMatches,
-	matchToEvent,
-} from "@/backend/match"
 
 export function getTournamentList(
 	isLoggedIn: Ref<boolean>,

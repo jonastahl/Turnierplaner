@@ -7,8 +7,16 @@
 						{{ t(option.label) }}
 					</template>
 				</SelectButton>
-				<MatchesCalendar v-if="calendarView.id === 'calendar'" :tour-id="props.tourId" :player-id="props.playerId" />
-				<MatchesList v-else-if="calendarView.id === 'list'" :tour-id="props.tourId" :player-id="props.playerId" />
+				<MatchesCalendar
+					v-if="calendarView.id === 'calendar'"
+					:tour-id="props.tourId"
+					:player-id="props.playerId"
+				/>
+				<MatchesList
+					v-else-if="calendarView.id === 'list'"
+					:tour-id="props.tourId"
+					:player-id="props.playerId"
+				/>
 			</template>
 		</Card>
 	</div>

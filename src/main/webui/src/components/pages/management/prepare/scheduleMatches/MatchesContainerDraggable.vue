@@ -14,9 +14,9 @@
 		style="box-sizing: content-box; width: calc(100% - 6px)"
 	>
 		<template #default="{ item }">
-			<div style="background-color: rgba(164, 230, 210, 0.9); width: 200px">
-				<MatchEvent :match="item" :competition="competition" />
-			</div>
+			<MatchEventColor>
+				<MatchEvent :match="item" />
+			</MatchEventColor>
 		</template>
 	</DraggablePanel>
 </template>
@@ -36,7 +36,8 @@ import {
 	extractGroupMatches,
 	extractKnockoutMatches,
 } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
-import MatchEvent from "@/components/pages/management/prepare/scheduleMatches/MatchEvent.vue"
+import MatchEvent from "@/components/items/MatchEvent.vue"
+import MatchEventColor from "@/components/items/MatchEventColor.vue"
 
 const route = useRoute()
 const { t } = useI18n()
