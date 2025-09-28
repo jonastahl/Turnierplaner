@@ -2,6 +2,7 @@ package de.secretj12.turnierplaner.resources;
 
 import de.secretj12.turnierplaner.db.entities.Match;
 import de.secretj12.turnierplaner.db.entities.Player;
+import de.secretj12.turnierplaner.db.entities.Tournament;
 import de.secretj12.turnierplaner.db.entities.competition.Competition;
 import de.secretj12.turnierplaner.db.entities.competition.Team;
 import de.secretj12.turnierplaner.db.entities.groups.Group;
@@ -25,6 +26,7 @@ import de.secretj12.turnierplaner.tools.CommonHelpers;
 import de.secretj12.turnierplaner.tools.GroupTools;
 import de.secretj12.turnierplaner.tools.KnockoutTools;
 import io.quarkus.security.identity.SecurityIdentity;
+import io.smallrye.mutiny.tuples.Tuple2;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -477,6 +479,54 @@ public class CompetitionResource {
         boolean allSuc = true;
         for (var entry : players.entrySet())
             allSuc &= mailTemplates.sendPublishedMail(entry.getKey(), tourName, entry.getValue());
+
+        return RestResponse.ResponseBuilder
+            .create(allSuc ? Response.Status.OK : Response.Status.PARTIAL_CONTENT, "Mails published")
+            .build();
+    }
+
+    @POST
+    @RolesAllowed("director")
+    @Path("/reschedule")
+    @Transactional
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse<String> rescheduleMatches(@PathParam("tourName") String tourName,
+                                                  List<jDirectorScheduleMatch> reschedMatches) {
+        Tournament tournament = tournaments.getByName(tourName);
+        if (tournament == null) throw new NotFoundException("Tournament could not be found");
+        Map<Player, Map<Competition, List<Tuple2<Match, MailTemplates.OldData>>>> players = new HashMap<>();
+        for (var cMatch : reschedMatches) {
+            if (cMatch.getCourt() == null || cMatch.getBegin() == null || cMatch.getEnd() == null)
+                throw new BadRequestException("Invalid match data");
+            Match match = matches.findById(cMatch.getId());
+            if (match == null)
+                throw new NotFoundException("Could not find match");
+            Competition competition = match.getCompetition();
+            if (competition.getcProgress() != CreationProgress.DONE)
+                throw new BadRequestException("Match is not published yet");
+            if (competition.getTournament().getId() != tournament.getId())
+                throw new BadRequestException("Match does not belong to specified tournament");
+            var oldData = new MailTemplates.OldData(match.getBegin(), match.getEnd(), match.getCourt().getName());
+            var court = courts.findByName(cMatch.getCourt());
+            if (court == null) throw new NotFoundException("Could not find court");
+            match.setCourt(court);
+            match.setBegin(cMatch.getBegin());
+            match.setEnd(cMatch.getEnd());
+            matches.persist(match);
+
+            Competition comp = match.getCompetition();
+            Stream.of(match.getTeamA(), match.getTeamB())
+                .flatMap(t -> Stream.of(t.getPlayerA(), t.getPlayerB())).filter(Objects::nonNull)
+                .forEach(p -> {
+                    players.computeIfAbsent(p, (P) -> new HashMap<>())
+                        .computeIfAbsent(comp, (C) -> new ArrayList<>())
+                        .add(Tuple2.of(match, oldData));
+                });
+        }
+
+        boolean allSuc = true;
+        for (var entry : players.entrySet())
+            allSuc &= mailTemplates.sendRescheduleMail(entry.getKey(), tourName, entry.getValue());
 
         return RestResponse.ResponseBuilder
             .create(allSuc ? Response.Status.OK : Response.Status.PARTIAL_CONTENT, "Mails published")

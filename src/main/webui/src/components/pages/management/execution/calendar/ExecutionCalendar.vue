@@ -17,7 +17,16 @@
 			/>
 		</template>
 	</ViewCalendar>
-	<ChangeDialog v-model:visible="chgoverviewvisible" :change-set="changeSet" />
+	<ChangeDialog
+		v-model:visible="chgoverviewvisible"
+		:change-set="changeSet"
+		@publishing="
+			() => {
+				events.splice(0, events.length)
+				chgoverviewvisible = false
+			}
+		"
+	/>
 </template>
 
 <script setup lang="ts">

@@ -34,4 +34,10 @@ public interface MailMessages {
     String upcomingGameNotice();
 
     String myGames();
+
+    String rescheduleSubject();
+
+    String rescheduleGameMovedSingle();
+
+    String rescheduleGameMovedMultiple();
 }
