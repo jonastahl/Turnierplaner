@@ -53,6 +53,7 @@ import ViewTeamNames from "@/components/links/LinkTeamNames.vue"
 import LinkCompetition from "@/components/links/LinkCompetition.vue"
 import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
 import ValOrEdited from "@/components/pages/management/execution/calendar/ValOrEdited.vue"
+import { genTitle } from "@/backend/match"
 
 const { t } = useI18n()
 

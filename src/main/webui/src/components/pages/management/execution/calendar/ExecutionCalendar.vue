@@ -46,7 +46,7 @@ const curEnd = ref<Date | undefined>()
 
 const { data: courts } = getTournamentCourts(route)
 const { data: tournament } = getTournamentDetails(route, t, toast)
-const { data: matches } = getScheduledMatchesEvents(curStart, curEnd)
+const { data: matches, isSuccess } = getScheduledMatchesEvents(curStart, curEnd)
 
 function onViewChange(startDate: Date, endDate: Date) {
 	curStart.value = startDate
@@ -56,9 +56,7 @@ function onViewChange(startDate: Date, endDate: Date) {
 const events = ref<MatchCalEvent[]>([])
 
 watch(matches, () => {
-	events.value.splice(0, events.value.length)
-
-	if (!matches.value) return
+	if (!isSuccess.value || events.value.length || !matches.value) return
 
 	matches.value.forEach((match) => {
 		const otherTour = match.data.tourName !== route.params.tourId

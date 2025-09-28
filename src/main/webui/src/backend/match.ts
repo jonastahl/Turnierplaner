@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 import {
 	AnnotatedMatch,
-	AnnotatedMatchServer,
 	annotatedMatchServerToClient,
 	Match,
 	matchClientToServer,
@@ -79,12 +78,10 @@ export function getScheduledMatches(
 						to: to.value,
 					},
 				})
-				.then<AnnotatedMatchServer[]>((data) => data.data)
-				.then<AnnotatedMatch[]>((matches) => {
-					return matches.map(annotatedMatchServerToClient)
-				})
+				.then<AnnotatedMatch[]>((matches) =>
+					matches.data.map(annotatedMatchServerToClient),
+				)
 		},
-		placeholderData: (data) => data,
 	})
 }
 export function getScheduledMatchesEvents(
