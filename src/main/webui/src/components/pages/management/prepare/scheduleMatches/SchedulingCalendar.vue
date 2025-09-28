@@ -66,11 +66,11 @@ const route = useRoute()
 const toast = useToast()
 const { data: tournament } = getTournamentDetails(route, t, toast)
 const { data: competition } = getCompetitionDetails(route, t, toast)
-const { data: knockout } = getKnockout(
+const { data: knockout, isSuccess: knockoutSuc } = getKnockout(
 	route,
 	computed(() => competition.value?.tourType === CompType.KNOCKOUT),
 )
-const { data: groups } = getGroup(
+const { data: groups, isSuccess: groupSuc } = getGroup(
 	route,
 	computed(() => competition.value?.tourType === CompType.GROUPS),
 )
@@ -87,7 +87,8 @@ const events = defineModel<MatchCalEvent[]>({ default: [] })
 watch(
 	[knockout, groups],
 	() => {
-		events.value.splice(0, events.value.length)
+		if (!knockoutSuc.value || !groupSuc.value || events.value.length) return
+
 		if (competition.value?.tourType === CompType.KNOCKOUT && knockout.value) {
 			extractKnockoutMatches(knockout.value, addMatch)
 		} else if (
@@ -105,7 +106,6 @@ watch(
 watch([exMatches, props], updateExisting)
 
 function updateExisting() {
-	console.log("update")
 	for (let i = events.value.length - 1; i >= 0; i--) {
 		if (events.value[i].secondary) events.value.splice(i, 1)
 	}
