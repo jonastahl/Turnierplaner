@@ -93,7 +93,6 @@ const { data: competitions } = getCompetitionsList(route, isLoggedIn, t, toast)
 const { mutate: publishCompetition } = usePublishCompetitions(route, t, toast)
 
 function publish(competitions: string[]) {
-	console.log("publish")
 	confirm.require({
 		header: t(
 			competitions.length === 1

@@ -275,6 +275,12 @@
 		"published_all": "All competitions have been published. All players were notified.",
 		"published_all_missing": "All competitions have been published. Not all players could be notified, as they did not specify an email address."
 	},
+	"ViewExecution": {
+		"published_single": "Match has been moved. All players were notified.",
+		"published_single_missing": "Match has been moved. Not all players could be notified, as they did not specify an email address.",
+		"published_all": "Matches have been moved. All players were notified.",
+		"published_all_missing": "Matches have been moved. Not all players could be notified, as they did not specify an email address."
+	},
 	"ViewManage": {
 		"execution": "Execution",
 		"publish": "Publish",

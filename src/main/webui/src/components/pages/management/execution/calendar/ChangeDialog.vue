@@ -23,11 +23,8 @@
 				:label="t('general.saveandpublish')"
 				@click="
 					() => {
-						toast.add({
-							severity: 'info',
-							summary: 'Coming soon',
-							life: 3000,
-						})
+						emit('publishing')
+						reschedule(props.changeSet)
 					}
 				"
 			/>
@@ -41,12 +38,21 @@ import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMat
 import UpdatedMatch from "@/components/pages/management/execution/calendar/UpdatedMatch.vue"
 import MatchEventColor from "@/components/items/MatchEventColor.vue"
 import { useToast } from "primevue/usetoast"
+import { useRescheduleMatches } from "@/backend/match"
+import { useRoute } from "vue-router"
 
 const visible = defineModel<boolean>()
 const props = defineProps<{ changeSet: MatchCalEvent[] }>()
 
+const route = useRoute()
 const { t } = useI18n()
 const toast = useToast()
+
+const emit = defineEmits<{
+	publishing: []
+}>()
+
+const { mutate: reschedule } = useRescheduleMatches(route, t, toast)
 </script>
 
 <style scoped></style>

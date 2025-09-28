@@ -4,8 +4,9 @@ import {
 	annotatedMatchServerToClient,
 	Match,
 	matchClientToServer,
+	MatchEvent,
 } from "@/interfaces/match"
-import axios from "axios"
+import axios, { AxiosResponse } from "axios"
 import { RouteLocationNormalizedLoaded } from "vue-router"
 import { ToastServiceMethods } from "primevue/toastservice"
 import { computed, ref, Ref } from "vue"
@@ -45,6 +46,56 @@ export function useUpdateMatches(
 					route.params.tourId,
 					route.params.compId,
 				],
+				refetchType: "all",
+			})
+		},
+		onError(error) {
+			toast.add({
+				severity: "error",
+				summary: t("general.failure"),
+				detail: t("general.error_saving"),
+				life: 3000,
+			})
+			console.log(error)
+		},
+	})
+}
+
+export function useRescheduleMatches(
+	route: RouteLocationNormalizedLoaded,
+	t: (s: string) => string,
+	toast: ToastServiceMethods,
+) {
+	const queryClient = useQueryClient()
+	return useMutation({
+		mutationFn: (matches: MatchEvent[]) =>
+			axios.post(
+				`/tournament/${<string>route.params.tourId}/competition/reschedule`,
+				matches.map(eventToAnnotatedMatch).map(matchClientToServer),
+			),
+		onSuccess(data: AxiosResponse, matches: MatchEvent[]) {
+			let message
+			if (data.status == 200) {
+				if (matches.length === 1) {
+					message = "ViewExecution.published_all"
+				} else {
+					message = "ViewExecution.published_single"
+				}
+			} else {
+				if (matches.length === 1) {
+					message = "ViewExecution.published_all_missing"
+				} else {
+					message = "ViewExecution.published_single_missing"
+				}
+			}
+			toast.add({
+				severity: data.status == 200 ? "success" : "warn",
+				summary: t("general.success"),
+				detail: t(message),
+				life: 3000,
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["scheduledMatches"],
 				refetchType: "all",
 			})
 		},
@@ -147,13 +198,21 @@ export function getScheduledMatchEventsExceptCompetition(
 	}
 }
 
-export function matchToEvent(match: AnnotatedMatch) {
+export function matchToEvent(match: AnnotatedMatch): MatchEvent {
 	return {
 		id: match.id || uuidv4(),
 		start: new Date(match.begin ?? new Date()),
 		end: new Date(match.end ?? new Date()),
 		split: match.court ?? "undefined court",
 		data: match,
+	}
+}
+export function eventToAnnotatedMatch(match: MatchEvent): AnnotatedMatch {
+	return {
+		...match.data,
+		begin: match.start,
+		end: match.end,
+		court: match.split,
 	}
 }
 

@@ -1,0 +1,69 @@
+{#include MailTemplates/masterTemplateMail.html}
+    {#title}{msg:rescheduleSubject()}{/title}
+    {#preheader}
+			{#if multipleMatches}
+				{msg:rescheduleGameMovedMultiple()}
+			{#else}
+				{msg:rescheduleGameMovedSingle()}
+			{/if}
+		{/preheader}
+
+	<p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
+    {msg:helloName(player.getFirstName())}
+	</p>
+	<p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
+      {#if multipleMatches}
+          {msg:rescheduleGameMovedMultiple()}
+      {#else}
+          {msg:rescheduleGameMovedSingle()}
+      {/if}
+	</p>
+
+	{#for comp in competitions}
+			<h3 style="margin-bottom: 0.3rem">
+				<a style="color: inherit; text-decoration: none;" href="{url}/tournament/{tourName}/competition/{comp.name}">{comp.name}</a>
+			</h3>
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				{#for game in comp.games}
+					<tr>
+						<td style="width: 50%; padding: 10px; vertical-align: middle">
+							<a style="white-space: pre-line; margin: 0; color: inherit; text-decoration: none" href="{url}/player/overview/{game.opponentA.getId()}">{game.opponentA.getFullName()}</a>
+							{#if game.opponentB != null}
+								<br>
+								<a style="white-space: pre-line; margin: 0; color: inherit; text-decoration: none" href="{url}/player/overview/{game.opponentB.getId()}">{game.opponentB.getFullName()}</a>
+							{/if}
+						</td>
+						<td style="width: 30%; padding: 10px; vertical-align: middle">
+							<p style="margin: 0.2rem">
+								{#if game.oldTime}
+									<span style="color: red; text-decoration: line-through">{game.oldTime}</span><br>
+									<span style="color: green">{game.time}</span>
+								{#else}
+									{game.time}
+								{/if}
+							</p>
+						</td>
+						<td style="width: 20%; padding: 10px; vertical-align: middle">
+							<p style="margin: 0.2rem">
+                {#if game.oldCourt}
+									<span style="color: red; text-decoration: line-through">{game.oldCourt}</span><br>
+									<span style="color: green">{game.court}</span>
+                {#else}
+									{game.court}
+                {/if}
+							</p>
+						</td>
+					</tr>
+        {/for}
+			</table>
+	{/for}
+
+	<p style="margin-top: 2rem">{msg:upcomingGameNotice()}</p>
+
+	<div style="text-align: center">
+		<a href="{url}/player/overview/{player.getId}" target="_blank"
+			 style="border: solid 2px #0867ec; border-radius: 4px; box-sizing: border-box; cursor: pointer; display: inline-block; font-size: 16px; font-weight: bold; margin: 0; padding: 12px 24px; text-decoration: none; text-transform: capitalize; background-color: #0867ec; border-color: #0867ec; color: #ffffff;">
+        {msg:myGames()}
+		</a>
+	</div>
+{/include}

@@ -69,6 +69,14 @@ export interface AnnotatedMatch extends Match {
 	compName: string
 }
 
+export interface MatchEvent {
+	id: string
+	start: Date
+	end: Date
+	split: string
+	data: AnnotatedMatch
+}
+
 export function matchServerToClient(match: MatchServer): Match {
 	const teamA = match.teamA === null ? null : teamServerToClient(match.teamA)
 	const teamB = match.teamB === null ? null : teamServerToClient(match.teamB)
