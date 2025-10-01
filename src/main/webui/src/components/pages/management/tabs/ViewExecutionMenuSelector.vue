@@ -21,14 +21,9 @@ const activeTab = ref<number>(0)
 
 const menuComps = [
 	{
-		label: t("ViewPrepare.overview"),
-		icon: "pi pi-crown",
-		route: Routes.ManageExecution,
-	},
-	{
 		label: t("general.calendar"),
 		icon: "pi pi-calendar-clock",
-		route: Routes.ManageExecutionCalendar,
+		route: Routes.ManageExecution,
 	},
 	{
 		label: t("general.gameplans"),

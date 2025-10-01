@@ -11,14 +11,7 @@ export interface Game {
 	scoreB: number
 }
 
-export interface SetKey {
-	match_id: string
-	index: number
-}
-
 export interface Set {
-	// key: SetKey
-	index: number
 	scoreA: number
 	scoreB: number
 }
@@ -45,8 +38,7 @@ export interface MatchServer {
 	winner: boolean | undefined
 	teamA: TeamServer | null
 	teamB: TeamServer | null
-	// TODO add result
-	sets: Array<Set>
+	sets: Set[]
 }
 
 export interface AnnotatedMatchServer extends MatchServer {

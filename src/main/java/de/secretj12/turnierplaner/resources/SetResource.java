@@ -13,6 +13,7 @@ import de.secretj12.turnierplaner.model.user.jUserSet;
 import de.secretj12.turnierplaner.model.user.jUserTeamGroupResult;
 import de.secretj12.turnierplaner.tools.GroupTools;
 import io.quarkus.security.UnauthorizedException;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.tuples.Tuple2;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -21,6 +22,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
 import java.time.Instant;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +42,8 @@ public class SetResource {
 
     @Inject
     GroupTools groupTools;
+    @Inject
+    SecurityIdentity securityIdentity;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -56,52 +60,46 @@ public class SetResource {
             throw new NotFoundException("Competition was not found");
 
         Instant beginGamePhase = tournament.getBeginGamePhase();
-        if (beginGamePhase != null && beginGamePhase.isAfter(Instant.now()))
+        if (beginGamePhase != null && beginGamePhase.isAfter(Instant.now()) && !securityIdentity.hasRole("director"))
             throw new UnauthorizedException("Cannot update matches before game phase has begun");
 
         Match match = matchRepository.findById(matchId);
         if (match == null)
             throw new InternalServerErrorException("Could find match");
 
-        for (jUserSet jSet : sets) {
-            if (jSet.getIndex() > 4)
-                throw new BadRequestException("Invalid set index");
-
-            Set.SetKey setKey = new Set.SetKey();
-            setKey.setMatch(match);
-            setKey.setIndex(jSet.getIndex());
-            Set set = setRepository.findById(setKey);
-
-            if (set != null && jSet.getScoreA() == 0 && jSet.getScoreB() == 0) {
-                setRepository.delete(set);
-            } else {
-                if (set == null) {
-                    set = new Set();
-                    set.setKey(setKey);
-                }
-
-                set.setScoreA(jSet.getScoreA());
-                set.setScoreB(jSet.getScoreB());
-                setRepository.persist(set);
-            }
+        match.getSets().forEach(setRepository::delete);
+        if (securityIdentity.hasRole("director") && sets.isEmpty()) {
+            match.setFinished(false);
+            adjustNext(match);
+            return "Result was reset";
         }
 
         match.setFinished(true);
-        match.setWinner(findWinner(match, competition.getNumberSets()));
-        matchRepository.persist(match);
+        match.setWinner(findWinner(sets, competition.getNumberSets()));
 
+        for (byte i = 0; i < sets.size(); i++) {
+            jUserSet jSet = sets.get(i);
+            Set.SetKey setKey = new Set.SetKey();
+            setKey.setMatch(match);
+            setKey.setIndex(i);
+            Set set = new Set();
+            set.setKey(setKey);
+            set.setScoreA(jSet.getScoreA());
+            set.setScoreB(jSet.getScoreB());
+            setRepository.persist(set);
+        }
+
+        matchRepository.persist(match);
         adjustNext(match);
         return "Updated matches";
     }
 
     private void adjustNext(Match match) {
-        if (!match.getFinished())
-            return;
-
         if (match.getPreviousOfA() != null) {
             for (NextMatch nm : match.getPreviousOfA()) {
                 Match nMatch = nm.getNextMatch();
-                nMatch.setTeamA(match.getWinner() ^ nm.isWinner() ? match.getTeamB() : match.getTeamA());
+                nMatch.setTeamA(match.isFinished() ? match.getWinner() ^ nm.isWinner() ? match.getTeamB() : match
+                    .getTeamA() : null);
                 matchRepository.persist(nMatch);
                 adjustNext(nMatch);
             }
@@ -109,87 +107,74 @@ public class SetResource {
         if (match.getPreviousOfB() != null) {
             for (NextMatch nm : match.getPreviousOfB()) {
                 Match nMatch = nm.getNextMatch();
-                nMatch.setTeamB(match.getWinner() ^ nm.isWinner() ? match.getTeamB() : match.getTeamA());
+                nMatch.setTeamB(match.isFinished() ? match.getWinner() ^ nm.isWinner() ? match.getTeamB() : match
+                    .getTeamA() : null);
                 matchRepository.persist(nMatch);
                 adjustNext(nMatch);
             }
         }
-        if (match.getGroup() != null && groupTools.isFinished(match.getGroup().getGroup())) {
+        if (match.getGroup() != null) {
             Group group = match.getGroup().getGroup();
-            List<jUserTeamGroupResult> results = groupTools.determineGroupResults(group);
+            boolean isFinished = groupTools.isFinished(match.getGroup().getGroup());
+            List<jUserTeamGroupResult> results = isFinished ? groupTools.determineGroupResults(group) : List.of();
 
             for (var fog : group.getFinalOfGroupA()) {
                 Match fin = fog.getNextMatch();
-                fin.setTeamA(teamRepository.findById(results.get(fog.getPos() - 1).getTeam().getId()));
+                fin.setTeamA(isFinished ? teamRepository.findById(results.get(fog.getPos() - 1).getTeam()
+                    .getId()) : null);
                 adjustNext(fin);
             }
             for (var fog : group.getFinalOfGroupB()) {
                 Match fin = fog.getNextMatch();
-                fin.setTeamB(teamRepository.findById(results.get(fog.getPos() - 1).getTeam().getId()));
+                fin.setTeamB(isFinished ? teamRepository.findById(results.get(fog.getPos() - 1).getTeam()
+                    .getId()) : null);
                 adjustNext(fin);
             }
         }
     }
 
-    private boolean findWinner(Match match, NumberSets numberSets) {
+    private boolean findWinner(List<jUserSet> sets, NumberSets numberSets) {
         int dif = 0;
+        Iterator<jUserSet> it = sets.iterator();
         for (byte i = 0; i < 2; i++) {
-            Set.SetKey setKey = new Set.SetKey();
-            setKey.setMatch(match);
-            setKey.setIndex(i);
-            Set set = setRepository.findById(setKey);
-
-            if (set == null)
-                throw new BadRequestException("Set " + i + " is null");
-            isValidSet(set);
-            dif += calcDif(set);
+            notNull(it);
+            dif += calcDif(isValidSet(it));
         }
 
-        Set set3 = setRepository.findById(match, (byte) 2);
         switch (numberSets) {
             case THREE -> {
                 if (Math.abs(dif) == 2)
-                    isNull(set3);
-                else {
-                    isValidTiebreak(set3);
-                    dif += calcDif(set3);
-                }
+                    isNull(it);
+                else
+                    dif += calcDif(isValidTiebreak(it));
             }
-            case FIVE -> {
-                isValidSet(set3);
-                dif += calcDif(set3);
-            }
+            case FIVE -> dif += calcDif(isValidSet(it));
         }
-        Set set4 = setRepository.findById(match, (byte) 3);
         switch (numberSets) {
-            case THREE -> isNull(set4);
+            case THREE -> isNull(it);
             case FIVE -> {
                 if (Math.abs(dif) == 3)
-                    isNull(set4);
-                else {
-                    isValidSet(set4);
-                    dif += calcDif(set4);
-                }
+                    isNull(it);
+                else
+                    dif += calcDif(isValidSet(it));
             }
         }
-        Set set5 = setRepository.findById(match, (byte) 4);
         switch (numberSets) {
-            case THREE -> isNull(set5);
+            case THREE -> isNull(it);
             case FIVE -> {
                 if (Math.abs(dif) == 3)
-                    isNull(set4);
-                else {
-                    isValidTiebreak(set5);
-                    dif += calcDif(set5);
-                }
+                    isNull(it);
+                else
+                    dif += calcDif(isValidTiebreak(it));
             }
         }
         if (dif == 0)
             throw new InternalServerErrorException("Dif should 0");
+        isNull(it);
         return dif > 0;
     }
 
-    private int calcDif(Set set) {
+    private int calcDif(jUserSet set) {
         if (set.getScoreA() > set.getScoreB())
             return 1;
         else
@@ -213,16 +198,19 @@ public class SetResource {
         Tuple2.of((byte) 6, (byte) 7)
     );
 
-    private void isValidSet(Set set) {
-        notNull(set);
+    private jUserSet isValidSet(Iterator<jUserSet> it) {
+        notNull(it);
+        jUserSet set = it.next();
         byte scoreA = set.getScoreA();
         byte scoreB = set.getScoreB();
         if (!validResults.contains(Tuple2.of(scoreA, scoreB)))
             throw new BadRequestException("Invalid result");
+        return set;
     }
 
-    private void isValidTiebreak(Set set) {
-        notNull(set);
+    private jUserSet isValidTiebreak(Iterator<jUserSet> it) {
+        notNull(it);
+        jUserSet set = it.next();
         int scoreA = set.getScoreA();
         int scoreB = set.getScoreB();
         boolean valid = (scoreA == 10 && scoreB <= 8)
@@ -231,15 +219,16 @@ public class SetResource {
             || (scoreB == scoreA + 2 && scoreA >= 9);
         if (!valid)
             throw new BadRequestException("Invalid tiebreak");
+        return set;
     }
 
-    private void notNull(Set set) {
-        if (set == null)
+    private void notNull(Iterator<jUserSet> it) {
+        if (!it.hasNext())
             throw new BadRequestException("Set is not null");
     }
 
-    private void isNull(Set set) {
-        if (set != null)
+    private void isNull(Iterator<jUserSet> it) {
+        if (it.hasNext())
             throw new BadRequestException("Set is null");
     }
 
