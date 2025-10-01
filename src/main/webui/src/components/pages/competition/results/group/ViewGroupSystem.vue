@@ -1,13 +1,13 @@
 <template>
 	<!-- TODO add toggle to show as list? -->
-	<div v-if="groupSystem && competition" class="w-full grid xl:w-11">
+	<div v-if="groupSystem && competition" class="w-full grid max-w-fit">
 		<div
 			class="col-12"
 			:class="{
 				'lg:col-8': groupSystem.finale,
 			}"
 		>
-			<div class="grid">
+			<div class="grid max-w-fit">
 				<div
 					v-for="group in groupSystem.groups"
 					:key="group.index"

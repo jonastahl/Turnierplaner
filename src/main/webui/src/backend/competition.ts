@@ -58,11 +58,24 @@ export function getCompetitionDetails(
 	t: (s: string) => string,
 	toast: ToastServiceMethods,
 ) {
+	return getCompetitionDetailsCustom(
+		route,
+		t,
+		computed(() => <string>route.params.compId),
+		toast,
+	)
+}
+export function getCompetitionDetailsCustom(
+	route: RouteLocationNormalizedLoaded,
+	t: (s: string) => string,
+	compId: Ref<string>,
+	toast: ToastServiceMethods,
+) {
 	return useQuery({
 		queryKey: [
 			"competitionDetails",
 			computed(() => route.params.tourId),
-			computed(() => route.params.compId),
+			compId,
 		],
 		queryFn: async (): Promise<Competition> => {
 			if (!route.params.tourId || !route.params.compId)

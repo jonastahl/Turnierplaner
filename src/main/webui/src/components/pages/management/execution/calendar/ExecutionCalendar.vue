@@ -14,6 +14,7 @@
 			<MatchEvent
 				:match="<AnnotatedMatch>event.data"
 				:tournament="tournament"
+				edit-result
 			/>
 		</template>
 	</ViewCalendar>
@@ -65,7 +66,8 @@ function onViewChange(startDate: Date, endDate: Date) {
 const events = ref<MatchCalEvent[]>([])
 
 watch(matches, () => {
-	if (!isSuccess.value || events.value.length || !matches.value) return
+	if (!isSuccess.value || changeSet.value.length || !matches.value) return
+	events.value.splice(0, events.value.length)
 
 	matches.value.forEach((match) => {
 		const otherTour = match.data.tourName !== route.params.tourId

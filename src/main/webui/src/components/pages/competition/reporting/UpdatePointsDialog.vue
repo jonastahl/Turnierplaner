@@ -84,7 +84,7 @@ import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import PlayerPointRow from "@/components/pages/competition/reporting/PlayerPointRow.vue"
 import { NumberSets } from "@/interfaces/competition"
-import { checkSets, useUpdateSet } from "@/backend/set"
+import { checkSets, useUpdateSetCustom } from "@/backend/set"
 import { useRoute } from "vue-router"
 import { useToast } from "primevue/usetoast"
 
@@ -94,6 +94,7 @@ const route = useRoute()
 
 const props = defineProps<{
 	numberSets: NumberSets
+	compId?: string
 }>()
 
 const numberSets = computed(() =>
@@ -124,7 +125,12 @@ const showPopUp = function (match: Match) {
 	}
 	visible.value = true
 }
-const { mutate: updateSet } = useUpdateSet(route, t, toast)
+const { mutate: updateSet } = useUpdateSetCustom(
+	route,
+	computed(() => props.compId || <string>route.params.compId),
+	t,
+	toast,
+)
 
 const cancel = function () {
 	visible.value = false

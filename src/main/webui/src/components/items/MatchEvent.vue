@@ -10,7 +10,7 @@
 				:competition="props.match.compName"
 			/>
 		</i>
-		<ul class="mt-1 pt-0 pl-4">
+		<ul class="mt-1 pt-0 pl-4 mb-1">
 			<li v-if="props.match.teamA">
 				<template v-if="props.match.teamA.playerA">
 					<ViewTeamNames :team="props.match.teamA" :inverted="true" />
@@ -22,6 +22,7 @@
 				</template>
 			</li>
 		</ul>
+		<ResultCompact :edit-result="editResult" :match="props.match" />
 	</div>
 </template>
 
@@ -33,13 +34,13 @@ import LinkCompetition from "@/components/links/LinkCompetition.vue"
 import LinkTournament from "@/components/links/LinkTournament.vue"
 import { Tournament } from "@/interfaces/tournament"
 import { genTitle } from "@/backend/match"
+import ResultCompact from "@/components/items/ResultCompact.vue"
 
 const { t } = useI18n()
 
 const props = defineProps<{
 	match: AnnotatedMatch
 	tournament?: Tournament
+	editResult?: boolean
 }>()
 </script>
-
-<style scoped></style>
