@@ -1,13 +1,11 @@
 <template>
-	<Suspense>
-		<template v-if="competition">
-			<ViewGroupSystem v-if="competition.tourType === CompType.GROUPS" />
-			<ViewKnockoutSystem
-				v-else-if="competition.tourType === CompType.KNOCKOUT"
-			/>
-			<p v-else>Invalid type</p></template
-		>
-	</Suspense>
+	<template v-if="competition">
+		<ViewGroupSystem v-if="competition.tourType === CompType.GROUPS" />
+		<ViewKnockoutSystem
+			v-else-if="competition.tourType === CompType.KNOCKOUT"
+		/>
+		<p v-else>Invalid type</p>
+	</template>
 </template>
 
 <script lang="ts" setup>

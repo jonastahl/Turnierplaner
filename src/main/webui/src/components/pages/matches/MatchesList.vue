@@ -174,7 +174,11 @@
 			</template>
 		</Column>
 		<!-- TODO add results -->
-		<Column :header="t('general.result')" />
+		<Column sortable field="sets" :header="t('general.result')">
+			<template #body="{ data }">
+				<ResultCompact :edit-result="editResult" :match="data" />
+			</template>
+		</Column>
 	</DataTable>
 </template>
 
@@ -196,10 +200,12 @@ import ViewTeamNames from "@/components/links/LinkTeamNames.vue"
 import LinkTournament from "@/components/links/LinkTournament.vue"
 import LinkCompetition from "@/components/links/LinkCompetition.vue"
 import { genTitle, getScheduledMatches } from "@/backend/match"
+import ResultCompact from "@/components/items/ResultCompact.vue"
 
 const props = defineProps<{
 	tourId?: string
 	playerId?: string
+	editResult?: boolean
 }>()
 
 const route = useRoute()

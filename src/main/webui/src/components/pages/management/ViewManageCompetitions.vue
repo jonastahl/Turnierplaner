@@ -1,6 +1,9 @@
 <template>
 	<div class="w-full p-2">
-		<Card style="margin-top: -10px !important">
+		<Card
+			style="margin-top: -10px !important"
+			:pt="{ content: 'p-0 pt-2 pb-2' }"
+		>
 			<template #header>
 				<ViewMenuSelector />
 				<ViewExecutionMenuSelector v-if="route.meta.executionMenu" />

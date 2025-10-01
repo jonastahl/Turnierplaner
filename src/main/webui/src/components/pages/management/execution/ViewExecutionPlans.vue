@@ -1,8 +1,11 @@
 <template>
-	<template v-if="competition">
-		<ViewResults v-if="competition.cProgress === Progress.DONE" />
-		<span v-else>{{ t("ViewExecution.not_yet_published") }}</span>
-	</template>
+	<div class="w-full flex justify-content-center">
+		<template v-if="competition">
+			<ViewResults v-if="competition.cProgress === Progress.DONE" />
+			<span v-else>{{ t("ViewExecution.not_yet_published") }}</span>
+		</template>
+		<ProgressSpinner v-else />
+	</div>
 </template>
 
 <script setup lang="ts">

@@ -1,6 +1,6 @@
 <template>
-	<div class="w-full p-2">
-		<Card style="margin-top: -10px !important">
+	<div class="w-full">
+		<Card style="margin-top: -10px !important" :pt="{ content: 'p-0' }">
 			<template #content>
 				<div class="flex flex-row justify-content-between mb-2">
 					<SelectButton v-model="calendarView" :options="views">
@@ -25,6 +25,7 @@
 				<MatchesList
 					v-else-if="calendarView.id === LIST"
 					:tour-id="tournament?.id || undefined"
+					edit-result
 				/>
 			</template>
 		</Card>

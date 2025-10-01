@@ -1,36 +1,34 @@
 <template>
-	<div class="w-full xl:w-11">
-		<Card v-if="knockoutSystem && competition">
-			<template #content>
-				<div class="w-full flex flex-column align-items-center">
-					<HorizontalScroller>
-						<ViewKnockoutTree
-							:finale="knockoutSystem.finale ?? undefined"
-							:third-place="knockoutSystem.thirdPlace ?? undefined"
-							:border-radius="0"
-							:border-thickness="2"
-							:margin-small="30"
-							:margin-big="40"
-							:titles="knockoutTitle(t)"
-						>
-							<template #match="{ match }">
-								<ViewMatch
-									v-if="match"
-									:match="match"
-									:mode="competition.mode"
-									:number-sets="competition.numberSets"
-									:allow-update="true"
-								/>
-							</template>
-							<template #additional="{ match }">
-								<ViewMatchDate v-if="match" :match="match" />
-							</template>
-						</ViewKnockoutTree>
-					</HorizontalScroller>
-				</div>
-			</template>
-		</Card>
-	</div>
+	<Card v-if="knockoutSystem && competition" class="w-fit max-w-full">
+		<template #content>
+			<div class="w-full flex flex-column align-items-center">
+				<HorizontalScroller>
+					<ViewKnockoutTree
+						:finale="knockoutSystem.finale ?? undefined"
+						:third-place="knockoutSystem.thirdPlace ?? undefined"
+						:border-radius="0"
+						:border-thickness="2"
+						:margin-small="30"
+						:margin-big="40"
+						:titles="knockoutTitle(t)"
+					>
+						<template #match="{ match }">
+							<ViewMatch
+								v-if="match"
+								:match="match"
+								:mode="competition.mode"
+								:number-sets="competition.numberSets"
+								:allow-update="true"
+							/>
+						</template>
+						<template #additional="{ match }">
+							<ViewMatchDate v-if="match" :match="match" />
+						</template>
+					</ViewKnockoutTree>
+				</HorizontalScroller>
+			</div>
+		</template>
+	</Card>
 </template>
 
 <script lang="ts" setup>

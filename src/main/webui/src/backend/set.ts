@@ -3,9 +3,23 @@ import { Set } from "@/interfaces/match"
 import axios from "axios"
 import { RouteLocationNormalizedLoaded } from "vue-router"
 import { ToastServiceMethods } from "primevue/toastservice"
+import { computed, Ref } from "vue"
 
 export function useUpdateSet(
 	route: RouteLocationNormalizedLoaded,
+	t: (s: string) => string,
+	toast: ToastServiceMethods,
+) {
+	useUpdateSetCustom(
+		route,
+		computed(() => <string>route.params.compId),
+		t,
+		toast,
+	)
+}
+export function useUpdateSetCustom(
+	route: RouteLocationNormalizedLoaded,
+	compId: Ref<string>,
 	t: (s: string) => string,
 	toast: ToastServiceMethods,
 ) {
@@ -13,7 +27,7 @@ export function useUpdateSet(
 	return useMutation({
 		mutationFn: (data: { sets: Set[]; matchId: string }) =>
 			axios.post(
-				`/tournament/${<string>route.params.tourId}/competition/${<string>route.params.compId}/set/${data.matchId}`,
+				`/tournament/${<string>route.params.tourId}/competition/${compId.value}/set/${data.matchId}`,
 				data.sets,
 			),
 		onSuccess() {
@@ -29,6 +43,10 @@ export function useUpdateSet(
 			})
 			queryClient.invalidateQueries({
 				queryKey: ["group", route.params.tourId, route.params.compId],
+				refetchType: "all",
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["scheduledMatches"],
 				refetchType: "all",
 			})
 		},
