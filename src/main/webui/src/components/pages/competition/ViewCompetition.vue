@@ -23,10 +23,7 @@
 				<!-- TODO show after plan has been published -->
 				<!-- show game page -->
 				<ViewResults
-					v-if="competition"
-					:tour-type="competition.tourType"
-					:mode="competition.mode"
-					:number-sets="competition.numberSets"
+					v-if="competition && competition.cProgress == Progress.DONE"
 				/>
 			</template>
 		</template>
@@ -41,6 +38,7 @@ import { useI18n } from "vue-i18n"
 import { getTournamentDetails } from "@/backend/tournament"
 import { useToast } from "primevue/usetoast"
 import { getCompetitionDetails } from "@/backend/competition"
+import { Progress } from "@/interfaces/competition"
 
 const { t } = useI18n()
 const toast = useToast()

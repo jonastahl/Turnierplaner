@@ -26,12 +26,7 @@ import { computed, ref, watch } from "vue"
 import { getTournamentCourts } from "@/backend/court"
 import { getTournamentDetails } from "@/backend/tournament"
 import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
-import { getScheduledMatchesEvents } from "@/backend/match"
-
-const props = defineProps<{
-	tourId?: string
-	playerId?: string
-}>()
+import { getScheduledTournamentMatchEvents } from "@/backend/match"
 
 const route = useRoute()
 const { t } = useI18n()
@@ -42,12 +37,11 @@ const curEnd = ref<Date | undefined>()
 
 const { data: courts } = getTournamentCourts(route)
 const { data: tournament } = getTournamentDetails(route, t, toast)
-const { data: matches } = getScheduledMatchesEvents(
+const { data: matches } = getScheduledTournamentMatchEvents(
+	route,
 	t,
 	curStart,
 	curEnd,
-	props.playerId,
-	props.tourId,
 )
 
 function onViewChange(startDate: Date, endDate: Date) {

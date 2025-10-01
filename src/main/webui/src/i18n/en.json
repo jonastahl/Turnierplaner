@@ -279,7 +279,8 @@
 		"published_single": "Match has been moved. All players were notified.",
 		"published_single_missing": "Match has been moved. Not all players could be notified, as they did not specify an email address.",
 		"published_all": "Matches have been moved. All players were notified.",
-		"published_all_missing": "Matches have been moved. Not all players could be notified, as they did not specify an email address."
+		"published_all_missing": "Matches have been moved. Not all players could be notified, as they did not specify an email address.",
+		"not_yet_published": "You need to publish the competition before entering results"
 	},
 	"ViewManage": {
 		"execution": "Execution",

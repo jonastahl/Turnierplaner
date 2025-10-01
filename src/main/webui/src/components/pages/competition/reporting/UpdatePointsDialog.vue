@@ -5,9 +5,9 @@
 		:header="t('DialogUpdateScore.header')"
 		modal
 	>
-		<span class="text-surface-500 dark:text-surface-400 block mb-2">{{
-			t("DialogUpdateScore.update_score")
-		}}</span>
+		<span class="text-surface-500 dark:text-surface-400 block mb-2">
+			{{ t("DialogUpdateScore.update_score") }}
+		</span>
 		<div class="grid">
 			<div class="col-fixed" style="width: 300px"></div>
 			<div
