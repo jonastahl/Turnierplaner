@@ -7,7 +7,7 @@
 		@click="updatePoints"
 	>
 		<i class="pi pi-pen-to-square mr-1 ml-2"></i>
-		<template v-for="(set, index) in match.sets" :key="set.index">
+		<template v-for="(set, index) in match.sets" :key="index">
 			{{ set.scoreA }}:{{ set.scoreB }}
 			<template v-if="index < match.sets.length - 1"> / </template>
 		</template> </span

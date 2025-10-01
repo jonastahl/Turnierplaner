@@ -12,8 +12,8 @@
 				</td>
 				<template v-if="props.match.sets && props.match.sets.length > 0">
 					<td
-						v-for="set in props.match.sets"
-						:key="set.index"
+						v-for="(set, index) in props.match.sets"
+						:key="index"
 						class="result"
 						:class="{
 							'cursor-pointer': isReporter,
@@ -43,8 +43,8 @@
 
 				<template v-if="props.match.sets && props.match.sets.length > 0">
 					<td
-						v-for="set in props.match.sets"
-						:key="set.index"
+						v-for="(set, index) in props.match.sets"
+						:key="index"
 						class="result"
 						:class="{
 							'cursor-pointer': isReporter,
