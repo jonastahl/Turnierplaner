@@ -15,7 +15,10 @@
 				>
 					<Card class="w-full">
 						<template #content>
-							<ViewGroupTable :group="group" :number-sets="props.numberSets" />
+							<ViewGroupTable
+								:group="group"
+								:number-sets="competition.numberSets"
+							/>
 							<ViewGroupResults :group="group" />
 						</template>
 					</Card>
@@ -40,7 +43,7 @@
 									v-if="match"
 									:match="match"
 									:mode="competition.mode"
-									:number-sets="props.numberSets"
+									:number-sets="competition.numberSets"
 									:allow-update="true"
 								/>
 							</template>
@@ -62,7 +65,6 @@ import { useRoute } from "vue-router"
 import ViewGroupTable from "@/components/pages/competition/results/group/ViewGroupTable.vue"
 import HorizontalScroller from "@/components/items/HorizontalScroller.vue"
 import { getGroup } from "@/backend/group"
-import { NumberSets } from "@/interfaces/competition"
 import ViewGroupResults from "@/components/pages/competition/results/group/ViewGroupResults.vue"
 import ViewKnockoutTree from "@/components/pages/competition/results/knockout/ViewKnockoutTree.vue"
 import ViewMatch from "@/components/pages/competition/results/knockout/ViewMatch.vue"
@@ -78,9 +80,6 @@ const toast = useToast()
 
 const { data: competition } = getCompetitionDetails(route, t, toast)
 const { data: groupSystem } = getGroup(route)
-const props = defineProps<{
-	numberSets: NumberSets
-}>()
 </script>
 
 <style>

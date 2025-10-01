@@ -278,7 +278,8 @@
 		"published_single": "Spiel wurde verschoben. Alle Spieler wurden benachrichtigt.",
 		"published_single_missing": "Spiel wurde verschoben. Manche Spieler konnten nicht benachrichtigt werden, da sie keine Email angegeben haben.",
 		"published_all": "Spiele wurden verschoben. Alle Spieler wurden benachrichtigt.",
-		"published_all_missing": "Spiele wurden verschoben. Manche Spieler konnten nicht benachrichtigt werden, da sie keine Email angegeben haben."
+		"published_all_missing": "Spiele wurden verschoben. Manche Spieler konnten nicht benachrichtigt werden, da sie keine Email angegeben haben.",
+		"not_yet_published": "Veröffentliche die Konkurrenz bevor Ergebnisse eingetragen werden können."
 	},
 	"ViewManage": {
 		"execution": "Durchführung",

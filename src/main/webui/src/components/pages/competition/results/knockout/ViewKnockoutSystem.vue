@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full xl:w-11">
-		<Card v-if="knockoutSystem">
+		<Card v-if="knockoutSystem && competition">
 			<template #content>
 				<div class="w-full flex flex-column align-items-center">
 					<HorizontalScroller>
@@ -17,8 +17,8 @@
 								<ViewMatch
 									v-if="match"
 									:match="match"
-									:mode="props.mode"
-									:number-sets="props.numberSets"
+									:mode="competition.mode"
+									:number-sets="competition.numberSets"
 									:allow-update="true"
 								/>
 							</template>
@@ -37,22 +37,19 @@
 import { useRoute } from "vue-router"
 import ViewKnockoutTree from "@/components/pages/competition/results/knockout/ViewKnockoutTree.vue"
 import HorizontalScroller from "@/components/items/HorizontalScroller.vue"
-import { Mode, NumberSets } from "@/interfaces/competition"
 import { getKnockout } from "@/backend/knockout"
 import ViewMatch from "@/components/pages/competition/results/knockout/ViewMatch.vue"
 import ViewMatchDate from "@/components/pages/competition/results/knockout/ViewMatchDate.vue"
 import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
 import { useI18n } from "vue-i18n"
+import { getCompetitionDetails } from "@/backend/competition"
+import { useToast } from "primevue/usetoast"
 
 const { t } = useI18n()
-
-const props = defineProps<{
-	mode: Mode
-	numberSets: NumberSets
-}>()
-
 const route = useRoute()
+const toast = useToast()
 
+const { data: competition } = getCompetitionDetails(route, t, toast)
 const { data: knockoutSystem } = getKnockout(route)
 </script>
 

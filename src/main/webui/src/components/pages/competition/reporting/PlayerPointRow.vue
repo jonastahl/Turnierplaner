@@ -2,8 +2,11 @@
 	<div class="grid">
 		<div class="col-fixed" style="width: 300px">
 			<div class="text-center p-3 border-round-sm bg-primary font-bold">
-				{{ props.team?.playerA?.name }}
-				{{ props.team?.playerB?.name }}
+				<template v-if="props.team?.playerA">
+					{{ props.team?.playerA?.name }}
+					{{ props.team?.playerB?.name }}
+				</template>
+				<template v-else> ??? </template>
 			</div>
 		</div>
 		<div
