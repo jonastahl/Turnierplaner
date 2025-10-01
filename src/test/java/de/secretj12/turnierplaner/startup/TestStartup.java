@@ -6,7 +6,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
@@ -55,7 +54,7 @@ public class TestStartup {
         groupRepository.deleteAll();
         playerRepository.deleteAll();
         competitionRepository.deleteAll();
-        courtRepositiory.deleteAll();
         tournamentRepository.deleteAll();
+        courtRepositiory.deleteAll();
     }
 }
