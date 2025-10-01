@@ -69,24 +69,35 @@
 		<divider />
 		<div class="flex justify-content-end flex-wrap gap-2">
 			<Button
-				label="Cancel"
+				v-if="isDirector"
+				:label="t('general.reset')"
+				severity="danger"
+				@click="resetResult"
+			/>
+			<Button
+				:label="t('general.cancel')"
 				severity="secondary"
 				type="button"
 				@click="cancel"
 			></Button>
-			<Button label="Save" type="button" @click="savePoints"></Button>
+			<Button
+				:label="t('general.save')"
+				type="button"
+				@click="savePoints"
+			></Button>
 		</div>
 	</Dialog>
 </template>
 <script lang="ts" setup>
 import { Match } from "@/interfaces/match"
-import { computed, ref } from "vue"
+import { computed, inject, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import PlayerPointRow from "@/components/pages/competition/reporting/PlayerPointRow.vue"
 import { NumberSets } from "@/interfaces/competition"
 import { checkSets, useUpdateSetCustom } from "@/backend/set"
 import { useRoute } from "vue-router"
 import { useToast } from "primevue/usetoast"
+import { getIsDirector } from "@/backend/security"
 
 const { t } = useI18n()
 const toast = useToast()
@@ -96,6 +107,9 @@ const props = defineProps<{
 	numberSets: NumberSets
 	compId?: string
 }>()
+
+const isLoggedIn = inject("loggedIn", ref(false))
+const { data: isDirector } = getIsDirector(isLoggedIn)
 
 const numberSets = computed(() =>
 	props.numberSets === NumberSets.THREE ? 3 : 5,
@@ -132,15 +146,16 @@ const { mutate: updateSet } = useUpdateSetCustom(
 	toast,
 )
 
-const cancel = function () {
+function cancel() {
 	visible.value = false
 }
 
-const savePoints = function () {
+function savePoints() {
 	if (!currentMatch.value || !currentMatch.value.id) {
 		return
 	}
-	errors.value = checkSets(getAllSets(), numberSets.value)
+	const sets = getAllSets()
+	errors.value = checkSets(sets, numberSets.value, !!isDirector.value)
 	if (errors.value.length > 0) {
 		toast.add({
 			severity: "error",
@@ -152,53 +167,28 @@ const savePoints = function () {
 		return
 	}
 
-	const sets = getAllChangedSets()
-	if (sets.length > 0)
-		updateSet({
-			matchId: currentMatch.value!.id,
-			sets: sets,
-		})
+	updateSet({
+		matchId: currentMatch.value!.id,
+		sets: sets.filter((s) => s.scoreA !== 0 || s.scoreB !== 0),
+	})
 	visible.value = false
 }
 
-// return list of sets that contain all set that differ from the beginning
-function getAllChangedSets() {
-	let changedSets = []
-	for (let i = 0; i < numberSets.value; i++) {
-		// case set does not exist yet
-		if (
-			!currentMatch.value?.sets?.length ||
-			i > currentMatch.value?.sets?.length - 1
-		) {
-			// don't create a new set for 0 points
-			if (teamAGamePoints.value[i] !== 0 || teamBGamePoints.value[i] !== 0) {
-				changedSets.push({
-					index: i,
-					scoreA: teamAGamePoints.value[i],
-					scoreB: teamBGamePoints.value[i],
-				})
-			}
-			continue
-		}
-		// you can set a existing set to 0, additionally check that the value is not the same as before
-		const a = currentMatch.value?.sets?.[i].scoreA
-		const b = currentMatch.value?.sets?.[i].scoreB
-		if (teamAGamePoints.value[i] !== a || teamBGamePoints.value[i] !== b) {
-			changedSets.push({
-				index: i,
-				scoreA: teamAGamePoints.value[i],
-				scoreB: teamBGamePoints.value[i],
-			})
-		}
+const resetResult = function () {
+	if (!currentMatch.value || !currentMatch.value.id) {
+		return
 	}
-	return changedSets
+	updateSet({
+		matchId: currentMatch.value.id,
+		sets: [],
+	})
+	visible.value = false
 }
 
 function getAllSets() {
 	let sets = []
 	for (let i = 0; i < numberSets.value; i++) {
 		sets.push({
-			index: i,
 			scoreA: teamAGamePoints.value[i],
 			scoreB: teamBGamePoints.value[i],
 		})

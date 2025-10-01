@@ -9,8 +9,6 @@ import io.smallrye.common.constraint.NotNull;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 import java.util.Collection;
@@ -143,10 +141,6 @@ public class Match {
 
     public void setWinner(Boolean winner) {
         this.winner = winner;
-    }
-
-    public Boolean getFinished() {
-        return finished;
     }
 
     public Team getTeamA() {

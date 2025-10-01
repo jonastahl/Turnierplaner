@@ -14,13 +14,11 @@ export enum Routes {
 	AssignMatches = "assignMatches",
 	ScheduleMatches = "scheduleMatches",
 	ManageExecution = "manageExecution",
-	ManageExecutionCalendar = "manageExecutionCalendar",
 	ManageExecutionPlans = "manageExecutionPlans",
 	PlayerRegistration = "playerRegistration",
 	UpdatePlayer = "updatePlayer",
 	PlayerVerified = "playerVerified",
 	PlayerOverview = "playerOverview",
-	Templates = "templates",
 	Impressum = "impressum",
 }
 
@@ -145,21 +143,10 @@ export default [
 				},
 				children: [
 					{
-						path: "overview/:compId?",
+						path: "calendar/:compId?",
 						name: Routes.ManageExecution,
 						meta: {
 							executionsel: Routes.ManageExecution,
-						},
-						component: () =>
-							import(
-								"@/components/pages/management/execution/ViewExecutionOverview.vue"
-							),
-					},
-					{
-						path: "calendar/:compId?",
-						name: Routes.ManageExecutionCalendar,
-						meta: {
-							executionsel: Routes.ManageExecutionCalendar,
 						},
 						component: () =>
 							import(

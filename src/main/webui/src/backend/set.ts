@@ -62,9 +62,16 @@ export function useUpdateSetCustom(
 	})
 }
 
-export function checkSets(sets: Set[], numberSets: number) {
+export function checkSets(
+	sets: Set[],
+	numberSets: number,
+	isDirector: boolean,
+) {
 	if (sets.length != numberSets)
 		console.error("Internal error: wrong number of sets")
+	if (isDirector && sets.every((set) => set.scoreA == 0 && set.scoreB == 0)) {
+		return []
+	}
 
 	const errors = []
 	let dif = 0
