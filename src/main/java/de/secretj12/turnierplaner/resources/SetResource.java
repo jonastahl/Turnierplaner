@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-@RolesAllowed("reporter")
 @Path("/tournament/{tourId}/competition/{compId}/set/{matchId}")
 public class SetResource {
     @Inject
@@ -45,6 +44,13 @@ public class SetResource {
     @Inject
     SecurityIdentity securityIdentity;
 
+    /**
+     * Everybody can report the first result of a match after the game has started.
+     * Only reporters can update existing results.
+     * Directors can set a result before the game has started and remove a result.
+     * After every update the players get an update-mail about the result and their upcoming matches.
+     * There is no update-mail when a match result is reseted.
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
@@ -66,6 +72,9 @@ public class SetResource {
         Match match = matchRepository.findById(matchId);
         if (match == null)
             throw new InternalServerErrorException("Could find match");
+        boolean firstResult = match.getSets().isEmpty();
+        if (!firstResult && !securityIdentity.hasRole("reporter"))
+            throw new UnauthorizedException("Cannot update existing match result");
 
         match.getSets().forEach(setRepository::delete);
         if (securityIdentity.hasRole("director") && sets.isEmpty()) {

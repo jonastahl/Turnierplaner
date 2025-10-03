@@ -16,19 +16,19 @@
 						:key="index"
 						class="result"
 						:class="{
-							'cursor-pointer': isReporter,
+							'cursor-pointer': mayEdit,
 						}"
 						@click="showPopUp(props.match)"
 					>
 						{{ set.scoreA }}
 					</td>
 				</template>
-				<template v-else-if="allowUpdate && isReporter">
+				<template v-else-if="allowUpdate && mayEdit">
 					<td
 						rowspan="2"
 						class="empty-result"
 						:class="{
-							'cursor-pointer': isReporter,
+							'cursor-pointer': mayEdit,
 						}"
 						@click="showPopUp(props.match)"
 					>
@@ -47,7 +47,7 @@
 						:key="index"
 						class="result"
 						:class="{
-							'cursor-pointer': isReporter,
+							'cursor-pointer': mayEdit,
 						}"
 						@click="showPopUp(props.match)"
 					>
@@ -69,9 +69,10 @@ import { KnockoutMatch } from "@/interfaces/knockoutSystem"
 import { Mode, NumberSets } from "@/interfaces/competition"
 import ViewTeamNames from "@/components/links/LinkTeamNames.vue"
 import UpdatePointsDialog from "@/components/pages/competition/reporting/UpdatePointsDialog.vue"
-import { inject, ref } from "vue"
+import { computed, inject, ref } from "vue"
 import { Match } from "@/interfaces/match"
-import { getIsReporter } from "@/backend/security"
+import { getIsDirector, getIsReporter } from "@/backend/security"
+import { mayEditMatch } from "@/backend/set"
 
 const props = withDefaults(
 	defineProps<{
@@ -88,10 +89,15 @@ const props = withDefaults(
 
 const isLoggedIn = inject("loggedIn", ref(false))
 const { data: isReporter } = getIsReporter(isLoggedIn)
+const { data: isDirector } = getIsDirector(isLoggedIn)
 const dialog = ref()
 
-const showPopUp = function (match: Match) {
-	if (isReporter.value) {
+const mayEdit = computed(() =>
+	mayEditMatch(!!isDirector.value, !!isReporter.value, props.match),
+)
+
+function showPopUp(match: Match) {
+	if (mayEdit.value) {
 		dialog.value.showPopUp(match)
 	}
 }

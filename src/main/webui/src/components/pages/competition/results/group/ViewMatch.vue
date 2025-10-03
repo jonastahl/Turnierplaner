@@ -11,14 +11,14 @@
 		</template>
 	</p>
 	<div v-else-if="props.reversed">
-		<div v-for="(set, index) in props.match.sets" :key="index">
+		<p v-for="(set, index) in props.match.sets" :key="index">
 			{{ set.scoreB }} - {{ set.scoreA }}
-		</div>
+		</p>
 	</div>
 	<div v-else>
-		<div v-for="(set, index) in props.match.sets" :key="index">
+		<p v-for="(set, index) in props.match.sets" :key="index">
 			{{ set.scoreA }} - {{ set.scoreB }}
-		</div>
+		</p>
 	</div>
 </template>
 
