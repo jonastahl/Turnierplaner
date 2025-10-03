@@ -39,7 +39,11 @@
 								index + indexB < props.group.teams.length - 1
 							"
 							:class="{
-								'cursor-pointer': isReporter,
+								'cursor-pointer': mayEditMatch(
+									!!isDirector,
+									!!isReporter,
+									findMatch(teamA, teamB).match,
+								),
 								highlightLow:
 									hoverIdA &&
 									hoverIdB &&
@@ -51,20 +55,14 @@
 							@mouseleave="hoverLeave()"
 							@click="showPopUp(findMatch(teamA, teamB).match)"
 						>
-							<div>
-								<ViewMatch v-bind="findMatch(teamA, teamB)" />
-							</div>
+							<ViewMatch v-bind="findMatch(teamA, teamB)" />
 						</td>
 					</template>
 				</tr>
 			</template>
 		</tbody>
 	</table>
-	<UpdatePointsDialog
-		v-if="isReporter"
-		ref="dialog"
-		:number-sets="props.numberSets"
-	/>
+	<UpdatePointsDialog ref="dialog" :number-sets="props.numberSets" />
 </template>
 
 <script setup lang="ts">
@@ -77,7 +75,8 @@ import { Team } from "@/interfaces/team"
 import ViewTeamNames from "@/components/links/LinkTeamNames.vue"
 import UpdatePointsDialog from "@/components/pages/competition/reporting/UpdatePointsDialog.vue"
 import { NumberSets } from "@/interfaces/competition"
-import { getIsReporter } from "@/backend/security"
+import { getIsDirector, getIsReporter } from "@/backend/security"
+import { mayEditMatch } from "@/backend/set"
 
 const { t } = useI18n()
 
@@ -88,6 +87,7 @@ const props = defineProps<{
 
 const isLoggedIn = inject("loggedIn", ref(false))
 const { data: isReporter } = getIsReporter(isLoggedIn)
+const { data: isDirector } = getIsDirector(isLoggedIn)
 
 function findMatch(
 	teamA: Team,
@@ -124,10 +124,11 @@ function hoverLeave() {
 	hoverTeam.value = null
 }
 
-const dialog = ref()
+const dialog = ref<InstanceType<typeof UpdatePointsDialog> | null>(null)
 
 function showPopUp(match: Match) {
-	if (isReporter.value) dialog.value.showPopUp(match)
+	if (mayEditMatch(!!isDirector.value, !!isReporter.value, match))
+		dialog.value?.showPopUp(match)
 }
 </script>
 

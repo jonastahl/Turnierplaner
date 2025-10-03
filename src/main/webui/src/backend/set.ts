@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/vue-query"
-import { Set } from "@/interfaces/match"
+import { Match, Set } from "@/interfaces/match"
 import axios from "axios"
 import { RouteLocationNormalizedLoaded } from "vue-router"
 import { ToastServiceMethods } from "primevue/toastservice"
@@ -15,6 +15,17 @@ export function useUpdateSet(
 		computed(() => <string>route.params.compId),
 		t,
 		toast,
+	)
+}
+
+export function mayEditMatch(
+	isDirector: boolean,
+	isReporter: boolean,
+	match: Match,
+): boolean {
+	return (
+		(isDirector || (match.begin !== null && match.begin <= new Date())) &&
+		(isReporter || !match.sets?.length)
 	)
 }
 export function useUpdateSetCustom(

@@ -515,7 +515,7 @@ public class CompetitionResource {
             matches.persist(match);
 
             Competition comp = match.getCompetition();
-            Stream.of(match.getTeamA(), match.getTeamB())
+            Stream.of(match.getTeamA(), match.getTeamB()).filter(Objects::nonNull)
                 .flatMap(t -> Stream.of(t.getPlayerA(), t.getPlayerB())).filter(Objects::nonNull)
                 .forEach(p -> {
                     players.computeIfAbsent(p, (P) -> new HashMap<>())
