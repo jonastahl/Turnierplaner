@@ -38,7 +38,6 @@ import org.jboss.resteasy.reactive.RestResponse;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Path("/tournament/{tourName}/competition")
 public class CompetitionResource {
@@ -153,7 +152,8 @@ public class CompetitionResource {
 
         if (!securityIdentity.hasRole("director")
             && (competition.getTournament().getBeginRegistration().isAfter(Instant.now())
-                || competition.getTournament().getBeginGamePhase().isBefore(Instant.now())))
+                || (competition.getTournament().getBeginGamePhase().isBefore(Instant.now()))
+                    && competition.getcProgress() == CreationProgress.DONE))
             throw new NotAuthorizedException("Registration phase is not active");
 
         return competition.getTeams().stream().map(jUserTeam::new).toList();
@@ -468,9 +468,7 @@ public class CompetitionResource {
 
             comp.getMatches()
                 .stream().filter(CompetitionResource::matchIsPlayed)
-                .forEach(m -> Stream.of(m.getTeamA(), m.getTeamB())
-                    .filter(Objects::nonNull)
-                    .flatMap(t -> Stream.of(t.getPlayerA(), t.getPlayerB())).filter(Objects::nonNull)
+                .forEach(m -> m.getPlayers()
                     .forEach(p -> players.computeIfAbsent(p, (P) -> new HashMap<>())
                         .computeIfAbsent(comp, (C) -> new ArrayList<>())
                         .add(m))
@@ -494,7 +492,7 @@ public class CompetitionResource {
                                                   List<jDirectorScheduleMatch> reschedMatches) {
         Tournament tournament = tournaments.getByName(tourName);
         if (tournament == null) throw new NotFoundException("Tournament could not be found");
-        Map<Player, Map<Competition, List<Tuple2<Match, MailTemplates.OldData>>>> players = new HashMap<>();
+        Map<Player, Map<Competition, List<Tuple2<Match, Match>>>> players = new HashMap<>();
         for (var cMatch : reschedMatches) {
             if (cMatch.getCourt() == null || cMatch.getBegin() == null || cMatch.getEnd() == null)
                 throw new BadRequestException("Invalid match data");
@@ -506,7 +504,7 @@ public class CompetitionResource {
                 throw new BadRequestException("Match is not published yet");
             if (competition.getTournament().getId() != tournament.getId())
                 throw new BadRequestException("Match does not belong to specified tournament");
-            var oldData = new MailTemplates.OldData(match.getBegin(), match.getEnd(), match.getCourt().getName());
+            var oldData = Match.copy(match);
             var court = courts.findByName(cMatch.getCourt());
             if (court == null) throw new NotFoundException("Could not find court");
             match.setCourt(court);
@@ -515,13 +513,10 @@ public class CompetitionResource {
             matches.persist(match);
 
             Competition comp = match.getCompetition();
-            Stream.of(match.getTeamA(), match.getTeamB()).filter(Objects::nonNull)
-                .flatMap(t -> Stream.of(t.getPlayerA(), t.getPlayerB())).filter(Objects::nonNull)
-                .forEach(p -> {
-                    players.computeIfAbsent(p, (P) -> new HashMap<>())
-                        .computeIfAbsent(comp, (C) -> new ArrayList<>())
-                        .add(Tuple2.of(match, oldData));
-                });
+            match.getPlayers()
+                .forEach(p -> players.computeIfAbsent(p, (P) -> new HashMap<>())
+                    .computeIfAbsent(comp, (C) -> new ArrayList<>())
+                    .add(Tuple2.of(match, oldData)));
         }
 
         boolean allSuc = true;

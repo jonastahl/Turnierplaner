@@ -10,15 +10,10 @@ import io.quarkus.qute.TemplateContents;
 import io.quarkus.qute.TemplateInstance;
 import io.smallrye.mutiny.tuples.Tuple2;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.text.DateFormat;
-import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @ApplicationScoped
 public class MailTemplates {
@@ -59,7 +54,18 @@ public class MailTemplates {
                                                                                       String tourName,
                                                                                       String compName,
                                                                                       boolean multipleMatches,
-                                                                                      List<PlayersCompetitions<PlayersMatchesUpdate>> competitions
+                                                                                      List<PlayersCompetitions<PlayersMatchesDateLocUpdate>> competitions
+        );
+
+        public static native MailTemplate.MailTemplateInstance createMatchUpdate(
+                                                                                 String url,
+                                                                                 Player player,
+                                                                                 String tourName,
+                                                                                 String compName,
+                                                                                 boolean multipleUpdate,
+                                                                                 List<PlayersCompetitions<PlayersMatchesUpdate>> competitionsChange,
+                                                                                 boolean multipleAdded,
+                                                                                 List<PlayersCompetitions<PlayersMatches>> competitionsAdded
         );
     }
 
@@ -92,24 +98,33 @@ public class MailTemplates {
     record PlayersMatches(Player opponentA, Player opponentB, String time, String court) {
     }
 
-    record PlayersMatchesUpdate(Player opponentA, Player opponentB, String time, String court, String oldTime,
-                                String oldCourt) {
+    record PlayersMatchesDateLocUpdate(Player opponentA, Player opponentB, String time, String court, String oldTime,
+                                       String oldCourt) {
+    }
+
+    record PlayersMatchesUpdate(Player opponentA, Player opponentB, String time, String court, String result,
+                                Player oldOpponentA, Player oldOpponentB, String oldTime, String oldCourt,
+                                String oldResult) {
     }
 
     record PlayersCompetitions<T>(String name, List<T> games) {
     }
 
-    private Team getOpponentTeam(Player player, Match match) {
-        if (match.getTeamA().getPlayerA().getId() == player.getId()
-            || (match.getTeamA().getPlayerB() != null && match.getTeamA().getPlayerB().getId() == player.getId())
+    private boolean isTeamA(Player player, Match match) {
+        if (match.getTeamA() != null && (match.getTeamA().getPlayerA().getId() == player.getId()
+            || (match.getTeamA().getPlayerB() != null && match.getTeamA().getPlayerB().getId() == player.getId()))
         ) {
-            return match.getTeamB();
-        } else if (match.getTeamB().getPlayerA().getId() == player.getId()
-            || (match.getTeamB().getPlayerB() != null && match.getTeamB().getPlayerB().getId() == player.getId())) {
-                return match.getTeamA();
+            return false;
+        } else if (match.getTeamB() != null && (match.getTeamB().getPlayerA().getId() == player.getId()
+            || (match.getTeamB().getPlayerB() != null && match.getTeamB().getPlayerB().getId() == player.getId()))) {
+                return true;
             } else {
                 throw new IllegalStateException("Player is not the match");
             }
+    }
+
+    private Team getOpponentTeam(Player player, Match match) {
+        return isTeamA(player, match) ? match.getTeamA() : match.getTeamB();
     }
 
     @TemplateContents("{msg:preparationSubject(comps)}")
@@ -159,11 +174,8 @@ public class MailTemplates {
     record rescheduleSubject() implements TemplateInstance {
     }
 
-    public record OldData(Instant oldbegin, Instant oldend, String oldcourt) {
-    }
-
     public boolean sendRescheduleMail(Player player, String tourName,
-                                      Map<Competition, List<Tuple2<Match, OldData>>> playersMatches) {
+                                      Map<Competition, List<Tuple2<Match, Match>>> playersMatches) {
         if (!player.isMailVerified() || player.getEmail() == null) return false;
 
         Locale loc = new Locale.Builder().setLanguage(player.getLanguage().getLanguageCode()).build();
@@ -172,18 +184,18 @@ public class MailTemplates {
         String compName = String.join(", ", playersMatches.keySet().stream().map(Competition::getName).toList());
         boolean multipleMatches = playersMatches.values().stream().mapToInt(List::size).sum() > 1;
         // @formatter:off
-        List<PlayersCompetitions<PlayersMatchesUpdate>> playerCompetitions = playersMatches.entrySet().stream().map(
+        List<PlayersCompetitions<PlayersMatchesDateLocUpdate>> playerCompetitions = playersMatches.entrySet().stream().map(
             entry -> new PlayersCompetitions<>(
                 entry.getKey().getName(), entry.getValue().stream().map(
-                data -> new PlayersMatchesUpdate(
+                data -> new PlayersMatchesDateLocUpdate(
                     getOpponentTeam(player, data.getItem1()).getPlayerA(),
                     getOpponentTeam(player, data.getItem1()).getPlayerB(),
                     dateFormat.format(Date.from(data.getItem1().getBegin())),
                     data.getItem1().getCourt().getName(),
-                    data.getItem2().oldbegin().equals(data.getItem1().getBegin()) ?
-                        null : dateFormat.format(Date.from(data.getItem2().oldbegin())),
-                    data.getItem2().oldcourt().equals(data.getItem1().getCourt().getName()) ?
-                        null : data.getItem2().oldcourt())
+                    data.getItem2().getBegin().equals(data.getItem1().getBegin()) ?
+                        null : dateFormat.format(Date.from(data.getItem2().getBegin())),
+                    data.getItem2().getCourt().getName().equals(data.getItem1().getCourt().getName()) ?
+                        null : data.getItem2().getCourt().getName())
                 ).toList()
             )
         ).toList();
@@ -199,7 +211,74 @@ public class MailTemplates {
             .setAttribute("locale", player.getLanguage().getLanguageCode())
             .to(player.getEmail())
             .subject(new rescheduleSubject().setLocale(player.getLanguage().getLanguageCode()).render())
-            .sendAndAwait();
+            .send().subscribe().with(unused -> {
+            });
+
+        return true;
+    }
+
+    @TemplateContents("{msg:matchUpdateSubject(compName)}")
+    record matchUpdateSubject(String compName) implements TemplateInstance {
+    }
+
+    private String printResult(Match match, boolean reversed) {
+        return String.join(" / ", match.getSets().stream()
+            .map(s -> reversed ? (s.getScoreB() + "-" + s.getScoreA()) : (s.getScoreA() + "-" + s.getScoreB()))
+            .toList());
+    }
+
+    public boolean sendMatchUpdateMail(Player player, String tourName, String compName,
+                                       List<Tuple2<Match, Match>> matchesUpdate, List<Match> matchesAdded) {
+        if (!player.isMailVerified() || player.getEmail() == null) return false;
+
+        Locale loc = new Locale.Builder().setLanguage(player.getLanguage().getLanguageCode()).build();
+        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT, loc);
+
+        boolean multipleUpdate = matchesUpdate.size() > 1;
+        // @formatter:off
+        PlayersCompetitions<PlayersMatchesUpdate> compMatchesUpdate = new PlayersCompetitions<>(compName, matchesUpdate.stream().map(
+            data -> new PlayersMatchesUpdate(
+                Optional.ofNullable(getOpponentTeam(player, data.getItem1())).map(Team::getPlayerA).orElse(null),
+                Optional.ofNullable(getOpponentTeam(player, data.getItem1())).map(Team::getPlayerB).orElse(null),
+                dateFormat.format(Date.from(data.getItem1().getBegin())),
+                data.getItem1().getCourt().getName(),
+                String.join(" / ", data.getItem1().getSets().stream().map(s -> s.getScoreA() + "-" + s.getScoreB()).toList()),
+                Optional.ofNullable(getOpponentTeam(player, data.getItem2())).map(Team::getPlayerA).orElse(null),
+                Optional.ofNullable(getOpponentTeam(player, data.getItem2())).map(Team::getPlayerB).orElse(null),
+                dateFormat.format(Date.from(data.getItem2().getBegin())),
+                data.getItem2().getCourt().getName(),
+                String.join(" / ", data.getItem2().getSets().stream().map(s -> s.getScoreA() + "-" + s.getScoreB()).toList())
+           )
+        ).toList());
+        // @formatter:on
+
+        boolean multipleAdded = matchesAdded.size() > 1;
+        // @formatter:off
+        PlayersCompetitions<PlayersMatches> compMatchesAdded = new PlayersCompetitions<>(compName,
+            matchesAdded.stream().map(
+            m -> new PlayersMatches(
+                Optional.ofNullable(getOpponentTeam(player, m)).map(Team::getPlayerA).orElse(null),
+                Optional.ofNullable(getOpponentTeam(player, m)).map(Team::getPlayerB).orElse(null),
+                dateFormat.format(Date.from(m.getBegin())),
+                m.getCourt().getName())
+            ).toList()
+        );
+        // @formatter:on
+
+        Templates.createMatchUpdate(
+            url,
+            player,
+            tourName,
+            compName,
+            multipleUpdate,
+            compMatchesUpdate.games.isEmpty() ? List.of() : List.of(compMatchesUpdate),
+            multipleAdded,
+            compMatchesAdded.games.isEmpty() ? List.of() : List.of(compMatchesAdded))
+            .setAttribute("locale", player.getLanguage().getLanguageCode())
+            .to(player.getEmail())
+            .subject(new matchUpdateSubject(compName).setLocale(player.getLanguage().getLanguageCode()).render())
+            .send().subscribe().with(unused -> {
+            });
 
         return true;
     }

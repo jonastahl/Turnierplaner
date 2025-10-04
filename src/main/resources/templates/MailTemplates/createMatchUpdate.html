@@ -1,0 +1,119 @@
+{#include MailTemplates/masterTemplateMail.html}
+    {#title}{msg:matchUpdateSubject(compName)}{/title}
+    {#preheader}
+		{/preheader}
+
+	<p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
+    {msg:helloName(player.getFirstName())}
+	</p>
+	{#if competitionsChange.size() > 0}
+		<p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
+				{#if multipleUpdate}
+						{msg:matchUpdateGameChangedMultiple()}
+				{#else}
+						{msg:matchUpdateGameChangedSingle()}
+				{/if}
+		</p>
+	{/if}
+	{#for comp in competitionsChange}
+			<h3 style="margin-bottom: 0.3rem">
+				<a style="color: inherit; text-decoration: none;" href="{url}/tournament/{tourName}/competition/{comp.name}">{comp.name}</a>
+			</h3>
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				{#for game in comp.games}
+					<tr>
+						<td style="width: 35%; padding: 10px; vertical-align: middle">
+							{#if game.oldOpponentA != game.opponentA}
+								{#if game.oldOpponentA}
+									<a style="color: red; text-decoration: line-through; white-space: pre-line; margin: 0" href="{url}/player/overview/{game.oldOpponentA.getId()}">{game.oldOpponentA.getFullName()}</a>
+								{/if}
+								<a style="color: green; white-space: pre-line; margin: 0; text-decoration: none" href="{url}/player/overview/{game.opponentA.getId()}">{game.opponentA.getFullName()}</a>
+              {#else}
+								{#if game.opponentA}
+									<a style="white-space: pre-line; margin: 0; color: inherit; text-decoration: none" href="{url}/player/overview/{game.opponentA.getId()}">{game.opponentA.getFullName()}</a>
+								{/if}
+							{/if}
+							{#if game.opponentB != null}
+								<br>
+                  {#if game.oldOpponentB != game.opponentB}
+										{#if game.oldOpponentB}
+											<a style="color: red; text-decoration: line-through; white-space: pre-line; margin: 0" href="{url}/player/overview/{game.oldOpponentB.getId()}">{game.oldOpponentB.getFullName()}</a>
+										{/if}
+										<a style="color: green; white-space: pre-line; margin: 0; text-decoration: none" href="{url}/player/overview/{game.opponentB.getId()}">{game.opponentB.getFullName()}</a>
+                  {#else}
+										{#if game.opponentB}
+											<a style="white-space: pre-line; margin: 0; color: inherit; text-decoration: none" href="{url}/player/overview/{game.opponentB.getId()}">{game.opponentB.getFullName()}</a>
+										{/if}
+                  {/if}
+							{/if}
+						</td>
+						<td style="width: 40%; padding: 10px; vertical-align: middle">
+							<p style="margin: 0.2rem">
+                  {game.time}
+							</p>
+							<p style="margin: 0.2rem">
+                  {game.court}
+							</p>
+						</td>
+						<td style="width: 25%; padding: 10px; vertical-align: middle">
+							<p style="margin: 0.2rem">
+                  {#if game.oldResult != game.result}
+										<span style="color: red; text-decoration: line-through">{game.oldResult}</span><br>
+										<span style="color: green">{game.result}</span>
+                  {#else}
+										{game.result}
+                  {/if}
+							</p>
+						</td>
+					</tr>
+        {/for}
+			</table>
+	{/for}
+
+	{#if competitionsAdded.size() > 0}
+		<p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
+				{#if multipleAdded}
+						{msg:matchUpdateAddedMultiple()}
+				{#else}
+						{msg:matchUpdateAddedSingle()}
+				{/if}
+		</p>
+	{/if}
+	{#for comp in competitionsAdded}
+		<h3 style="margin-bottom: 0.3rem">
+			<a style="color: inherit; text-decoration: none;" href="{url}/tournament/{tourName}/competition/{comp.name}">{comp.name}</a>
+		</h3>
+		<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				{#for game in comp.games}
+					<tr>
+						<td style="width: 35%; padding: 10px; vertical-align: middle">
+							{#if game.opponentA}
+								<a style="white-space: pre-line; margin: 0; color: inherit; text-decoration: none" href="{url}/player/overview/{game.opponentA.getId()}">{game.opponentA.getFullName()}</a>
+								{#if game.opponentB}
+									<br>
+									<a style="white-space: pre-line; margin: 0; color: inherit; text-decoration: none" href="{url}/player/overview/{game.opponentB.getId()}">{game.opponentB.getFullName()}</a>
+								{/if}
+							{#else}
+								???
+							{/if}
+						</td>
+						<td style="width: 40%; padding: 10px; vertical-align: middle">
+							<p style="margin: 0.2rem">{game.time}</p>
+							<p style="margin: 0.2rem">{game.court}</p>
+						</td>
+						<td style="width: 25%; padding: 10px; vertical-align: middle">
+						</td>
+					</tr>
+				{/for}
+		</table>
+	{/for}
+
+	<p style="margin-top: 2rem">{msg:upcomingGameNotice()}</p>
+
+	<div style="text-align: center">
+		<a href="{url}/player/overview/{player.getId}" target="_blank"
+			 style="border: solid 2px #0867ec; border-radius: 4px; box-sizing: border-box; cursor: pointer; display: inline-block; font-size: 16px; font-weight: bold; margin: 0; padding: 12px 24px; text-decoration: none; text-transform: capitalize; background-color: #0867ec; border-color: #0867ec; color: #ffffff;">
+        {msg:myGames()}
+		</a>
+	</div>
+{/include}

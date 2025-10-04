@@ -398,11 +398,10 @@ export function usePublishCompetitions(
 				life: 3000,
 			})
 
-			if (competitions.length === 1)
-				queryClient.invalidateQueries({
-					queryKey: ["competitionList"],
-					refetchType: "all",
-				})
+			queryClient.invalidateQueries({
+				queryKey: ["competitionList"],
+				refetchType: "all",
+			})
 			for (const comp of competitions) {
 				queryClient.invalidateQueries({
 					queryKey: ["competitionDetails", route.params.tourId, comp],

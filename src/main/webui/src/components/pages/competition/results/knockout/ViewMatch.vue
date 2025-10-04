@@ -57,11 +57,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<UpdatePointsDialog
-		v-if="isReporter"
-		ref="dialog"
-		:number-sets="props.numberSets"
-	/>
+	<UpdatePointsDialog ref="dialog" :number-sets="props.numberSets" />
 </template>
 
 <script setup lang="ts">

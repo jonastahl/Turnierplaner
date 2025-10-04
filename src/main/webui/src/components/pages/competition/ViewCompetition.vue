@@ -10,7 +10,12 @@
 					)
 				}}
 			</template>
-			<template v-else-if="new Date() < tournament.game_phase.begin">
+			<template
+				v-else-if="
+					new Date() < tournament.game_phase.begin ||
+					competition?.cProgress != Progress.DONE
+				"
+			>
 				<!-- show registration page -->
 				<ViewSignUp
 					v-if="competition"
