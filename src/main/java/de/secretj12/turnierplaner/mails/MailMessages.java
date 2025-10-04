@@ -40,4 +40,14 @@ public interface MailMessages {
     String rescheduleGameMovedSingle();
 
     String rescheduleGameMovedMultiple();
+
+    String matchUpdateSubject(String compName);
+
+    String matchUpdateGameChangedSingle();
+
+    String matchUpdateGameChangedMultiple();
+
+    String matchUpdateAddedSingle();
+
+    String matchUpdateAddedMultiple();
 }

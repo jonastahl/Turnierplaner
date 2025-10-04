@@ -2,6 +2,7 @@ package de.secretj12.turnierplaner.resources;
 
 
 import de.secretj12.turnierplaner.db.entities.Match;
+import de.secretj12.turnierplaner.db.entities.Player;
 import de.secretj12.turnierplaner.db.entities.Set;
 import de.secretj12.turnierplaner.db.entities.Tournament;
 import de.secretj12.turnierplaner.db.entities.competition.Competition;
@@ -9,22 +10,23 @@ import de.secretj12.turnierplaner.db.entities.groups.Group;
 import de.secretj12.turnierplaner.db.entities.knockout.NextMatch;
 import de.secretj12.turnierplaner.db.repositories.*;
 import de.secretj12.turnierplaner.enums.NumberSets;
+import de.secretj12.turnierplaner.mails.MailTemplates;
 import de.secretj12.turnierplaner.model.user.jUserSet;
 import de.secretj12.turnierplaner.model.user.jUserTeamGroupResult;
 import de.secretj12.turnierplaner.tools.GroupTools;
 import io.quarkus.security.UnauthorizedException;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.tuples.Tuple2;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestResponse;
 
 import java.time.Instant;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Path("/tournament/{tourId}/competition/{compId}/set/{matchId}")
 public class SetResource {
@@ -43,6 +45,8 @@ public class SetResource {
     GroupTools groupTools;
     @Inject
     SecurityIdentity securityIdentity;
+    @Inject
+    MailTemplates mailTemplates;
 
     /**
      * Everybody can report the first result of a match after the game has started.
@@ -55,9 +59,9 @@ public class SetResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     @Transactional
-    public String updateMatches(@PathParam("tourId") String tourId, @PathParam("compId") String compId,
-                                @PathParam("matchId") UUID matchId,
-                                List<jUserSet> sets) {
+    public RestResponse<String> updateMatches(@PathParam("tourId") String tourId, @PathParam("compId") String compId,
+                                              @PathParam("matchId") UUID matchId,
+                                              List<jUserSet> sets) {
         Tournament tournament = tournaments.getByName(tourId);
         Competition competition = competitions.getByName(tourId, compId);
         if (tournament == null)
@@ -77,15 +81,19 @@ public class SetResource {
             throw new UnauthorizedException("Cannot update existing match result");
 
         match.getSets().forEach(setRepository::delete);
+        Map<Player, PlayerUpdateAdd> playerNotifications = new HashMap<>();
         if (securityIdentity.hasRole("director") && sets.isEmpty()) {
             match.setFinished(false);
-            adjustNext(match);
-            return "Result was reset";
+            adjustNext(match, playerNotifications);
+            return RestResponse.ok("Result was reset");
         }
 
         match.setFinished(true);
         match.setWinner(findWinner(sets, competition.getNumberSets()));
 
+
+        Match oldData = Match.copy(match);
+        List<Set> nsets = new ArrayList<>();
         for (byte i = 0; i < sets.size(); i++) {
             jUserSet jSet = sets.get(i);
             Set.SetKey setKey = new Set.SetKey();
@@ -96,30 +104,54 @@ public class SetResource {
             set.setScoreA(jSet.getScoreA());
             set.setScoreB(jSet.getScoreB());
             setRepository.persist(set);
+            nsets.add(set);
         }
+        match.setSets(nsets);
+        match.getPlayers()
+            .forEach(p -> playerNotifications.computeIfAbsent(p, k -> new PlayerUpdateAdd()).update.add(Tuple2.of(match,
+                oldData)));
 
         matchRepository.persist(match);
-        adjustNext(match);
-        return "Updated matches";
+        adjustNext(match, playerNotifications);
+
+        boolean allSuc = true;
+        for (var entry : playerNotifications.entrySet())
+            allSuc &= mailTemplates.sendMatchUpdateMail(entry.getKey(), tourId, compId,
+                entry.getValue().update,
+                entry.getValue().add);
+
+        return RestResponse.ResponseBuilder
+            .create(allSuc ? Response.Status.OK : Response.Status.PARTIAL_CONTENT, "Mails published")
+            .build();
     }
 
-    private void adjustNext(Match match) {
+    private record PlayerUpdateAdd(List<Tuple2<Match, Match>> update, List<Match> add) {
+        public PlayerUpdateAdd() {
+            this(new ArrayList<>(), new ArrayList<>());
+        }
+    }
+
+    private void adjustNext(Match match, Map<Player, PlayerUpdateAdd> playerNotifications) {
         if (match.getPreviousOfA() != null) {
             for (NextMatch nm : match.getPreviousOfA()) {
                 Match nMatch = nm.getNextMatch();
+                Match oldData = Match.copy(nMatch);
                 nMatch.setTeamA(match.isFinished() ? match.getWinner() ^ nm.isWinner() ? match.getTeamB() : match
                     .getTeamA() : null);
+                updateNotfications(oldData, nMatch, playerNotifications, true);
                 matchRepository.persist(nMatch);
-                adjustNext(nMatch);
+                adjustNext(nMatch, playerNotifications);
             }
         }
         if (match.getPreviousOfB() != null) {
             for (NextMatch nm : match.getPreviousOfB()) {
                 Match nMatch = nm.getNextMatch();
+                Match oldData = Match.copy(nMatch);
                 nMatch.setTeamB(match.isFinished() ? match.getWinner() ^ nm.isWinner() ? match.getTeamB() : match
                     .getTeamA() : null);
+                updateNotfications(oldData, nMatch, playerNotifications, false);
                 matchRepository.persist(nMatch);
-                adjustNext(nMatch);
+                adjustNext(nMatch, playerNotifications);
             }
         }
         if (match.getGroup() != null) {
@@ -129,16 +161,36 @@ public class SetResource {
 
             for (var fog : group.getFinalOfGroupA()) {
                 Match fin = fog.getNextMatch();
+                Match oldData = Match.copy(fin);
                 fin.setTeamA(isFinished ? teamRepository.findById(results.get(fog.getPos() - 1).getTeam()
                     .getId()) : null);
-                adjustNext(fin);
+                updateNotfications(oldData, fin, playerNotifications, true);
+                matchRepository.persist(fin);
+                adjustNext(fin, playerNotifications);
             }
             for (var fog : group.getFinalOfGroupB()) {
                 Match fin = fog.getNextMatch();
+                Match oldData = Match.copy(fin);
                 fin.setTeamB(isFinished ? teamRepository.findById(results.get(fog.getPos() - 1).getTeam()
                     .getId()) : null);
-                adjustNext(fin);
+                updateNotfications(oldData, fin, playerNotifications, false);
+                matchRepository.persist(fin);
+                adjustNext(fin, playerNotifications);
             }
+        }
+    }
+
+    private static void updateNotfications(Match oldData, Match nMatch,
+                                           Map<Player, PlayerUpdateAdd> playerNotifications, boolean teamA) {
+        var newTeam = teamA ? nMatch.getTeamA() : nMatch.getTeamB();
+        var exTeam = teamA ? nMatch.getTeamB() : nMatch.getTeamA();
+        if (newTeam != null && newTeam != (teamA ? oldData.getTeamA() : oldData.getTeamB())) {
+            Stream.of(newTeam.getPlayerA(), newTeam.getPlayerB()).filter(Objects::nonNull)
+                .forEach(p -> playerNotifications.computeIfAbsent(p, k -> new PlayerUpdateAdd()).add.add(nMatch));
+            if (exTeam != null)
+                Stream.of(exTeam.getPlayerA(), exTeam.getPlayerB()).filter(Objects::nonNull)
+                    .forEach(p -> playerNotifications.computeIfAbsent(p, k -> new PlayerUpdateAdd()).update.add(Tuple2
+                        .of(nMatch, oldData)));
         }
     }
 

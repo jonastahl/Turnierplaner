@@ -11,10 +11,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "matches")
@@ -86,6 +84,22 @@ public class Match {
 
     @OneToMany(mappedBy = "key.match", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Set> sets;
+
+    public static Match copy(Match match) {
+        Match m = new Match();
+        m.court = match.court;
+        m.begin = match.begin;
+        m.end = match.end;
+        m.teamA = match.teamA;
+        m.teamB = match.teamB;
+        m.sets = match.sets;
+        return m;
+    }
+
+    public Stream<Player> getPlayers() {
+        return Stream.of(this.getTeamA(), this.getTeamB()).filter(Objects::nonNull)
+            .flatMap(t -> Stream.of(t.getPlayerA(), t.getPlayerB())).filter(Objects::nonNull);
+    }
 
     public UUID getId() {
         return id;
@@ -200,7 +214,8 @@ public class Match {
     }
 
     public List<Set> getSets() {
-        return sets.stream().sorted(Comparator.comparingInt(s -> s.getKey().getIndex())).toList();
+        return sets == null ? List.of() : sets.stream().sorted(Comparator.comparingInt(s -> s.getKey().getIndex()))
+            .toList();
     }
 
     public void setSets(List<Set> sets) {
