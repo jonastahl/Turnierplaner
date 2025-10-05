@@ -4,7 +4,7 @@
 			<div v-bind="props.action" class="cursor-pointer">
 				<span v-if="!item.overview" v-bind="props.label">{{ item.name }}</span>
 				<strong v-else v-bind="props.label">
-					{{ t("ViewPrepare.overview") }}
+					{{ t("general." + item.overview) }}
 				</strong>
 			</div>
 		</template>
@@ -37,7 +37,7 @@ const menuComps = computed(() => {
 		...(<boolean>route.meta.overview
 			? [
 					{
-						overview: true,
+						overview: route.meta.overview,
 					},
 				]
 			: []),
@@ -76,7 +76,7 @@ watch(
 				) + (route.meta.overview ? 1 : 0)
 		} else {
 			activeTab.value = 0
-			if (!route.meta.overview) {
+			if (!route.meta.overview && competitions.value.length) {
 				router.replace({
 					params: {
 						compId: competitions.value[0].name,

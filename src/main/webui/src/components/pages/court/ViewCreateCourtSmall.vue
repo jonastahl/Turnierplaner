@@ -8,7 +8,7 @@
 			option-label="name"
 			:placeholder="t('court.type')"
 		/>
-		<Button size="small" @click="add">Add</Button>
+		<Button size="small" @click="add">{{ t("general.add") }}</Button>
 	</InputGroup>
 </template>
 
