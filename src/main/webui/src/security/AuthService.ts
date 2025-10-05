@@ -3,7 +3,7 @@ import { auth_settings, popup } from "./settings"
 import { ref } from "vue"
 
 class AuthService {
-	userManager
+	userManager: UserManager
 
 	constructor() {
 		this.userManager = new UserManager(auth_settings)
@@ -17,17 +17,25 @@ class AuthService {
 						.signinSilent()
 						.then(() => {
 							console.log("update token silently")
-							access_token.value = user.access_token
 							resolve()
 						})
 						.catch(() => {
-							access_token.value = null
 							reject()
 						})
 				} else {
 					resolve()
 				}
 			})
+		})
+	}
+
+	reload() {
+		this.userManager.getUser().then((user) => {
+			if (user != null && !user.expired) {
+				this.userManager.events.load(user)
+			} else {
+				this.userManager.events.unload()
+			}
 		})
 	}
 

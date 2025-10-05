@@ -1,5 +1,5 @@
 <template>
-	<Button v-if="isLoggedIn" rounded outlined size="small" @click="settings">
+	<Button v-if="isDirector" rounded outlined size="small" @click="settings">
 		<template #icon>
 			<span class="material-symbols-outlined">settings</span>
 		</template>
@@ -35,10 +35,12 @@ import { router } from "@/main"
 import { useI18n } from "vue-i18n"
 import { useSaveLanguage } from "@/backend/config"
 import { Routes } from "@/routes"
+import { getIsDirector } from "@/backend/security"
 
 const currentUser = ref<string>("")
 const isLoggedIn = inject("loggedIn", ref(false))
 const { locale, availableLocales } = useI18n()
+const { data: isDirector } = getIsDirector(isLoggedIn)
 
 const { mutate: saveLanguage } = useSaveLanguage(isLoggedIn)
 

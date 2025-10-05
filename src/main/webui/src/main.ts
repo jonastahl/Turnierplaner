@@ -9,7 +9,7 @@ import { settings } from "@/settings"
 import VueAxios from "vue-axios"
 import axios from "axios"
 
-import { access_token, auth } from "@/security/AuthService"
+import { access_token } from "@/security/AuthService"
 /* i18n */
 import languages from "./i18n"
 import routes from "./routes"
@@ -53,9 +53,6 @@ axios.interceptors.response.use(
 		return response
 	},
 	function (error) {
-		if (error.status === 401) {
-			auth.login()
-		}
 		throw error
 	},
 )

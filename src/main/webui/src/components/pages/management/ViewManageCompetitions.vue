@@ -21,13 +21,13 @@ import ViewCompSelector from "@/components/pages/management/tabs/ViewCompSelecto
 import ViewMenuSelector from "@/components/pages/management/tabs/ViewMenuSelector.vue"
 import ViewExecutionMenuSelector from "@/components/pages/management/tabs/ViewExecutionMenuSelector.vue"
 import { inject, ref, watch } from "vue"
-import { auth } from "@/security/AuthService"
 import { useRoute, useRouter } from "vue-router"
 import { Routes } from "@/routes"
 import { getCompetitionsList } from "@/backend/competition"
 import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
 import { Progress } from "@/interfaces/competition"
+import { getIsDirector } from "@/backend/security"
 
 const route = useRoute()
 const router = useRouter()
@@ -35,9 +35,18 @@ const { t } = useI18n()
 const toast = useToast()
 const isLoggedIn = inject("loggedIn", ref(false))
 const { data: competitions } = getCompetitionsList(route, isLoggedIn, t, toast)
-if (!isLoggedIn.value) {
-	auth.login()
-}
+const { data: isDirector, isSuccess: directorSuccess } =
+	getIsDirector(isLoggedIn)
+watch(
+	[isLoggedIn, isDirector, directorSuccess],
+	() => {
+		if (!isLoggedIn.value || (isDirector.value && !directorSuccess.value))
+			router.push({
+				name: Routes.Tournaments,
+			})
+	},
+	{ immediate: true },
+)
 
 watch(
 	route,

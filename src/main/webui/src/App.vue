@@ -66,6 +66,12 @@ watch(
 	{ immediate: true },
 )
 
+window.addEventListener("storage", (event) => {
+	if (event.key?.startsWith("oidc.user")) {
+		auth.reload()
+	}
+})
+
 const { data: config } = getConfig(loggedIn)
 const { locale } = useI18n()
 
