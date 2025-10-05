@@ -1,6 +1,7 @@
 <template>
 	<div id="date">
-		{{ props.match.begin?.toLocaleString(t("lang"), dateOptions) || "" }}
+		{{ props.match.begin?.toLocaleString(t("lang"), dateOptions) || "" }},
+		{{ props.match.court }}
 	</div>
 </template>
 
