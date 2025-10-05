@@ -19,6 +19,15 @@
 		</div>
 		<div class="col-8">
 			<div class="flex flex-column gap-3">
+				<Message
+					v-if="!selectedCourts.length"
+					severity="warn"
+					icon="pi pi-info-circle"
+					class="m-0"
+					:closable="false"
+				>
+					{{ t("court.warning_select_courts") }}
+				</Message>
 				<SchedulingCalendar
 					v-model="scheduledMatches"
 					:courts="selectedCourts"
