@@ -24,6 +24,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
+import static de.secretj12.turnierplaner.enums.CreationProgress.DONE;
 import static de.secretj12.turnierplaner.enums.CreationProgress.TEAMS;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -77,7 +78,7 @@ public class TestCompetitionResource {
         comp20.setMode(CompetitionMode.SINGLE);
         comp20.setType(CompetitionType.KNOCKOUT);
         comp20.setPlayerASex(SexFilter.MALE);
-        comp20.setcProgress(TEAMS);
+        comp20.setcProgress(DONE);
         comp20.setSignup(CompetitionSignUp.INDIVIDUAL);
         comp20.setPlayerASex(SexFilter.ANY);
         comp20.setTournament(tour20);
