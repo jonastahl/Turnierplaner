@@ -124,22 +124,6 @@
 				>{{ t(errors.email || "") }}
 			</InlineMessage>
 		</div>
-		<div class="field col-12">
-			<label for="phone">{{ t("ViewPlayerRegistration.phone.field") }}</label>
-			<InputText
-				id="phone"
-				v-model="phone"
-				:disabled="disabled"
-				type="text"
-				v-bind="phoneAttrs"
-				maxlength="30"
-				class="w-full"
-				:class="{ 'p-invalid': errors.phone }"
-			/>
-			<InlineMessage v-if="errors.phone" class="mt-2"
-				>{{ t(errors.phone || "") }}
-			</InlineMessage>
-		</div>
 	</div>
 </template>
 
@@ -163,9 +147,6 @@ const props = withDefaults(
 	},
 )
 
-const phoneRegExp =
-	/^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)$/
-
 const { defineField, errors, handleSubmit } = useForm<PlayerRegistration>({
 	validationSchema: toTypedSchema(
 		object({
@@ -175,9 +156,6 @@ const { defineField, errors, handleSubmit } = useForm<PlayerRegistration>({
 			birthday: date().required(),
 			language: mixed().oneOf(Object.values(Language)).required(),
 			email: string().max(100).email().required(),
-			phone: string()
-				.matches(phoneRegExp, t("ViewPlayerRegistration.phone.correct"))
-				.required(),
 		}),
 	),
 	initialValues: {
@@ -187,7 +165,6 @@ const { defineField, errors, handleSubmit } = useForm<PlayerRegistration>({
 		birthday: props.player.birthday,
 		language: props.player.language,
 		email: props.player.email,
-		phone: props.player.phone,
 	},
 })
 
@@ -197,7 +174,6 @@ const [sex, sexAttrs] = defineField("sex")
 const [language, languageAttrs] = defineField("language")
 const [birthday, birthdayAttrs] = defineField("birthday")
 const [email, emailAttrs] = defineField("email")
-const [phone, phoneAttrs] = defineField("phone")
 
 const onSubmit = handleSubmit((values) => {
 	emit("submit", <PlayerRegistration>(<unknown>values))

@@ -16,7 +16,6 @@ export function useRegisterPlayer(
 				birthday: dateToJson(reg.birthday),
 				language: reg.language,
 				email: reg.email,
-				phone: reg.phone,
 			})
 		},
 		onSuccess() {

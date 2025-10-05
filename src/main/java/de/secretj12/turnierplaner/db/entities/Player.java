@@ -64,9 +64,6 @@ public class Player {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "phone")
-    private String phone;
-
     @Column(name = "mail_verified")
     private boolean mailVerified;
 
@@ -82,14 +79,13 @@ public class Player {
     public Player() {
     }
 
-    public Player(String firstName, String lastName, Sex sex, LocalDate birthday, String email, String phone,
+    public Player(String firstName, String lastName, Sex sex, LocalDate birthday, String email,
                   boolean mailVerified, boolean adminVerified, Language language) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
         this.birthday = birthday;
         this.email = email;
-        this.phone = phone;
         this.mailVerified = mailVerified;
         this.adminVerified = adminVerified;
         this.language = language;
@@ -141,14 +137,6 @@ public class Player {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public boolean isMailVerified() {

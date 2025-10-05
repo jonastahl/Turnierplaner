@@ -61,7 +61,6 @@ const player = reactive<PlayerRegistrationForm>({
 	birthday: undefined,
 	language: langMap[locale.value],
 	email: "",
-	phone: "",
 })
 </script>
 
