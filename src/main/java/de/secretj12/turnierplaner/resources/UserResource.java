@@ -33,7 +33,7 @@ public class UserResource {
     @Path("/list")
     public List<jAdminUser> list() {
         return keycloak.realm(realm).users().list().stream()
-            .filter(u -> !u.getUsername().equals(securityIdentity.getPrincipal().getName()))
+            .filter(u -> !securityIdentity.getPrincipal().getName().equals(u.getUsername()))
             .map(u -> new jAdminUser(u, getRole(u)))
             .toList();
     }
