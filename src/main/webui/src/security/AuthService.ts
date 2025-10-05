@@ -35,7 +35,11 @@ class AuthService {
 		return this.userManager.getUser()
 	}
 
+	lastLogin: Date | null = null
 	login() {
+		if (this.lastLogin != null && this.lastLogin.getTime() + 1000 * 2 > Date.now())
+			return
+		this.lastLogin = new Date()
 		if (popup) return this.userManager.signinPopup()
 		else return this.userManager.signinRedirect()
 	}
