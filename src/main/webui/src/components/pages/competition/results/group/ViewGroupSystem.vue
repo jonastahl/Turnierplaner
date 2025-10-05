@@ -48,7 +48,7 @@
 								/>
 							</template>
 							<template #additional="{ match }">
-								<ViewMatchDate v-if="match" :match="match" />
+								<ViewMatchFooter v-if="match" :match="match" />
 							</template>
 						</ViewKnockoutTree>
 					</HorizontalScroller>
@@ -72,7 +72,7 @@ import { useI18n } from "vue-i18n"
 import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
 import { getCompetitionDetails } from "@/backend/competition"
 import { useToast } from "primevue/usetoast"
-import ViewMatchDate from "@/components/pages/competition/results/knockout/ViewMatchDate.vue"
+import ViewMatchFooter from "@/components/pages/competition/results/knockout/ViewMatchFooter.vue"
 
 const route = useRoute()
 const { t } = useI18n()

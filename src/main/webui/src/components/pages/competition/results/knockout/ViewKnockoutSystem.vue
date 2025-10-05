@@ -22,7 +22,7 @@
 							/>
 						</template>
 						<template #additional="{ match }">
-							<ViewMatchDate v-if="match" :match="match" />
+							<ViewMatchFooter v-if="match" :match="match" />
 						</template>
 					</ViewKnockoutTree>
 				</HorizontalScroller>
@@ -37,7 +37,7 @@ import ViewKnockoutTree from "@/components/pages/competition/results/knockout/Vi
 import HorizontalScroller from "@/components/items/HorizontalScroller.vue"
 import { getKnockout } from "@/backend/knockout"
 import ViewMatch from "@/components/pages/competition/results/knockout/ViewMatch.vue"
-import ViewMatchDate from "@/components/pages/competition/results/knockout/ViewMatchDate.vue"
+import ViewMatchFooter from "@/components/pages/competition/results/knockout/ViewMatchFooter.vue"
 import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
 import { useI18n } from "vue-i18n"
 import { getCompetitionDetails } from "@/backend/competition"

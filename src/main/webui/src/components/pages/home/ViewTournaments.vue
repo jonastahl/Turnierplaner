@@ -4,7 +4,9 @@
 			<Skeleton v-for="i in Array(5)" :key="i" class="w-23rem h-12rem" />
 		</template>
 		<item
-			v-for="tournament in tournaments"
+			v-for="tournament in tournaments?.toSorted((a, b) =>
+				a.game_phase.end < b.game_phase.end ? 1 : -1,
+			)"
 			v-else-if="isSuccess"
 			:key="tournament.name"
 			:can-create="canCreate || false"
