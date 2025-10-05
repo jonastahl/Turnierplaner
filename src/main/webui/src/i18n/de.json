@@ -156,7 +156,7 @@
 		"missingAge": "Bitte wähle ein Datum",
 		"playerA": "Spieler 1",
 		"playerB": "Spieler 2",
-		"numberSets": "Anzahl der Sätze"
+		"numberSets": "Anzahl der Gewinnsätze"
 	},
 	"ViewSignUp": {
 		"atLeastOneLetter": "Bitte tippe mindestens einen Buchstaben ein",
