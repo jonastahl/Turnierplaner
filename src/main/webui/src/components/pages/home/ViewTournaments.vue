@@ -52,7 +52,7 @@ function selected(tournament: string) {
 
 function settingsItem(tournament: string) {
 	router.push({
-		name: Routes.EditTournament,
+		name: Routes.ManageSettings,
 		params: { tourId: tournament },
 	})
 }

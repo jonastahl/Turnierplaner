@@ -62,6 +62,7 @@ public class TestdataGenerator {
         for (int i = 0; i < NUMBEROFCOURTS; i++) {
             courts[i] = new Court();
             courts[i].setName("Platz " + (i + 1));
+            courts[i].setCourtType(CourtType.values()[random.nextInt(CourtType.values().length)]);
             courtRepositiory.persist(courts[i]);
         }
 

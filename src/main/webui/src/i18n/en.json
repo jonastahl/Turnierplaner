@@ -24,6 +24,7 @@
 		"cancel": "Cancel",
 		"back": "Back",
 		"next": "Next",
+		"add": "Add",
 		"saveandcont": "Save and continue",
 		"saveandcomp": "Save and complete",
 		"saveandpublish": "Save and publish",
@@ -52,7 +53,8 @@
 		"male": "Male",
 		"female": "Female",
 		"serverside_error": "Serverside error",
-		"gameplans": "Game plans"
+		"gameplans": "Game plans",
+		"overview": "Overview"
 	},
 	"DialogUpdateScore": {
 		"header": "Score Update",
@@ -60,7 +62,7 @@
 	},
 	"ViewPlayerRegistration": {
 		"headline": "Player Registration",
-		"after": "Thank you for registration! Please confirm your email with the verification link, we sent you to your email.",
+		"after": "Thank you for registration! Please confirm your e-mail with the verification link, we sent you to your email.",
 		"verification_success": "You have successfully verified yourself!",
 		"verification_failed": "This verification link doesn't seem to be correct.",
 		"first_name": {

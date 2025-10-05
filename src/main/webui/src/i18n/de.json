@@ -24,6 +24,7 @@
 		"cancel": "Abbrechen",
 		"back": "Zurück",
 		"next": "Weiter",
+		"add": "Hinzufügen",
 		"saveandcont": "Speichern und weiter",
 		"saveandcomp": "Speichern und abschließen",
 		"saveandpublish": "Speichern und veröffentlichen",
@@ -52,7 +53,8 @@
 		"male": "Männlich",
 		"female": "Weiblich",
 		"serverside_error": "Serverseitiger Fehler",
-		"gameplans": "Spielpläne"
+		"gameplans": "Spielpläne",
+		"overview": "Übersicht"
 	},
 	"DialogUpdateScore": {
 		"header": "Punkte Eintragung",
@@ -60,7 +62,7 @@
 	},
 	"ViewPlayerRegistration": {
 		"headline": "Spielerregistrierung",
-		"after": "Vielen Dank für die Registrierung. Bitte bestätigen Sie ihre Email mit dem Link in ihrer Verifizierungsmail.",
+		"after": "Vielen Dank für die Registrierung. Bitte bestätigen Sie ihre E-Mail mit dem Link in ihrer Verifizierungsmail.",
 		"verification_success": "Sie haben sich erfolgreich verifiziert!",
 		"verification_failed": "Der Verifizierungslink scheint nicht zu stimmen!",
 		"first_name": {
@@ -112,6 +114,7 @@
 		"add_content": "Klicke um neues Turnier hinzuzufügen"
 	},
 	"ViewCreateTournament": {
+		"tournamentCreating": "Turniererstellung",
 		"tournamentCreated": "Turnier erstellt",
 		"tournamentCreationFailed": "Turnier konnte nicht erstellt werden",
 		"tournamentCreation": "Turniererstellung"

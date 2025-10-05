@@ -2,7 +2,6 @@ export enum Routes {
 	Tournaments = "tournaments",
 	Settings = "settings",
 	CreateTournament = "createTournament",
-	EditTournament = "editTournament",
 	Competitions = "competitions",
 	CreateCompetition = "createCompetition",
 	MatchesOverview = "matchesOverview",
@@ -40,12 +39,6 @@ export default [
 			import("@/components/pages/tournament/ViewCreateTournament.vue"),
 	},
 	{
-		path: "/tournament/:tourId/edit",
-		name: Routes.EditTournament,
-		component: () =>
-			import("@/components/pages/tournament/ViewEditTournament.vue"),
-	},
-	{
 		path: "/tournament/:tourId",
 		name: Routes.Competitions,
 		component: () =>
@@ -81,7 +74,7 @@ export default [
 				component: () =>
 					import("@/components/pages/management/settings/ViewSettings.vue"),
 				meta: {
-					overview: false,
+					overview: "tournament",
 					compSelector: true,
 					managesel: Routes.ManageSettings,
 					managepage: Routes.ManageSettings,
@@ -95,7 +88,7 @@ export default [
 						"@/components/pages/management/prepare/ViewPrepareMatches.vue"
 					),
 				meta: {
-					overview: true,
+					overview: "overview",
 					compSelector: true,
 					managesel: Routes.ManagePrepare,
 					managepage: Routes.ManagePrepare,
@@ -135,7 +128,6 @@ export default [
 				component: () =>
 					import("@/components/pages/management/execution/ViewExecution.vue"),
 				meta: {
-					overview: false,
 					compSelector: false,
 					managesel: Routes.ManageExecution,
 					executionsel: Routes.ManageExecution,

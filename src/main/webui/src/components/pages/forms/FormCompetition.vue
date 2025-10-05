@@ -520,8 +520,8 @@ const [playerBMinAge, playerBMinAgeAttrs] = defineField("playerB_minAge")
 const [playerBMaxAge, playerBMaxAgeAttrs] = defineField("playerB_maxAge")
 
 const numberSetsOptions = ref([
-	{ name: "3", value: NumberSets.THREE },
-	{ name: "5", value: NumberSets.FIVE },
+	{ name: "2", value: NumberSets.THREE },
+	{ name: "3", value: NumberSets.FIVE },
 ])
 
 const onSubmit = handleSubmit(

@@ -1,20 +1,39 @@
 <template>
-	<FormTournament
-		:submit-text="t('general.create')"
-		:disabled="false"
-		header="ViewCreateTournament.tournamentCreation"
-		@submit="submit"
-	/>
+	<div class="flex justify-content-center w-full">
+		<Card id="card">
+			<template #title>{{
+				t("ViewCreateTournament.tournamentCreation")
+			}}</template>
+			<template #content>
+				<FormTournament
+					ref="form"
+					:tour-details="TournamentDefault"
+					:disabled="false"
+					@submit="submit"
+				/>
+			</template>
+			<template #footer>
+				<div class="justify-content-end flex">
+					<Button
+						:label="t('general.create')"
+						severity="success"
+						@click="() => form !== null && form.onSubmit()"
+					/>
+				</div>
+			</template>
+		</Card>
+	</div>
 </template>
 
 <script lang="ts" setup>
 import { router } from "@/main"
 import { useToast } from "primevue/usetoast"
 import FormTournament from "@/components/pages/forms/FormTournament.vue"
-import { TournamentServer } from "@/interfaces/tournament"
+import { TournamentDefault, TournamentServer } from "@/interfaces/tournament"
 import { useI18n } from "vue-i18n"
 import { useAddTournament } from "@/backend/tournament"
 import { Routes } from "@/routes"
+import { ref } from "vue"
 
 const { t } = useI18n()
 const toast = useToast()
@@ -29,6 +48,7 @@ const { mutate } = useAddTournament(t, toast, {
 		})
 	},
 })
+const form = ref<InstanceType<typeof FormTournament> | null>(null)
 
 function submit(server_data: TournamentServer) {
 	tourName = server_data.name
@@ -36,4 +56,8 @@ function submit(server_data: TournamentServer) {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+#card {
+	width: min(90dvw, 50rem);
+}
+</style>

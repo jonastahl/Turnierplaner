@@ -1,74 +1,14 @@
 <template>
-	<div class="flex justify-content-center">
-		<Card id="card">
-			<template #content>
-				<FormCompetition
-					v-if="!competition || isUpdating"
-					:competition="CompetitionDefault"
-					:disabled="true"
-					@submit="submit"
-				/>
-				<FormCompetition
-					v-else
-					ref="form"
-					:competition="competition"
-					:disabled="false"
-					@submit="submit"
-				/>
-			</template>
-			<template #footer>
-				<div class="flex flex-row justify-content-end">
-					<Button :label="t('general.save')" severity="success" @click="save" />
-				</div>
-			</template>
-		</Card>
-	</div>
+	<ViewCompSettings v-if="route.params.compId" />
+	<ViewTourSettings v-else />
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useRoute } from "vue-router"
-import FormCompetition from "@/components/pages/forms/FormCompetition.vue"
-import { useI18n } from "vue-i18n"
-import { CompetitionDefault, CompetitionServer } from "@/interfaces/competition"
-import {
-	getCompetitionDetails,
-	useUpdateCompetition,
-} from "@/backend/competition"
-import { useToast } from "primevue/usetoast"
-import { ref, watch } from "vue"
-
-const { t } = useI18n()
-const toast = useToast()
+import ViewCompSettings from "@/components/pages/management/settings/ViewCompSettings.vue"
+import ViewTourSettings from "@/components/pages/management/settings/ViewTourSettings.vue"
 
 const route = useRoute()
-const form = ref<InstanceType<typeof FormCompetition> | null>(null)
-
-const isUpdating = defineModel<boolean>("isUpdating", { default: false })
-
-function sleep(milliseconds: number) {
-	return new Promise((resolve) => setTimeout(resolve, milliseconds))
-}
-
-const { data: competition } = getCompetitionDetails(route, t, toast)
-watch(competition, async () => {
-	isUpdating.value = true
-	await sleep(100)
-	isUpdating.value = false
-})
-
-const { mutate } = useUpdateCompetition(route, t, toast, {})
-
-function save() {
-	form.value?.onSubmit()
-}
-
-function submit(server_data: CompetitionServer) {
-	mutate(server_data)
-}
 </script>
 
-<style scoped>
-#card {
-	width: min(90dvw, 50rem);
-}
-</style>
+<style scoped></style>
