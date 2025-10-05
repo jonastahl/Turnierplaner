@@ -305,7 +305,11 @@
 			"GRASS": "Gras"
 		},
 		"not_selected": "Alle Felder müssen ausgefüllt werden",
-		"select": "Plätze auswählen"
+		"select": "Plätze auswählen",
+		"no_courts": "Es existieren noch keine Plätze.",
+		"no_courts_admin": "Gehe in die Einstellungen um Plätze anzulegen.",
+		"no_courts_no_admin": "Bitte deinen Admin Plätze zu erstellen.",
+		"warning_select_courts": "You need to select a court before you can schedule matches."
 	},
 	"set": {
 		"invalid_sets": "Es gibt ungültige Sätze"

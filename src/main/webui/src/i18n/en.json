@@ -305,7 +305,11 @@
 			"GRASS": "Grass"
 		},
 		"not_selected": "All fields need to be filled",
-		"select": "Select courts"
+		"select": "Select courts",
+		"no_courts": "There are no courts.",
+		"no_courts_admin": "Go to the settings to create them.",
+		"no_courts_no_admin": "Ask your admin to create them.",
+		"warning_select_courts": "You need to select a court before you can schedule matches."
 	},
 	"set": {
 		"invalid_sets": "There are invalid sets"

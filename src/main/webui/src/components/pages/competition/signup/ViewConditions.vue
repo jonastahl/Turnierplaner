@@ -9,7 +9,7 @@
 		<Tag
 			v-if="player.hasMinAge"
 			v-tooltip="
-				t('ViewFormCompetition.born_before') +
+				t('ViewCompetition.born_before') +
 				' ' +
 				(player.minAge !== null
 					? player.minAge.toLocaleString(t('lang'), dateOptions)
@@ -22,7 +22,7 @@
 		<Tag
 			v-if="player.hasMaxAge"
 			v-tooltip="
-				t('ViewFormCompetition.born_after') +
+				t('ViewCompetition.born_after') +
 				' ' +
 				(player.maxAge !== null
 					? player.maxAge.toLocaleString(t('lang'), dateOptions)

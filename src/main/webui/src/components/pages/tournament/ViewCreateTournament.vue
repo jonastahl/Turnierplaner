@@ -5,12 +5,7 @@
 				t("ViewCreateTournament.tournamentCreation")
 			}}</template>
 			<template #content>
-				<FormTournament
-					ref="form"
-					:tour-details="TournamentDefault"
-					:disabled="false"
-					@submit="submit"
-				/>
+				<FormTournament ref="form" :disabled="false" @submit="submit" />
 			</template>
 			<template #footer>
 				<div class="justify-content-end flex">
@@ -29,7 +24,7 @@
 import { router } from "@/main"
 import { useToast } from "primevue/usetoast"
 import FormTournament from "@/components/pages/forms/FormTournament.vue"
-import { TournamentDefault, TournamentServer } from "@/interfaces/tournament"
+import { TournamentServer } from "@/interfaces/tournament"
 import { useI18n } from "vue-i18n"
 import { useAddTournament } from "@/backend/tournament"
 import { Routes } from "@/routes"
