@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-primary-900 p-6 flex justify-content-between">
+	<div id="footer" class="bg-primary-900 p-6 flex justify-content-between mt-4">
 		<div class="flex items-center sm:flex-row flex-column gap-2">
 			<u class="text-white transition-colors cursor-pointer" @click="selected"
 				>Impressum</u
@@ -52,5 +52,10 @@ footer {
 	right: 0;
 	top: 0;
 	background-color: white;
+}
+
+#footer {
+	z-index: 10;
+	box-shadow: 0 -10px 15px rgb(0, 0, 0, 0.2);
 }
 </style>
