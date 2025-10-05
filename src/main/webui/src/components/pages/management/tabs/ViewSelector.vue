@@ -2,10 +2,11 @@
 	<TabMenu :active-index="activeTab" :model="menuComps" @tab-change="tabChange">
 		<template #item="{ item, props }">
 			<div v-bind="props.action" class="cursor-pointer">
-				<span v-if="!item.overview" v-bind="props.label">{{ item.name }}</span>
-				<strong v-else v-bind="props.label">
+				<strong v-if="item.overview" v-bind="props.label">
 					{{ t("general." + item.overview) }}
 				</strong>
+				<span v-else-if="item.add" class="pi pi-plus-circle"></span>
+				<span v-else v-bind="props.label">{{ item.name }}</span>
 			</div>
 		</template>
 	</TabMenu>
@@ -42,6 +43,9 @@ const menuComps = computed(() => {
 				]
 			: []),
 		...competitions.value,
+		{
+			add: true,
+		},
 	]
 })
 
@@ -50,6 +54,15 @@ function tabChange(event: TabMenuChangeEvent) {
 
 	activeTab.value = event.index
 	let comp = null
+	if (event.index == menuComps.value.length - 1) {
+		router.push({
+			name: Routes.CreateCompetition,
+			params: {
+				tourId: route.params.tourId,
+			},
+		})
+		return
+	}
 	if (!route.meta.overview || activeTab.value > 0) {
 		comp =
 			competitions.value[

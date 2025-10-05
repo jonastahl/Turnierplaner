@@ -52,12 +52,12 @@ watch(
 	route,
 	() => {
 		if (route.name === Routes.ManageCompetition) {
-			router.push({
-				name: competitions.value?.every(
-					(comp) => comp.cProgress == Progress.DONE,
-				)
-					? Routes.ManageExecution
-					: Routes.ManagePrepare,
+			router.replace({
+				name: !competitions.value?.length
+					? Routes.ManageSettings
+					: competitions.value?.every((comp) => comp.cProgress == Progress.DONE)
+						? Routes.ManageExecution
+						: Routes.ManagePrepare,
 			})
 		}
 	},
