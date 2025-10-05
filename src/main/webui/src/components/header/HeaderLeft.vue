@@ -8,7 +8,7 @@
 		</span>
 		<div class="flex flex-column lg:flex-row align-items-center lg:gap-3">
 			<h1 id="colorHeadLine" class="m-0 cursor-pointer title" @click="toHome">
-				{{ config?.title ? t(config.title) : t("title") }}
+				{{ config?.title ? config.title : t("title") }}
 			</h1>
 			<div class="flex flex-column xl:flex-row align-items-center xl:gap-3">
 				<h2
