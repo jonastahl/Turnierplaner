@@ -2,6 +2,7 @@ package de.secretj12.turnierplaner.resources;
 
 import de.secretj12.turnierplaner.enums.AdminRole;
 import de.secretj12.turnierplaner.model.admin.jAdminUser;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -25,10 +26,15 @@ public class UserResource {
     @ConfigProperty(name = "turnierplaner.keycloak.realm")
     String realm;
 
+    @Inject
+    SecurityIdentity securityIdentity;
+
     @GET
     @Path("/list")
     public List<jAdminUser> list() {
-        return keycloak.realm(realm).users().list().stream().map(u -> new jAdminUser(u, getRole(u)))
+        return keycloak.realm(realm).users().list().stream()
+            .filter(u -> !u.getUsername().equals(securityIdentity.getPrincipal().getName()))
+            .map(u -> new jAdminUser(u, getRole(u)))
             .toList();
     }
 
