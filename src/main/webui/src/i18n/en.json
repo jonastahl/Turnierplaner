@@ -311,6 +311,7 @@
 	"settings": {
 		"save_default": "Save as default",
 		"verification": "Verification",
+		"no_other_users": "There are no other users",
 		"no_unverified": "No unverified player",
 		"admin_needed": "Admin verification needed",
 		"admin_needed_summary": "Players need to be verified before being able to sign up to a competition",

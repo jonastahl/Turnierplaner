@@ -9,7 +9,7 @@
 		size="small"
 	>
 		<template #empty>
-			{{ t("settings.no_unverified") }}
+			{{ t("settings.no_other_users") }}
 		</template>
 		<Column field="username" :header="t('general.name')" />
 		<Column field="role" header="Rolle">

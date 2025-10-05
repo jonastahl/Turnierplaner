@@ -310,6 +310,7 @@
 	"settings": {
 		"save_default": "Als Standard speichern",
 		"verification": "Verifikation",
+		"no_other_users": "Es gibt keine anderen User",
 		"no_unverified": "Es gibt aktuell keine unverifizierten Spieler",
 		"admin_needed": "Verifikation durch Admin nötig",
 		"admin_needed_summary": "Spieler müssen von einem Admin verifiziert werden um sich zu einem Spiel anmelden zu können.",
