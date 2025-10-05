@@ -34,7 +34,15 @@
 		</SettingsItem>
 		<SettingsItem v-if="isDirector">
 			<Card>
-				<template #title>{{ t("settings.player") }}</template>
+				<template #title>
+					<div class="flex justify-content-between">
+						<span>{{ t("settings.player") }}</span>
+						<Button
+							:label="t('general.register')"
+							@click="router.push({ name: Routes.PlayerRegistration })"
+						/>
+					</div>
+				</template>
 				<template #content>
 					<SettingsPlayer />
 				</template>
@@ -53,12 +61,20 @@ import { inject, ref } from "vue"
 import SettingsPlayerVerify from "@/components/pages/settings/SettingsPlayerVerify.vue"
 import SettingsUser from "@/components/pages/settings/SettingsUser.vue"
 import SettingsPlayer from "@/components/pages/settings/SettingsPlayer.vue"
+import { router } from "@/main"
+import { Routes } from "@/routes"
+import Button from "primevue/button"
+import { auth } from "@/security/AuthService"
 
 const { t } = useI18n()
 
 const isLoggedIn = inject("loggedIn", ref(false))
 const { data: isAdmin } = getIsAdmin(isLoggedIn)
 const { data: isDirector } = getIsDirector(isLoggedIn)
+
+if (!isLoggedIn.value) {
+	auth.login()
+}
 </script>
 
 <style scoped></style>
