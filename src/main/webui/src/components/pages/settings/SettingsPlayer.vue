@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { findPlayers } from "@/backend/player"
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { useToast } from "primevue/usetoast"
 import { useI18n } from "vue-i18n"
 import { Player } from "@/interfaces/player"
@@ -64,6 +64,10 @@ const toast = useToast()
 
 const filter = ref({
 	name: { value: "", matchMode: "contains" },
+})
+
+watch(filter, () => {
+	page.value = 0
 })
 
 const page = ref(0)
