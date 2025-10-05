@@ -229,5 +229,4 @@ export const PlayerDefault: PlayerRegistrationForm = {
 	birthday: undefined,
 	language: Language.EN,
 	email: "",
-	phone: "",
 }

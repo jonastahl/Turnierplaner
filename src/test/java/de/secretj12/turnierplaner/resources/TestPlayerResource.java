@@ -91,23 +91,23 @@ public class TestPlayerResource {
         for (int i = 0; i < 5; i++) {
             players.persist(
                 new Player("M" + i, "F" + i + "V", Sex.MALE, LocalDate.parse(
-                    "2023-04-02"), "a@example.org", "+12345", true, true, Language.DE));
+                    "2023-04-02"), "a@example.org", true, true, Language.DE));
         }
         for (int i = 5; i < 10; i++) {
             players.persist(new Player("M" + i, "F" + i, Sex.MALE, LocalDate.parse(
-                "2023-04-05"), "a@example.org", "+12345", false, true, Language.EN));
+                "2023-04-05"), "a@example.org", false, true, Language.EN));
         }
         for (int i = 10; i < 20; i++) {
             players.persist(new Player("M" + i, "F" + i + "V", Sex.MALE, LocalDate.parse(
-                "2023-04-05"), "a@example.org", "+12345", true, true, Language.DE));
+                "2023-04-05"), "a@example.org", true, true, Language.DE));
         }
         for (int i = 0; i < 3; i++) {
             players.persist(new Player("F" + i, "M" + i + "V", Sex.FEMALE, LocalDate.parse(
-                "2023-04-02"), "a@example.org", "+12345", true, true, Language.EN));
+                "2023-04-02"), "a@example.org", true, true, Language.EN));
         }
 
         players.persist(new Player("first", "last", Sex.MALE, LocalDate.parse(
-            "2023-04-02"), "a@example.org", "+12345", true, true, Language.DE));
+            "2023-04-02"), "a@example.org", true, true, Language.DE));
 
         mailbox.clear();
     }
@@ -191,8 +191,7 @@ public class TestPlayerResource {
                     "lastName": "last",
                     "sex": "MALE",
                     "birthday": "2022-03-10",
-                    "email": "ab@example.org",
-                    "phone": "+034759834"
+                    "email": "ab@example.org"
                 }""")
             .post("/player/register")
             .then().assertThat()
@@ -212,8 +211,7 @@ public class TestPlayerResource {
                     "sex": "MALE",
                     "birthday": "1977-03-10",
                     "language": "EN",
-                    "email": "%s",
-                    "phone": "%s"
+                    "email": "%s"
                 }""", recipient, tel))
             .post("/player/register")
             .then().assertThat()
@@ -223,7 +221,6 @@ public class TestPlayerResource {
         assertNotNull(players.getByName("firstName", "lastName"));
         assertFalse(players.getByName("firstName", "lastName").isMailVerified());
         // TODO admin verified?
-        assertEquals(tel, players.getByName("firstName", "lastName").getPhone());
 
         assertEquals(1, mailbox.getTotalMessagesSent());
         assertDoesNotThrow(() -> mailbox.getMailMessagesSentTo(recipient).getFirst().getHtml());
@@ -240,7 +237,6 @@ public class TestPlayerResource {
             .statusCode(Response.Status.OK.getStatusCode());
         assertTrue(players.getByName("firstName", "lastName").isMailVerified());
         // TODO admin verified?
-        assertEquals(tel, players.getByName("firstName", "lastName").getPhone());
     }
 
     @Test
@@ -256,8 +252,7 @@ public class TestPlayerResource {
                     "sex": "FEMALE",
                     "birthday": "1977-03-10",
                     "language": "DE",
-                    "email": "%s",
-                    "phone": "%s"
+                    "email": "%s"
                 }""", recipient, tel))
             .post("/player/register")
             .then().assertThat()
@@ -276,8 +271,7 @@ public class TestPlayerResource {
                     "lastName": "lastName",
                     "birthday": "1977-03-10",
                     "language": "EN",
-                    "email": "%s",
-                    "phone": "%s"
+                    "email": "%s"
                 }""", recipient, tel))
             .post("/player/register")
             .then().assertThat()

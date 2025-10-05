@@ -143,8 +143,6 @@ public class PlayerResource {
             throw new BadRequestException("Birthday may not be empty");
         if (form.getEmail() == null)
             throw new BadRequestException("E-Mail may not be empty");
-        if (form.getPhone() == null)
-            throw new BadRequestException("Phone may not be empty");
     }
 
     private void updatePlayer(jUserPlayerRegistrationForm form, Player player) {
@@ -157,7 +155,6 @@ public class PlayerResource {
             case FEMALE -> player.setSex(Sex.FEMALE);
         }
         player.setEmail(form.getEmail());
-        player.setPhone(form.getPhone());
         player.setLanguage(form.getLanguage());
     }
 

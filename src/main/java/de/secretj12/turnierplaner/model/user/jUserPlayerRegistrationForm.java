@@ -13,7 +13,6 @@ public class jUserPlayerRegistrationForm {
     Sex sex;
     LocalDate birthday;
     String email;
-    String phone;
     Language language;
 
     public jUserPlayerRegistrationForm() {
@@ -25,7 +24,6 @@ public class jUserPlayerRegistrationForm {
         this.sex = player.getSex();
         this.birthday = player.getBirthday();
         this.email = player.getEmail();
-        this.phone = player.getPhone();
         this.language = player.getLanguage();
     }
 
@@ -67,14 +65,6 @@ public class jUserPlayerRegistrationForm {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public Language getLanguage() {

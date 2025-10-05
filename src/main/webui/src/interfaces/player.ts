@@ -43,7 +43,6 @@ export interface PlayerRegistrationForm {
 	birthday: Date | undefined
 	language: Language
 	email: string
-	phone: string
 }
 
 export interface PlayerRegistration extends PlayerRegistrationForm {
@@ -63,7 +62,6 @@ export interface PlayerDetailsServer {
 	birthday: Date | string
 	language: Language
 	email: string
-	phone: string
 }
 
 export function playerDetailsServerToClient(

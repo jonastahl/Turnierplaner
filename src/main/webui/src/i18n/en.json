@@ -92,11 +92,6 @@
 			"empty": "Please input email address",
 			"correct": "Please input a valid mail address"
 		},
-		"phone": {
-			"field": "Phone number",
-			"empty": "Please enter your phone number",
-			"correct": "Please enter a valid phone number"
-		},
 		"sign_up": "Sign up",
 		"registration_failed": "Player registration failed",
 		"registration_failed_detail": "Please check your input and if you are already registered.",
@@ -295,7 +290,6 @@
 		"field_too_short": "Field is too short",
 		"field_too_long": "Field is too long",
 		"field_invalid_email": "Field is not a valid email address",
-		"field_invalid_phone": "Field is not a valid phone number",
 		"field_invalid_date": "Field is not a valid date",
 		"field_invalid_number": "Field is not a valid number",
 		"field_invalid_url": "Field is not a valid URL",

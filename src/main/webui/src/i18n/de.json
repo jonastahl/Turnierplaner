@@ -92,11 +92,6 @@
 			"empty": "Bitte geben Sie Ihre Email Adresse an",
 			"correct": "Bitte geben Sie eine korrekte Email Adresse an"
 		},
-		"phone": {
-			"field": "Handynummer",
-			"empty": "Bitte geben sie Ihre Handynummer an",
-			"correct": "Bitte gib eine korrekte Telefonnummer an"
-		},
 		"sign_up": "Registrieren",
 		"registration_failed": "Die Spielerregistrierung ist fehlgeschlagen",
 		"registration_failed_detail": "Bitte überprüfe Ihre Eingaben und ob Sie schon registriert sind",
@@ -294,7 +289,6 @@
 		"field_too_short": "Die Eingabe ist zu kurz",
 		"field_too_long": "Die Eingabe ist zu lang",
 		"field_invalid_email": "Bitte geben Sie eine gültige Email-Adresse an",
-		"field_invalid_phone": "Bitte geben Sie eine gültige Telefonnummer an",
 		"field_invalid_date": "Bitte geben Sie ein gültiges Datum an",
 		"field_invalid_number": "Bitte geben Sie eine gültige Zahl an",
 		"field_invalid_url": "Bitte geben Sie eine gültige URL an",
