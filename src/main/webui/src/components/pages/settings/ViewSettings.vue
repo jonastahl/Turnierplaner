@@ -57,24 +57,30 @@ import SettingsCourts from "@/components/pages/settings/SettingsCourts.vue"
 import SettingsItem from "@/components/pages/settings/SettingsItem.vue"
 import SettingsGeneral from "@/components/pages/settings/SettingsGeneral.vue"
 import { getIsAdmin, getIsDirector } from "@/backend/security"
-import { inject, ref } from "vue"
+import { inject, ref, watch } from "vue"
 import SettingsPlayerVerify from "@/components/pages/settings/SettingsPlayerVerify.vue"
 import SettingsUser from "@/components/pages/settings/SettingsUser.vue"
 import SettingsPlayer from "@/components/pages/settings/SettingsPlayer.vue"
 import { router } from "@/main"
 import { Routes } from "@/routes"
 import Button from "primevue/button"
-import { auth } from "@/security/AuthService"
 
 const { t } = useI18n()
 
 const isLoggedIn = inject("loggedIn", ref(false))
 const { data: isAdmin } = getIsAdmin(isLoggedIn)
-const { data: isDirector } = getIsDirector(isLoggedIn)
-
-if (!isLoggedIn.value) {
-	auth.login()
-}
+const { data: isDirector, isSuccess: directorSuccess } =
+	getIsDirector(isLoggedIn)
+watch(
+	[isLoggedIn, isDirector, directorSuccess],
+	() => {
+		if (!isLoggedIn.value || (isDirector.value && !directorSuccess.value))
+			router.push({
+				name: Routes.Tournaments,
+			})
+	},
+	{ immediate: true },
+)
 </script>
 
 <style scoped></style>

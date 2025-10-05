@@ -1,6 +1,7 @@
 import { settings } from "@/settings"
+import { UserManagerSettings, WebStorageStateStore } from "oidc-client-ts"
 
-function buildSettings() {
+function buildSettings(): UserManagerSettings {
 	return {
 		authority: settings.AUTH_DOMAIN,
 		client_id: "frontend-vue",
@@ -12,11 +13,11 @@ function buildSettings() {
 
 		popup_redirect_uri: settings.FRONTEND + "/callbackSignIn.html",
 		popup_post_logout_redirect_uri: settings.FRONTEND + "/callbackSignOut.html",
-		registration_endpoint:
-			settings.AUTH_DOMAIN + "/clients-registrations/openid-connect",
 
 		automaticSilentRenew: true,
 		filterProtocolClaims: true,
+
+		userStore: new WebStorageStateStore({ store: window.localStorage }),
 	}
 }
 
