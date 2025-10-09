@@ -9,17 +9,20 @@
 			{{ t("DialogUpdateScore.update_score") }}
 		</span>
 		<HorizontalScrollerOverflow>
-			<SetSelector :numberSets="numberSets" v-model:selectedSet="selectedSet" />
+			<SetSelector
+				v-model:selected-set="selectedSet"
+				:number-sets="numberSets"
+			/>
 			<PlayerPointRow
-				class="mt-2"
 				v-model:game-points="teamAGamePoints"
+				class="mt-2"
 				:team="currentMatch?.teamA"
 				:errors="errors"
 				@selected="(i) => (selectedSet = i)"
 			/>
 			<PlayerPointRow
-				class="mt-2"
 				v-model:game-points="teamBGamePoints"
+				class="mt-2"
 				:team="currentMatch?.teamB"
 				:errors="errors"
 				second
@@ -60,8 +63,8 @@
 		<divider />
 		<div class="flex justify-content-end flex-wrap gap-2">
 			<Button
-				:tabindex="13"
 				v-if="isDirector"
+				:tabindex="13"
 				:label="t('general.reset')"
 				severity="danger"
 				@click="resetResult"

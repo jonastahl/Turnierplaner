@@ -20,10 +20,9 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
 	numberSets: number
 }>()
 const selectedSet = defineModel<number>("selectedSet")
 </script>
-<style scoped>
-</style>
+<style scoped></style>
