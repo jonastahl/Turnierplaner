@@ -20,13 +20,12 @@
 					{{ t("ViewCompetition.registration_over") }}
 				</p>
 				<template v-else>
-					<div
-						class="mb-2 w-12 flex flex-row justify-content-between align-items-center"
-					>
-						<span>
+					<div class="grid ml-0 mr-0">
+						<span class="col-6">
 							{{ t("ViewCompetition.warning_register_before_signup") }}
 						</span>
 						<Button
+							class="col-6"
 							:label="t('general.register')"
 							@click="router.push({ name: Routes.PlayerRegistration })"
 						/>
@@ -40,8 +39,6 @@
 				</div>
 			</template>
 		</Card>
-
-		<!-- TODO add options for admin -->
 	</div>
 </template>
 

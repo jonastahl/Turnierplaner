@@ -1,6 +1,6 @@
 <template>
 	<div class="flex justify-content-center w-full">
-		<Card v-if="!isSuccess" id="card">
+		<Card v-if="!isSuccess && false" id="card">
 			<template #title>{{ t("ViewPlayerRegistration.headline") }}</template>
 			<template #content>
 				<FormPlayer
@@ -20,14 +20,14 @@
 				</div>
 			</template>
 		</Card>
-		<div v-else>
-			<h2>
-				{{ t("general.success") }}
-			</h2>
-			<p>
-				{{ t("ViewPlayerRegistration.after") }}
-			</p>
-		</div>
+		<Card v-else id="card">
+			<template #title>{{ t("general.success") }}</template>
+			<template #content>
+				<p>
+					{{ t("ViewPlayerRegistration.after") }}
+				</p>
+			</template>
+		</Card>
 	</div>
 </template>
 
