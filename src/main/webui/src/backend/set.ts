@@ -78,8 +78,6 @@ export function checkSets(
 	numberSets: number,
 	isDirector: boolean,
 ) {
-	if (sets.length != numberSets)
-		console.error("Internal error: wrong number of sets")
 	if (isDirector && sets.every((set) => set.scoreA == 0 && set.scoreB == 0)) {
 		return []
 	}
@@ -87,8 +85,13 @@ export function checkSets(
 	const errors = []
 	let dif = 0
 	let i = 0
+	console.log("Sets: ", sets)
 	for (; i < numberSets; i++) {
 		const set = sets[i]
+		if (!set) {
+			errors.push(i)
+			continue
+		}
 		if (i < numberSets - 1 ? !validSet(set) : !validTiebreak(set))
 			errors.push(i)
 
@@ -97,10 +100,12 @@ export function checkSets(
 
 		if (Math.abs(dif) == Math.ceil(numberSets / 2)) break
 	}
+	console.log("Errors zwischenstand: ", errors)
 	for (i++; i < numberSets; i++) {
 		const set = sets[i]
-		if (set.scoreA != 0 || set.scoreB != 0) errors.push(i)
+		if (!!set && (set.scoreA != 0 || set.scoreB != 0)) errors.push(i)
 	}
+	console.log("Errors am ende: ", errors)
 	return errors
 }
 

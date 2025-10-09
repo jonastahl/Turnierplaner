@@ -15,17 +15,12 @@
 					<Card :pt="{ content: 'p-0' }">
 						<template #content>
 							<div class="flex flex-column gap-3">
-								<div class="w-full overflow-x-auto">
-									<div
-										class="inline-block flex-wrap w-fit"
-										style="min-width: 100%"
-									>
-										<ViewGroupTable
-											:group="group"
-											:number-sets="competition.numberSets"
-										/>
-									</div>
-								</div>
+								<HorizontalScrollerOverflow>
+									<ViewGroupTable
+										:group="group"
+										:number-sets="competition.numberSets"
+									/>
+								</HorizontalScrollerOverflow>
 								<ViewGroupResults :group="group" />
 							</div>
 						</template>
@@ -70,6 +65,7 @@
 import { useRoute } from "vue-router"
 import ViewGroupTable from "@/components/pages/competition/results/group/ViewGroupTable.vue"
 import HorizontalScroller from "@/components/items/HorizontalScroller.vue"
+import HorizontalScrollerOverflow from "@/components/items/HorizontalScrollerOverflow.vue"
 import { getGroup } from "@/backend/group"
 import ViewGroupResults from "@/components/pages/competition/results/group/ViewGroupResults.vue"
 import ViewKnockoutTree from "@/components/pages/competition/results/knockout/ViewKnockoutTree.vue"
