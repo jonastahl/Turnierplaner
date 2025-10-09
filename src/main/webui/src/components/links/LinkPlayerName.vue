@@ -47,4 +47,8 @@ function click() {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+span {
+	white-space: nowrap;
+}
+</style>

@@ -1,5 +1,4 @@
 <template>
-	<!-- TODO add toggle to show as list? -->
 	<div v-if="groupSystem && competition" class="w-full grid max-w-fit">
 		<div
 			class="col-12"
@@ -13,13 +12,17 @@
 					:key="group.index"
 					class="col-12"
 				>
-					<Card class="w-full">
+					<Card :pt="{ content: 'p-0' }">
 						<template #content>
-							<ViewGroupTable
-								:group="group"
-								:number-sets="competition.numberSets"
-							/>
-							<ViewGroupResults :group="group" />
+							<div class="flex flex-column gap-3">
+								<HorizontalScrollerOverflow>
+									<ViewGroupTable
+										:group="group"
+										:number-sets="competition.numberSets"
+									/>
+								</HorizontalScrollerOverflow>
+								<ViewGroupResults :group="group" />
+							</div>
 						</template>
 					</Card>
 				</div>
@@ -56,14 +59,13 @@
 			</Card>
 		</div>
 	</div>
-
-	<!-- TODO show finals -->
 </template>
 
 <script lang="ts" setup>
 import { useRoute } from "vue-router"
 import ViewGroupTable from "@/components/pages/competition/results/group/ViewGroupTable.vue"
 import HorizontalScroller from "@/components/items/HorizontalScroller.vue"
+import HorizontalScrollerOverflow from "@/components/items/HorizontalScrollerOverflow.vue"
 import { getGroup } from "@/backend/group"
 import ViewGroupResults from "@/components/pages/competition/results/group/ViewGroupResults.vue"
 import ViewKnockoutTree from "@/components/pages/competition/results/knockout/ViewKnockoutTree.vue"

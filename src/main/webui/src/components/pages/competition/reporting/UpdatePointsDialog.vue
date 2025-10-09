@@ -1,86 +1,83 @@
 <template>
 	<Dialog
 		v-model:visible="visible"
-		style="width: 70rem"
 		:header="t('DialogUpdateScore.header')"
 		modal
+		class="p-2 max-w-full xl:w-6"
 	>
 		<span class="text-surface-500 dark:text-surface-400 block mb-2">
 			{{ t("DialogUpdateScore.update_score") }}
 		</span>
-		<div class="grid">
-			<div class="col-fixed" style="width: 300px"></div>
-			<div
-				v-for="n in numberSets"
-				:key="n"
-				class="col-fixed flex justify-content-center flex-wrap"
-				style="width: 140px"
-			>
-				<RadioButton
-					v-model="selectedSet"
-					:input-id="n.toString()"
-					name="sets"
-					:value="n - 1"
-				/>
-				<label class="ml-2" :for="n.toString()">Set {{ n }}</label>
-			</div>
-		</div>
-		<PlayerPointRow
-			v-if="visible"
-			v-model:game-points="teamAGamePoints"
-			:team="currentMatch?.teamA"
-			:errors="errors"
-		/>
-		<PlayerPointRow
-			v-if="visible"
-			v-model:game-points="teamBGamePoints"
-			:team="currentMatch?.teamB"
-			:errors="errors"
-		/>
+		<HorizontalScrollerOverflow>
+			<SetSelector
+				v-model:selected-set="selectedSet"
+				:number-sets="numberSets"
+			/>
+			<PlayerPointRow
+				v-model:game-points="teamAGamePoints"
+				class="mt-2"
+				:team="currentMatch?.teamA"
+				:errors="errors"
+				@selected="(i) => (selectedSet = i)"
+			/>
+			<PlayerPointRow
+				v-model:game-points="teamBGamePoints"
+				class="mt-2"
+				:team="currentMatch?.teamB"
+				:errors="errors"
+				second
+				@selected="(i) => (selectedSet = i)"
+			/>
+		</HorizontalScrollerOverflow>
 		<divider />
-		<div class="flex flex-row w-12 justify-content-between mb-2">
-			<template v-for="n in curTill + 1" :key="n">
-				<Button
-					v-if="n - 1 <= curTill - 2"
-					:label="`${curTill}:${n - 1}`"
-					@click="updatePoints(curTill, n - 1)"
-				/>
-				<Button
-					v-else-if="curTill <= 6"
-					:label="`${curTill + 1}:${n - 1}`"
-					@click="updatePoints(curTill + 1, n - 1)"
-				/>
-			</template>
-		</div>
-		<div class="flex flex-row w-12 justify-content-between">
-			<template v-for="n in curTill + 1" :key="n">
-				<Button
-					v-if="n - 1 <= curTill - 2"
-					:label="`${n - 1}:${curTill}`"
-					@click="updatePoints(n - 1, curTill)"
-				/>
-				<Button
-					v-else-if="curTill <= 6"
-					:label="`${n - 1}:${curTill + 1}`"
-					@click="updatePoints(n - 1, curTill + 1)"
-				/>
-			</template>
-		</div>
+		<HorizontalScrollerOverflow>
+			<div class="flex flex-row w-12 justify-content-between gap-2 mb-2">
+				<template v-for="n in curTill + 1" :key="n">
+					<Button
+						v-if="n - 1 <= curTill - 2"
+						:label="`${curTill}:${n - 1}`"
+						@click="updatePoints(curTill, n - 1)"
+					/>
+					<Button
+						v-else-if="curTill <= 6"
+						:label="`${curTill + 1}:${n - 1}`"
+						@click="updatePoints(curTill + 1, n - 1)"
+					/>
+				</template>
+			</div>
+			<div class="flex flex-row w-12 justify-content-between gap-2">
+				<template v-for="n in curTill + 1" :key="n">
+					<Button
+						v-if="n - 1 <= curTill - 2"
+						:label="`${n - 1}:${curTill}`"
+						@click="updatePoints(n - 1, curTill)"
+					/>
+					<Button
+						v-else-if="curTill <= 6"
+						:label="`${n - 1}:${curTill + 1}`"
+						@click="updatePoints(n - 1, curTill + 1)"
+					/>
+				</template>
+			</div>
+		</HorizontalScrollerOverflow>
 		<divider />
 		<div class="flex justify-content-end flex-wrap gap-2">
 			<Button
 				v-if="isDirector"
+				:tabindex="13"
 				:label="t('general.reset')"
 				severity="danger"
 				@click="resetResult"
 			/>
 			<Button
+				:tabindex="12"
 				:label="t('general.cancel')"
 				severity="secondary"
 				type="button"
 				@click="cancel"
 			></Button>
 			<Button
+				:tabindex="11"
 				:label="t('general.save')"
 				type="button"
 				@click="savePoints"
@@ -98,6 +95,8 @@ import { checkSets, useUpdateSetCustom } from "@/backend/set"
 import { useRoute } from "vue-router"
 import { useToast } from "primevue/usetoast"
 import { getIsDirector } from "@/backend/security"
+import SetSelector from "@/components/pages/competition/reporting/SetSelector.vue"
+import HorizontalScrollerOverflow from "@/components/items/HorizontalScrollerOverflow.vue"
 
 const { t } = useI18n()
 const toast = useToast()
@@ -150,6 +149,10 @@ function cancel() {
 	visible.value = false
 }
 
+function areSetsValid(till: number) {
+	return checkSets(getAllSets(till), numberSets.value, false).length === 0
+}
+
 function savePoints() {
 	if (!currentMatch.value || !currentMatch.value.id) {
 		return
@@ -185,9 +188,9 @@ const resetResult = function () {
 	visible.value = false
 }
 
-function getAllSets() {
+function getAllSets(till: number = numberSets.value) {
 	let sets = []
-	for (let i = 0; i < numberSets.value; i++) {
+	for (let i = 0; i < till; i++) {
 		sets.push({
 			scoreA: teamAGamePoints.value[i],
 			scoreB: teamBGamePoints.value[i],
@@ -199,7 +202,15 @@ function getAllSets() {
 function updatePoints(point1: number, point2: number) {
 	teamAGamePoints.value[selectedSet.value] = point1
 	teamBGamePoints.value[selectedSet.value] = point2
-	if (selectedSet.value < numberSets.value - 1) selectedSet.value++
+
+	if (areSetsValid(selectedSet.value + 1)) {
+		for (let i = selectedSet.value + 1; i < numberSets.value; i++) {
+			teamAGamePoints.value[i] = 0
+			teamBGamePoints.value[i] = 0
+		}
+	} else {
+		if (selectedSet.value < numberSets.value - 1) selectedSet.value++
+	}
 }
 
 defineExpose({

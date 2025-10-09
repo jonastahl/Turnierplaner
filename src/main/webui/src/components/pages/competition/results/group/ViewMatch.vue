@@ -1,5 +1,5 @@
 <template>
-	<p v-if="!props.match.finished">
+	<p v-if="!props.match.finished" style="white-space: nowrap">
 		{{ $t("ViewGroupSystem.start") }}<br />
 		<template v-if="props.match.begin">
 			{{ props.match.begin.toLocaleString(t("lang"), dateOptions) }}

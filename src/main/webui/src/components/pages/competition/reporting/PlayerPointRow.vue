@@ -1,36 +1,31 @@
 <template>
-	<div class="grid">
-		<div class="col-fixed" style="width: 300px">
-			<div class="text-center p-3 border-round-sm bg-primary font-bold">
-				<template v-if="props.team?.playerA">
-					{{ props.team?.playerA?.name }}
-					{{ props.team?.playerB?.name }}
-				</template>
-				<template v-else> ??? </template>
-			</div>
-		</div>
+	<div class="flex flex-row gap-3 w-full">
 		<div
-			v-if="gamePoints"
-			class="col flex flex-row flex-wrap gap-2"
-			style="width: 100%"
+			class="w-6 border-round-sm bg-primary font-bold flex flex-row align-items-center justify-content-center"
 		>
+			<LinkTeamNames :team="props.team" inverted short />
+		</div>
+		<div v-if="gamePoints" class="w-6 flex flex-row gap-2">
 			<InputNumber
 				v-for="(p, i) in gamePoints"
 				:key="p"
 				v-model="gamePoints[i]"
+				fluid
 				:max="100"
 				:min="0"
 				:invalid="props.errors.includes(i)"
 				:pt="{
 					input: {
-						root: { style: 'width: 120px; height: 50px', class: 'text-center' },
+						root: {
+							class: 'w-full text-center',
+							tabindex: 2 * i + (props.second ? 1 : 0) + 1,
+						},
 					},
 				}"
-				class="p-inputnumber-input"
-				input-style-class="p-inputnumber"
 				input-id="minmax-buttons"
 				mode="decimal"
-				style-class="p-inputnumber"
+				style="min-width: 3rem"
+				@focusin="emit('selected', i)"
 			/>
 		</div>
 	</div>
@@ -38,11 +33,17 @@
 
 <script setup lang="ts">
 import { Team } from "@/interfaces/team"
+import LinkTeamNames from "@/components/links/LinkTeamNames.vue"
 
 const gamePoints = defineModel("gamePoints", { type: Array<number> })
 const props = defineProps<{
 	team: Team | undefined | null
 	errors: number[]
+	second?: boolean
+}>()
+
+const emit = defineEmits<{
+	selected: [number]
 }>()
 </script>
 

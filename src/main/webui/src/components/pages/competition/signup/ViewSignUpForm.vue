@@ -32,11 +32,32 @@
 		</template>
 		<!-- DOUBLE INDIVIDUAL DIFFERENT -->
 		<template v-else>
-			<div id="regDoubIndDif">
-				<ViewConditions id="regDoubIndDifCondA" />
-				<SignUpDropDown id="regDoubIndDifRegA" />
-				<ViewConditions id="regDoubIndDifCondB" :second="true" />
-				<SignUpDropDown id="regDoubIndDifRegB" :is-player-b="true" />
+			<template v-if="windowWidth < 768">
+				<TabView :pt="{ panelContainer: 'p-0 pt-3' }">
+					<TabPanel :header="t('ViewCompetition.playerA')">
+						<div class="flex flex-column gap-2">
+							<ViewConditions />
+							<SignUpDropDown />
+						</div>
+					</TabPanel>
+					<TabPanel :header="t('ViewCompetition.playerB')">
+						<div class="flex flex-column gap-2">
+							<ViewConditions second />
+							<SignUpDropDown is-player-b />
+						</div>
+					</TabPanel>
+				</TabView>
+				<divider />
+			</template>
+			<div v-else class="grid">
+				<div class="col-6 flex flex-column gap-2">
+					<ViewConditions />
+					<SignUpDropDown />
+				</div>
+				<div class="col-6 flex flex-column gap-2">
+					<ViewConditions :second="true" />
+					<SignUpDropDown :is-player-b="true" />
+				</div>
 			</div>
 		</template>
 	</template>
@@ -51,67 +72,19 @@ import { useToast } from "primevue/usetoast"
 import { getCompetitionDetails } from "@/backend/competition"
 import SignUpDropDown from "@/components/pages/competition/signup/SignUpDropdown.vue"
 import SignUpDoubleDropdown from "@/components/pages/competition/signup/SignUpDoubleDropdown.vue"
+import { ref } from "vue"
 
 const { t } = useI18n()
 const toast = useToast()
 
 const route = useRoute()
 
+let windowWidth = ref(window.innerWidth)
+window.addEventListener("resize", () => {
+	windowWidth.value = window.innerWidth
+})
+
 const { data: competition } = getCompetitionDetails(route, t, toast)
 </script>
 
-<style scoped>
-#regDoubIndDif {
-	display: grid;
-	grid-template-columns: 1fr 1rem 1fr;
-	grid-template-rows: auto 0.5rem auto;
-}
-
-#regDoubIndDifCondA {
-	grid-column: 1;
-	grid-row: 1;
-}
-
-#regDoubIndDifRegA {
-	grid-column: 1;
-	grid-row: 3;
-}
-
-#regDoubIndDifCondB {
-	grid-column: 3;
-	grid-row: 1;
-}
-
-#regDoubIndDifRegB {
-	grid-column: 3;
-	grid-row: 3;
-}
-
-@media only screen and (max-width: 750px) {
-	#regDoubIndDif {
-		grid-template-columns: 1fr;
-		grid-template-rows: auto auto auto auto;
-	}
-
-	#regDoubIndDifCondA {
-		grid-column: 1;
-		grid-row: 1;
-	}
-
-	#regDoubIndDifRegA {
-		grid-column: 1;
-		grid-row: 2;
-		margin-bottom: 10px;
-	}
-
-	#regDoubIndDifCondB {
-		grid-column: 1;
-		grid-row: 3;
-	}
-
-	#regDoubIndDifRegB {
-		grid-column: 1;
-		grid-row: 4;
-	}
-}
-</style>
+<style scoped></style>
