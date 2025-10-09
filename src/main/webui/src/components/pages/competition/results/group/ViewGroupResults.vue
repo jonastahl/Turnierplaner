@@ -1,5 +1,5 @@
 <template>
-	<DataTable :value="props.group.results" size="small">
+	<DataTable :value="props.group.results" size="small" :pt="{ table: 'mb-0' }">
 		<Column field="rank" :header="'R'" />
 		<Column field="team" :header="'Team'">
 			<template #body="{ data }">

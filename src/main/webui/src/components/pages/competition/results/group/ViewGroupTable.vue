@@ -1,6 +1,5 @@
 <template>
-	<!-- TODO mobile optimization -->
-	<table style="width: calc(100% - 1px)">
+	<table class="m-0" style="min-width: 100%">
 		<tbody>
 			<tr>
 				<th id="first">
@@ -149,10 +148,10 @@ table {
 
 th,
 td {
-	width: 1fr;
 	height: 80px;
 	border-bottom: solid black 1px;
 	border-right: solid black 1px;
+	padding: 0 0.5rem 0 0.5rem;
 }
 
 th {

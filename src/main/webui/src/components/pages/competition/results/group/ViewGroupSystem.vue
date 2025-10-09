@@ -1,5 +1,4 @@
 <template>
-	<!-- TODO add toggle to show as list? -->
 	<div v-if="groupSystem && competition" class="w-full grid max-w-fit">
 		<div
 			class="col-12"
@@ -13,13 +12,22 @@
 					:key="group.index"
 					class="col-12"
 				>
-					<Card class="w-full">
+					<Card :pt="{ content: 'p-0' }">
 						<template #content>
-							<ViewGroupTable
-								:group="group"
-								:number-sets="competition.numberSets"
-							/>
-							<ViewGroupResults :group="group" />
+							<div class="flex flex-column gap-3">
+								<div class="w-full overflow-x-auto">
+									<div
+										class="inline-block flex-wrap w-fit"
+										style="min-width: 100%"
+									>
+										<ViewGroupTable
+											:group="group"
+											:number-sets="competition.numberSets"
+										/>
+									</div>
+								</div>
+								<ViewGroupResults :group="group" />
+							</div>
 						</template>
 					</Card>
 				</div>
@@ -56,8 +64,6 @@
 			</Card>
 		</div>
 	</div>
-
-	<!-- TODO show finals -->
 </template>
 
 <script lang="ts" setup>
