@@ -1,6 +1,6 @@
 <template>
 	<div class="flex justify-content-center w-full">
-		<Card v-if="!isSuccess && false" id="card">
+		<Card v-if="!isSuccess" id="card">
 			<template #title>{{ t("ViewPlayerRegistration.headline") }}</template>
 			<template #content>
 				<FormPlayer
