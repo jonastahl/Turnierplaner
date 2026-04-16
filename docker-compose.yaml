@@ -55,7 +55,7 @@ services:
       - keycloak_network
 
   turnierplaner_db:
-    image: postgres:latest
+    image: postgres:16
     container_name: turnierplaner-db
     environment:
       POSTGRES_USER: turnierplaner
@@ -120,7 +120,7 @@ services:
       - keycloak_network
 
   keycloak_db:
-    image: postgres:latest
+    image: postgres:16
     container_name: keycloak-db
     restart: always
     volumes:
