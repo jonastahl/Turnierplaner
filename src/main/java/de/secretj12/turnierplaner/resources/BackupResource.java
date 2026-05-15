@@ -2,34 +2,24 @@ package de.secretj12.turnierplaner.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import de.secretj12.turnierplaner.db.entities.*;
-import de.secretj12.turnierplaner.db.entities.competition.Competition;
-import de.secretj12.turnierplaner.db.entities.competition.Team;
-import de.secretj12.turnierplaner.db.entities.groups.FinalOfGroup;
-import de.secretj12.turnierplaner.db.entities.groups.Group;
-import de.secretj12.turnierplaner.db.entities.groups.MatchOfGroup;
-import de.secretj12.turnierplaner.db.entities.knockout.NextMatch;
 import de.secretj12.turnierplaner.db.repositories.*;
 import io.quarkus.hibernate.orm.panache.Panache;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 @Path("/backup")
-//@RolesAllowed("director")
+@RolesAllowed("admin")
 public class BackupResource {
 
     @Inject
@@ -106,6 +96,12 @@ public class BackupResource {
         zos.finish();
 
         String filename = "turnierplaner_" + LocalDate.now() + ".turnier";
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return Response.ok(baos.toByteArray())
                        .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
                        .build();

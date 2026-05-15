@@ -335,7 +335,12 @@
 		"player": "Spielerverwaltung",
 		"player_updated": "Spieler aktualisiert",
 		"player_update_headline": "Spieler aktualisieren",
-		"language": "Sprache"
+		"language": "Sprache",
+		"backup": "Backup",
+		"backup_download_warning": "Das Herunterladen eines Backups kann einige Minuten dauern.",
+		"backup_restore_warning": "Die Wiederherstellung eines Backups löscht alle aktuellen Daten. Erstelle vorsichtshalber ein Backup vor Du fortfährst!",
+		"download_backup": "Backup herunterladen",
+		"restore_backup": "Backup wiederherstellen"
 	},
 	"language": {
 		"en": "Englisch",

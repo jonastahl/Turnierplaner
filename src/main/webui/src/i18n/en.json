@@ -335,7 +335,12 @@
 		"player": "Player management",
 		"player_updated": "Player updated",
 		"player_update_headline": "Update player",
-		"language": "Language"
+		"language": "Language",
+		"backup": "Backup",
+		"backup_download_warning": "Downloading a backup may time some minutes. Please be patient.",
+		"backup_restore_warning": "Restoring a backup deletes all existing data. Please make sure you have a backup before restoring.",
+		"download_backup": "Download backup",
+		"restore_backup": "Restore backup"
 	},
 	"language": {
 		"en": "English",
