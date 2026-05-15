@@ -76,9 +76,12 @@ public class TestBackup {
         assertEquals(0, matchRepository.count(), "Matches should be deleted (cascade)");
         assertEquals(0, teamRepository.count(), "Teams should be deleted (cascade)");
 
+        // Generate different data
+        generateTestData();
+
         // 5. Upload the data
         given()
-            .contentType(ContentType.JSON)
+            .contentType(ContentType.BINARY)
             .body(backupData)
             .when()
             .post("/backup/upload")
@@ -108,7 +111,7 @@ public class TestBackup {
         tournamentRepository.findAll().stream().forEach(t -> tournamentRepository.delete(t));
         playerRepository.deleteAll();
         courtRepository.deleteAll();
-        
+
         Panache.getEntityManager().flush();
         Panache.getEntityManager().clear();
     }

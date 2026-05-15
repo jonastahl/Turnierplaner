@@ -1,5 +1,9 @@
 package de.secretj12.turnierplaner.db.entities.competition;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.secretj12.turnierplaner.db.entities.Match;
 import de.secretj12.turnierplaner.enums.*;
 import de.secretj12.turnierplaner.db.entities.Tournament;
@@ -16,7 +20,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-// TODO add attributes to set something like a plan published bit -> implement everywhere
 @Entity
 @Table(name = "competitions")
 @NamedQueries({
@@ -37,6 +40,7 @@ public class Competition {
     @Fetch(FetchMode.SELECT)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tournament_id", nullable = false)
+    @JsonIgnore
     private Tournament tournament;
 
     @Column(name = "description")
@@ -79,24 +83,31 @@ public class Competition {
     private CreationProgress cProgress;
 
     @Column(name = "totalRounds")
-    private int total;
+    private int totalRounds;
 
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "finale_id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Match finale;
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "thirdPlace_id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Match thirdPlace;
 
     @OneToMany(mappedBy = "competition", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<Team> teams;
 
     @OneToMany(mappedBy = "competition", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<Match> matches;
 
     @OneToMany(mappedBy = "competition", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<Group> groups;
 
     public UUID getId() {
@@ -291,12 +302,12 @@ public class Competition {
         this.finale = finale;
     }
 
-    public int getTotal() {
-        return total;
+    public int getTotalRounds() {
+        return totalRounds;
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setTotalRounds(int total) {
+        this.totalRounds = total;
     }
 
     public NumberSets getNumberSets() {

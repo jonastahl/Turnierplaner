@@ -114,7 +114,7 @@ public class GroupTools {
 
     private void createKnockoutTree(Competition competition, List<Group> groups, Match thirdP) {
         if (groups.size() == 1) {
-            competition.setTotal(0);
+            competition.setTotalRounds(0);
             competitions.persist(competition);
             if (thirdP != null)
                 matchRepository.delete(thirdP);
@@ -137,7 +137,7 @@ public class GroupTools {
             fog.setNextMatch(thirdP);
             finalOfGroupRepository.persist(fog);
 
-            competition.setTotal(1);
+            competition.setTotalRounds(1);
             competition.setThirdPlace(thirdP);
             competitions.persist(competition);
         } else if (groups.size() > 2) { // knockout tree needed
@@ -197,7 +197,7 @@ public class GroupTools {
                 }
                 matches = newMatches;
             } while (matches.size() > 1);
-            competition.setTotal(counter + 1);
+            competition.setTotalRounds(counter + 1);
             competitions.persist(competition);
         } else {
             throw new BadRequestException("Invalid group size");

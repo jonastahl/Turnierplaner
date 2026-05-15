@@ -521,7 +521,7 @@ public class TestdataGenerator {
                 competition.setNumberSets(NumberSets.FIVE);
             } else
                 competition.setNumberSets(NumberSets.THREE);
-            competition.setTotal(Integer.numberOfTrailingZeros(compSetting.getTeamNumbers()));
+            competition.setTotalRounds(Integer.numberOfTrailingZeros(compSetting.getTeamNumbers()));
             competitions.persist(competition);
             switch (tDate) {
                 case BEFORE_REGISTRATION -> {

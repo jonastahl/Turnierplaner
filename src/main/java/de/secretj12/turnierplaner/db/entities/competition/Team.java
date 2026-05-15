@@ -1,5 +1,9 @@
 package de.secretj12.turnierplaner.db.entities.competition;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.secretj12.turnierplaner.db.entities.Player;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
@@ -27,13 +31,19 @@ public class Team extends PanacheEntityBase {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Competition competition;
 
     @ManyToOne
     @JoinColumn(name = "player_a", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Player playerA;
     @ManyToOne
     @JoinColumn(name = "player_b", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Player playerB;
 
     public UUID getId() {
@@ -85,6 +95,7 @@ public class Team extends PanacheEntityBase {
         return find("id", id).firstResult();
     }
 
+    @JsonIgnore
     public String getFullName() {
         return playerA.getFullName() + (playerB != null ? "\n" + playerB.getFullName() : "");
     }
