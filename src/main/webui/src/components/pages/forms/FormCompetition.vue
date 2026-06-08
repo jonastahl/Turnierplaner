@@ -58,9 +58,9 @@
 						<span
 							v-if="slotProps.value === 'GROUPS'"
 							class="material-symbols-outlined mr-2"
-							>groups</span
+							>grid_view</span
 						>
-						<span v-else class="material-symbols-outlined mr-2">grid_view</span>
+						<span v-else class="material-symbols-outlined mr-2">groups</span>
 						<div v-if="slotProps.value === 'GROUPS'" class="mt-1">
 							{{ t("CompetitionSettings.groups") }}
 						</div>
@@ -77,9 +77,9 @@
 						<span
 							v-if="slotProps.option.value === 'GROUPS'"
 							class="material-symbols-outlined mr-2"
-							>groups</span
+							>grid_view</span
 						>
-						<span v-else class="material-symbols-outlined mr-2">grid_view</span>
+						<span v-else class="material-symbols-outlined mr-2">groups</span>
 						<div class="mt-1">{{ slotProps.option.name }}</div>
 					</div>
 				</template>
