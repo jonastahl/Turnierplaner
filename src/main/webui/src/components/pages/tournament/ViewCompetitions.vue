@@ -70,8 +70,8 @@
 				<Button
 					v-if="openRegistration"
 					class="button"
-					:label="t('general.register') + ' >>'"
-					@click="router.push({ name: Routes.PlayerRegistration })"
+					:label="t('general.create_player') + ' >>'"
+					@click="router.push({ name: Routes.CreatePlayer })"
 				/>
 				<Button
 					class="button"

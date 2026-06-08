@@ -14,7 +14,7 @@ export enum Routes {
 	ScheduleMatches = "scheduleMatches",
 	ManageExecution = "manageExecution",
 	ManageExecutionPlans = "manageExecutionPlans",
-	PlayerRegistration = "playerRegistration",
+	CreatePlayer = "createPlayer",
 	UpdatePlayer = "updatePlayer",
 	PlayerVerified = "playerVerified",
 	PlayerOverview = "playerOverview",
@@ -164,9 +164,8 @@ export default [
 	},
 	{
 		path: "/player/registration",
-		name: Routes.PlayerRegistration,
-		component: () =>
-			import("@/components/pages/player/ViewPlayerRegistration.vue"),
+		name: Routes.CreatePlayer,
+		component: () => import("@/components/pages/player/ViewCreatePlayer.vue"),
 	},
 	{
 		path: "/player/update/:playerId",

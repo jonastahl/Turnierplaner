@@ -26,8 +26,8 @@
 						</span>
 						<Button
 							class="col-6"
-							:label="t('general.register')"
-							@click="router.push({ name: Routes.PlayerRegistration })"
+							:label="t('general.create_player')"
+							@click="router.push({ name: Routes.CreatePlayer })"
 						/>
 					</div>
 					<divider />

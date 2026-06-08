@@ -21,8 +21,8 @@ export function useRegisterPlayer(
 		onSuccess() {
 			toast.add({
 				severity: "success",
-				summary: t("ViewPlayerRegistration.registration_successful"),
-				detail: t("ViewPlayerRegistration.after"),
+				summary: t("ViewCreatePlayer.registration_successful"),
+				detail: t("ViewCreatePlayer.after"),
 				life: 3000,
 			})
 		},
@@ -30,8 +30,8 @@ export function useRegisterPlayer(
 			console.log(error)
 			toast.add({
 				severity: "error",
-				summary: t("ViewPlayerRegistration.registration_failed"),
-				detail: t("ViewPlayerRegistration.registration_failed_detail"),
+				summary: t("ViewCreatePlayer.registration_failed"),
+				detail: t("ViewCreatePlayer.registration_failed_detail"),
 				life: 3000,
 			})
 		},

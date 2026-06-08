@@ -13,7 +13,7 @@
 		"description": "Description",
 		"name_missing": "Please input a name",
 		"signUp": "Sign up",
-		"register": "Register",
+		"create_player": "Spieler erstellen",
 		"success": "Success",
 		"failure": "Failure",
 		"loading": "Loading...",
