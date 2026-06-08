@@ -38,8 +38,8 @@
 					<div class="flex justify-content-between">
 						<span>{{ t("settings.player") }}</span>
 						<Button
-							:label="t('general.register')"
-							@click="router.push({ name: Routes.PlayerRegistration })"
+							:label="t('general.create_player')"
+							@click="router.push({ name: Routes.CreatePlayer })"
 						/>
 					</div>
 				</template>

@@ -7,10 +7,10 @@
 			{{ t("general.failure") }}
 		</h2>
 		<p v-if="isSuccess">
-			{{ t("ViewPlayerRegistration.verification_success") }}
+			{{ t("ViewCreatePlayer.verification_success") }}
 		</p>
 		<p v-else-if="isError">
-			{{ t("ViewPlayerRegistration.verification_failed") }}
+			{{ t("ViewCreatePlayer.verification_failed") }}
 		</p>
 	</div>
 </template>
@@ -29,8 +29,8 @@ let verificationCode = new URL(location.href).searchParams.get("code")
 if (!verificationCode) {
 	toast.add({
 		severity: "error",
-		summary: t("ViewPlayerRegistration.registration_failed"),
-		detail: t("ViewPlayerRegistration.registration_failed_detail"),
+		summary: t("ViewCreatePlayer.registration_failed"),
+		detail: t("ViewCreatePlayer.registration_failed_detail"),
 		life: 3000,
 	})
 } else {
