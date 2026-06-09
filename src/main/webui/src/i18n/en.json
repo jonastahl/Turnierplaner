@@ -98,7 +98,8 @@
 		"registration_failed": "Player registration failed",
 		"registration_failed_detail": "Please check your input and if you are already registered.",
 		"registration_successful": "Player registered successfully",
-		"not_found": "Can't find yourself? Maybe you forgot to register yourself."
+		"not_found": "Can't find yourself? Maybe you forgot to register yourself.",
+		"disclaimer": "By creating a player, you agree to the Privacy Policy. Additionally, you agree that your name will be visible to other visitors. Your date of birth and email address will never be displayed publicly."
 	},
 	"TournamentSettings": {
 		"visible": "Visible",

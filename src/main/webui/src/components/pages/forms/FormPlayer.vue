@@ -123,6 +123,9 @@
 			<InlineMessage v-if="errors.email" class="mt-2"
 				>{{ t(errors.email || "") }}
 			</InlineMessage>
+			<p>
+				{{ t("ViewPlayerRegistration.disclaimer") }}
+			</p>
 		</div>
 	</div>
 </template>

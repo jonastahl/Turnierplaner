@@ -98,7 +98,8 @@
 		"registration_failed": "Die Spielerregistrierung ist fehlgeschlagen",
 		"registration_failed_detail": "Bitte überprüfe Ihre Eingaben und ob Sie schon registriert sind",
 		"registration_successful": "Die Registrierung war erfolgreich",
-		"not_found": "Bevor du dich anmelden kannst musst du dich einmalig registrieren"
+		"not_found": "Bevor du dich anmelden kannst musst du dich einmalig registrieren",
+		"disclaimer": "Mit der Erstellung des Spielers stimmst du der Datenschutzerklärung zu. Außerdem stimmst du zu, dass dein Name für andere Besucher sichtbar ist. Dein Geburtstag und deine E-Mail-Adresse werden niemals öffentlich angezeigt."
 	},
 	"TournamentSettings": {
 		"visible": "Sichtbar",
