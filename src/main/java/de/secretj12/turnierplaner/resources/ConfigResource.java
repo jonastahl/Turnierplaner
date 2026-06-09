@@ -32,6 +32,10 @@ public class ConfigResource {
 
     @ConfigProperty(name = "turnierplaner.frontend.oidc")
     String frontendOidc;
+    @ConfigProperty(name = "turnierplaner.frontend.legal_notice")
+    String legalNotice;
+    @ConfigProperty(name = "turnierplaner.frontend.privacy_policy")
+    String privacyPolicy;
 
     @GET
     @Path("/load")
@@ -40,7 +44,7 @@ public class ConfigResource {
         Config config = null;
         if (jwt.getSubject() != null)
             config = configRepository.findByUUID(UUID.fromString(jwt.getSubject()));
-        return new jUserConfig(defaultConfigRepository.findById(0L), config, frontendOidc);
+        return new jUserConfig(defaultConfigRepository.findById(0L), config, frontendOidc, legalNotice, privacyPolicy);
     }
 
     @POST

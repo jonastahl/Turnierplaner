@@ -182,9 +182,4 @@ export default [
 		name: Routes.PlayerOverview,
 		component: () => import("@/components/pages/player/ViewPlayerOverview.vue"),
 	},
-	{
-		path: "/impressum",
-		name: Routes.Impressum,
-		component: () => import("@/components/footer/ViewImpressum.vue"),
-	},
 ]

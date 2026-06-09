@@ -8,15 +8,14 @@ public class jUserConfig {
     private String language;
     private boolean adminVerificationNeeded;
     private String auth_url;
+    private String legalNotice;
+    private String privacyPolicy;
 
     public jUserConfig() {
     }
 
-    public jUserConfig(DefaultConfig config) {
-        this(config, null, "");
-    }
-
-    public jUserConfig(DefaultConfig defConfig, Config config, String auth_config) {
+    public jUserConfig(DefaultConfig defConfig, Config config, String auth_config, String legalNotice,
+                       String privacyPolicy) {
         this.title = defConfig.getTitle() != null ? defConfig.getTitle() : "title";
         if (config == null)
             this.language = defConfig.getLanguage();
@@ -24,6 +23,8 @@ public class jUserConfig {
             this.language = config.getLanguage();
         this.adminVerificationNeeded = defConfig.isAdminVerificationNeeded();
         this.auth_url = auth_config;
+        this.legalNotice = legalNotice;
+        this.privacyPolicy = privacyPolicy;
     }
 
     public String getTitle() {
@@ -56,5 +57,21 @@ public class jUserConfig {
 
     public void setAuth_url(String auth_url) {
         this.auth_url = auth_url;
+    }
+
+    public String getLegalNotice() {
+        return legalNotice;
+    }
+
+    public void setLegalNotice(String legalNotice) {
+        this.legalNotice = legalNotice;
+    }
+
+    public String getPrivacyPolicy() {
+        return privacyPolicy;
+    }
+
+    public void setPrivacyPolicy(String privacyPolicy) {
+        this.privacyPolicy = privacyPolicy;
     }
 }

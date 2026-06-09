@@ -11,6 +11,8 @@ services:
       TURNIERPLANER_REGISTRATION_EXPIRE: 30
       TURNIERPLANER_ADMIN_VERIFICATION_NEEDED: true
       TURNIERPLANER_FRONTEND_URL: https://localhost:8080
+      TURNIERPLANER_LEGAL_NOTICE: /
+      TURNIERPLANER_PRIVACY_POLICY: /
 
       TURNIERPLANER_REALM: Quarkus # used by user query for admin
       TURNIERPLANER_OIDC_FRONTEND: http://localhost:7777/realms/Quarkus # address used by frontend
@@ -55,7 +57,7 @@ services:
       - keycloak_network
 
   turnierplaner_db:
-    image: postgres:16
+    image: postgres:17
     container_name: turnierplaner-db
     environment:
       POSTGRES_USER: turnierplaner
@@ -120,7 +122,7 @@ services:
       - keycloak_network
 
   keycloak_db:
-    image: postgres:16
+    image: postgres:17
     container_name: keycloak-db
     restart: always
     volumes:

@@ -331,5 +331,9 @@
 	"language": {
 		"en": "Englisch",
 		"de": "Deutsch"
+	},
+	"footer": {
+		"legal_notice": "Impressum",
+		"privacy_policy": "Datenschutzerklärung"
 	}
 }

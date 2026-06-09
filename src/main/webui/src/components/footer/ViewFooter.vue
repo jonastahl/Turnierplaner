@@ -1,9 +1,6 @@
 <template>
 	<div id="footer" class="bg-primary-900 p-6 flex justify-content-between mt-4">
 		<div class="flex items-center sm:flex-row flex-column gap-2">
-			<u class="text-white transition-colors cursor-pointer" @click="selected"
-				>Impressum</u
-			>
 			<div class="flex gap-2">
 				<a
 					href="https://github.com/jonastahl/Turnierplaner"
@@ -22,21 +19,37 @@
 					<i class="pi pi-github text-xl"></i>
 				</a>
 			</div>
+			<a
+				class="text-white underline transition-colors cursor-pointer"
+				:href="config?.legalNotice"
+				target="_blank"
+				rel="noopener"
+			>
+				{{ t("footer.legal_notice") }}
+			</a>
+			<a
+				class="text-white underline transition-colors cursor-pointer"
+				:href="config?.privacyPolicy"
+				target="_blank"
+				rel="noopener"
+			>
+				{{ t("footer.privacy_policy") }}
+			</a>
 		</div>
 		<span>Turnierplaner v{{ version }}</span>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { router } from "@/main"
 import { version } from "../../../package.json"
-import { Routes } from "@/routes"
+import { useI18n } from "vue-i18n"
+import { getConfig } from "@/backend/config"
+import { inject, ref } from "vue"
 
-function selected() {
-	router.push({
-		name: Routes.Impressum,
-	})
-}
+const { t } = useI18n()
+
+const isLoggedIn = inject("loggedIn", ref(false))
+const { data: config } = getConfig(isLoggedIn)
 </script>
 
 <style scoped>

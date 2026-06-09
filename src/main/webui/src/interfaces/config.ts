@@ -3,4 +3,6 @@ export interface Config {
 	language: string
 	adminVerificationNeeded: boolean
 	auth_url: string
+	legalNotice: string
+	privacyPolicy: string
 }

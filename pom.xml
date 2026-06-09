@@ -7,7 +7,7 @@
 
     <groupId>de.secretj12.turnierplaner</groupId>
     <artifactId>main</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.0</version>
 
     <properties>
         <java.version>25</java.version>
