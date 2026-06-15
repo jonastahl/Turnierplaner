@@ -153,8 +153,8 @@ const props = withDefaults(
 const { defineField, errors, handleSubmit } = useForm<PlayerRegistration>({
 	validationSchema: toTypedSchema(
 		object({
-			firstName: string().min(4).max(40).required(),
-			lastName: string().min(4).max(40).required(),
+			firstName: string().min(2).max(40).required(),
+			lastName: string().min(2).max(40).required(),
 			sex: mixed().oneOf(Object.values(Sex)).required(),
 			birthday: date().required(),
 			language: mixed().oneOf(Object.values(Language)).required(),
