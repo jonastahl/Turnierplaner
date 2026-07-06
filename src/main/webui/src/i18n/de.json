@@ -9,6 +9,7 @@
 		"general": "Allgemein",
 		"create": "Erstellen",
 		"update": "Aktualisieren",
+		"delete": "Löschen",
 		"name": "Name",
 		"description": "Beschreibung",
 		"name_missing": "Bitte gib einen Namen ein",
@@ -215,7 +216,11 @@
 		"register_failed": "Fehler beim Hinzufügen des Spielers",
 		"over": "Ü",
 		"under": "U",
-		"player_not_found": "Spieler nicht gefunden"
+		"player_not_found": "Spieler nicht gefunden",
+		"confirm_delete": "Sind Sie sicher, dass Sie diesen Spieler löschen möchten?",
+		"deleting_player": "Spieler löschen",
+		"deleted": "Spieler gelöscht",
+		"delete_failed": "Spieler konnte nicht gelöscht werden. Spieler ist wahrscheinlich bereits Teil von einigen Spielen"
 	},
 	"ViewKnockout": {
 		"finale": "Finale",

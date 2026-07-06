@@ -4,7 +4,7 @@
 			{{ t("settings.no_unverified") }}
 		</template>
 		<Column field="name" :header="t('general.name')">
-			<template #body="{ data }">
+			<template #body="{ data }: { data: Player }">
 				<div class="flex flex-row justify-content-between align-items-center">
 					<div>
 						{{ data.name }}
@@ -26,7 +26,11 @@
 							rounded
 							size="small"
 							class="h-2rem"
-							@click="deletePlayer(data)"
+							@click="
+								() => {
+									if (data.id) deletePlayer(data.id)
+								}
+							"
 						>
 							<span class="material-symbols-outlined">delete_forever</span>
 						</Button>
@@ -45,13 +49,14 @@ import {
 	useDeletePlayer,
 } from "@/backend/player"
 import { useToast } from "primevue/usetoast"
+import { Player } from "@/interfaces/player"
 
 const { t } = useI18n()
 const toast = useToast()
 
 const { data: unverified } = getUnverified(t, toast)
 const { mutate: verifyPlayer } = useAdminVerify()
-const { mutate: deletePlayer } = useDeletePlayer()
+const { mutate: deletePlayer } = useDeletePlayer(t, toast)
 </script>
 
 <style scoped></style>

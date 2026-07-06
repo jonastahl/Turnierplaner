@@ -124,14 +124,33 @@ export function useAdminVerify() {
 	})
 }
 
-export function useDeletePlayer() {
+export function useDeletePlayer(
+	t: (s: string) => string,
+	toast: ToastServiceMethods,
+) {
 	const queryClient = useQueryClient()
 	return useMutation({
-		mutationFn: async (player: Player) =>
-			axios.post(`player/delete`, playerClientToServer(player)),
+		mutationFn: async (id: string) => axios.post(`player/delete`, { id }),
 		onSuccess() {
 			queryClient.invalidateQueries({
 				queryKey: ["unverifiedPlayer"],
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["unverifiedPlayer", "searchPlayer"],
+			})
+			toast.add({
+				severity: "success",
+				summary: t("general.success"),
+				detail: t("Player.deleted"),
+				life: 3000,
+			})
+		},
+		onError() {
+			toast.add({
+				severity: "error",
+				summary: t("general.failure"),
+				detail: t("Player.delete_failed"),
+				life: 3000,
 			})
 		},
 	})

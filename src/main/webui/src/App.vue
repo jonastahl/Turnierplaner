@@ -11,6 +11,7 @@
 		<ViewFooter />
 	</div>
 	<Toast />
+	<ConfirmDialog />
 </template>
 
 <script lang="ts" setup>
