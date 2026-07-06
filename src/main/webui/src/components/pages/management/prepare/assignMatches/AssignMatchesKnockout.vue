@@ -242,7 +242,6 @@ function save(complete = false) {
 			summary: t("general.failure"),
 			detail: t("ViewPrepare.assignMatches.knockout_not_assigned"),
 			life: 3000,
-			closable: false,
 		})
 		return
 	}

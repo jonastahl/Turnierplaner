@@ -185,7 +185,10 @@
 		"loadingDetailsFailed": "Details der Konkurrenz konnten nicht geladen werden",
 		"competitionUpdated": "Änderungen wurden gespeichert",
 		"competitionUpdateFailed": "Aktualisierung fehlgeschlagen",
-		"competitionUpdate": "Konkurrenzaktualisierung"
+		"competitionUpdate": "Konkurrenzaktualisierung",
+		"competitionDeleted": "Konkurrenz gelöscht",
+		"deleting_competition": "Konkurrenz löschen",
+		"confirmDelete": "Möchten Sie diese Konkurrenz wirklich löschen?"
 	},
 	"ViewCompetition": {
 		"tournament_system": "Turniersystem",

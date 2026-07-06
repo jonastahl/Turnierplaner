@@ -62,7 +62,6 @@ export function getGroupsDivision(
 						summary: t("general.failure"),
 						detail: t("general.loading_failed"),
 						life: 3000,
-						closable: false,
 					})
 					throw error
 				})
@@ -116,7 +115,6 @@ export function useInitGroups(
 				summary: t("general.success"),
 				detail: t("general.saved"),
 				life: 3000,
-				closable: false,
 			})
 		},
 		onError() {
@@ -125,7 +123,6 @@ export function useInitGroups(
 				summary: t("general.failure"),
 				detail: t("general.save_failed"),
 				life: 3000,
-				closable: false,
 			})
 		},
 	})

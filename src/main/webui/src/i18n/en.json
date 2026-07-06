@@ -186,7 +186,10 @@
 		"loadingDetailsFailed": "Couldn't load competition details",
 		"competitionUpdated": "Competition updated",
 		"competitionUpdateFailed": "Updating competition failed",
-		"competitionUpdate": "Update competition"
+		"competitionUpdate": "Update competition",
+		"competitionDeleted": "Competition deleted",
+		"deleting_competition": "Deleting competition",
+		"confirmDelete": "Are you sure you want to delete this competition?"
 	},
 	"ViewCompetition": {
 		"tournament_system": "Tournament system",

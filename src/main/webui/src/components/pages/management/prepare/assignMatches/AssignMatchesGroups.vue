@@ -191,7 +191,6 @@ function save(complete = false) {
 			summary: t("ViewPrepare.assignMatches.emptyGroupSum"),
 			detail: t("ViewPrepare.assignMatches.emptyGroupDet"),
 			life: 3000,
-			closable: false,
 		})
 		return
 	}

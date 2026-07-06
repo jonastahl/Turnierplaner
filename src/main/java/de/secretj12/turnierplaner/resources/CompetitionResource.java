@@ -140,6 +140,21 @@ public class CompetitionResource {
         return "successfully changed";
     }
 
+    @DELETE
+    @Path("/{compName}/delete")
+    @Transactional
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteCompetition(@PathParam("tourName") String tourName,
+                                    @PathParam("compName") String compName) {
+        Competition competition = competitions.getByName(tourName, compName);
+        if (competition == null) throw new NotFoundException("Competition was not found");
+        if (!securityIdentity.hasRole("director"))
+            throw new NotAuthorizedException("Only director can delete competitions");
+
+        competitions.delete(competition);
+        return "successfully deleted";
+    }
+
     @GET
     @Path("/{compName}/signedUpTeams")
     @Produces(MediaType.APPLICATION_JSON)

@@ -68,7 +68,6 @@ export function useInitKnockout(
 						summary: t("general.success"),
 						detail: t("general.saved"),
 						life: 3000,
-						closable: false,
 					})
 				})
 				.catch(() => {
@@ -77,7 +76,6 @@ export function useInitKnockout(
 						summary: t("general.failure"),
 						detail: t("general.save_failed"),
 						life: 3000,
-						closable: false,
 					})
 				}),
 	})

@@ -131,7 +131,6 @@ export function useAddTournament(
 				summary: t("ViewCreateTournament.tournamentCreating"),
 				detail: t("ViewCreateTournament.tournamentCreated"),
 				life: 3000,
-				closable: false,
 			})
 			if (handler.suc) handler.suc()
 		},
@@ -141,7 +140,6 @@ export function useAddTournament(
 				summary: t("ViewCreateTournament.tournamentCreating"),
 				detail: t("ViewCreateTournament.tournamentCreationFailed"),
 				life: 3000,
-				closable: false,
 			})
 			if (handler.err) handler.err()
 		},

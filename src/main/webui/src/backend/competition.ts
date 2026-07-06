@@ -91,7 +91,7 @@ export function getCompetitionDetailsCustom(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("ViewSettings.loadingDetailsFailed"),
+						summary: t("ViewEditTournament.loadingDetailsFailed"),
 						detail: error,
 						life: 3000,
 					})
@@ -155,6 +155,52 @@ export function useUpdateCompetition(
 	})
 }
 
+export function useDeleteCompetition(
+	route: RouteLocationNormalizedLoaded,
+	t: (s: string) => string,
+	toast: ToastServiceMethods,
+) {
+	const queryClient = useQueryClient()
+	return useMutation({
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		mutationFn: (_: void) =>
+			axios.delete(
+				`/tournament/${<string>route.params.tourId}/competition/${<string>route.params.compId}/delete`,
+			),
+		onSuccess() {
+			Promise.all([
+				queryClient.invalidateQueries({
+					queryKey: ["competitionList"],
+					refetchType: "all",
+				}),
+				queryClient.invalidateQueries({
+					queryKey: [
+						"competitionDetails",
+						route.params.tourId,
+						route.params.compId,
+					],
+					refetchType: "none",
+				}),
+			]).then(() => {
+				toast.add({
+					severity: "success",
+					summary: t("general.success"),
+					detail: t("ViewEditCompetition.competitionDeleted"),
+					life: 3000,
+				})
+			})
+		},
+		onError() {
+			toast.add({
+				severity: "error",
+				summary: t("general.failure"),
+				detail: t("general.failure"),
+				life: 3000,
+			})
+		},
+	})
+}
+
 export function useAddCompetition(
 	route: RouteLocationNormalizedLoaded,
 	t: (s: string) => string,
@@ -177,7 +223,6 @@ export function useAddCompetition(
 				summary: t("ViewCreateCompetition.competitionCreation"),
 				detail: t("ViewCreateCompetition.competitionCreated"),
 				life: 3000,
-				closable: false,
 			})
 			queryClient
 				.invalidateQueries({
@@ -194,7 +239,6 @@ export function useAddCompetition(
 				summary: t("ViewCreateCompetition.competitionCreation"),
 				detail: t("ViewCreateCompetition.creationFailed"),
 				life: 3000,
-				closable: false,
 			})
 			if (handler.err) handler.err()
 		},
