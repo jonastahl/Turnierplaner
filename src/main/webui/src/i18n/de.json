@@ -126,7 +126,10 @@
 		"loadingDetailsFailed": "Turnierdetails konnten nicht geladen werden",
 		"tournamentUpdated": "Turnier aktualisiert",
 		"tournamentUpdateFailed": "Aktualisieren fehlgeschlagen",
-		"tournamentUpdate": "Turnier aktualisieren"
+		"tournamentDeleted": "Turnier gelöscht",
+		"tournamentDeleteFailed": "Löschen fehlgeschlagen",
+		"tournamentUpdate": "Turnier aktualisieren",
+		"confirmDelete": "Möchten Sie diesen Turnier wirklich löschen?"
 	},
 	"ViewCompetitions": {
 		"loadingFailed": "Konkurrenzen konnten nicht geladen werden",

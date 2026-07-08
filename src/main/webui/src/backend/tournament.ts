@@ -145,3 +145,49 @@ export function useAddTournament(
 		},
 	})
 }
+
+export function useDeleteTournament(
+	route: RouteLocationNormalizedLoaded,
+	t: (s: string) => string,
+	toast: ToastServiceMethods,
+) {
+	const queryClient = useQueryClient()
+	return useMutation({
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		mutationFn: (_: void) =>
+			axios.delete(
+				`/tournament/delete?tourName=${<string>route.params.tourId}`,
+			),
+		onSuccess() {
+			Promise.all([
+				queryClient.invalidateQueries({
+					queryKey: ["competitionList"],
+					refetchType: "all",
+				}),
+				queryClient.invalidateQueries({
+					queryKey: [
+						"competitionDetails",
+						route.params.tourId,
+						route.params.compId,
+					],
+					refetchType: "none",
+				}),
+			]).then(() => {
+				toast.add({
+					severity: "success",
+					summary: t("general.success"),
+					detail: t("ViewEditTournament.tournamentDeleted"),
+					life: 3000,
+				})
+			})
+		},
+		onError() {
+			toast.add({
+				severity: "error",
+				summary: t("general.failure"),
+				detail: t("ViewEditTournament.tournamentDeleteFailed"),
+				life: 3000,
+			})
+		},
+	})
+}

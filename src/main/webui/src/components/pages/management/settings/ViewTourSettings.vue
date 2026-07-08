@@ -21,7 +21,12 @@
 				/>
 			</template>
 			<template #footer>
-				<div class="flex flex-row justify-content-end">
+				<div class="flex flex-row justify-content-between">
+					<Button
+						:label="t('general.delete')"
+						severity="danger"
+						@click="askDeleteTournament"
+					/>
 					<Button :label="t('general.save')" severity="success" @click="save" />
 				</div>
 			</template>
@@ -30,19 +35,29 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useToast } from "primevue/usetoast"
 import { ref, watch } from "vue"
 import FormTournament from "@/components/pages/forms/FormTournament.vue"
 import { TournamentDefault, TournamentServer } from "@/interfaces/tournament"
-import { getTournamentDetails, useUpdateTournament } from "@/backend/tournament"
+import {
+	getTournamentDetails,
+	useDeleteTournament,
+	useUpdateTournament,
+} from "@/backend/tournament"
 import { useI18n } from "vue-i18n"
+import { useDeleteCompetition } from "@/backend/competition"
+import { useConfirm } from "primevue/useconfirm"
 
 const { t } = useI18n()
 const toast = useToast()
 
 const route = useRoute()
 const form = ref<InstanceType<typeof FormTournament> | null>(null)
+const router = useRouter()
+const confirm = useConfirm()
+
+const { mutate: deleteTournament } = useDeleteTournament(route, t, toast)
 
 const isUpdating = defineModel<boolean>("isUpdating", { default: false })
 
@@ -61,6 +76,22 @@ const { mutate } = useUpdateTournament(t, toast, {})
 
 function save() {
 	form.value?.onSubmit()
+}
+
+function askDeleteTournament() {
+	confirm.require({
+		message: t("ViewEditTournament.confirmDelete"),
+		header: t("ViewEditTournament.deleting_tournament"),
+		icon: "pi pi-exclamation-triangle",
+		rejectClass: "p-button-secondary p-button-outlined",
+		rejectLabel: t("general.cancel"),
+		acceptClass: "p-button-danger",
+		acceptLabel: t("general.delete"),
+		accept: () =>
+			deleteTournament(undefined, {
+				onSuccess: () => router.back(),
+			}),
+	})
 }
 
 function submit(server_data: TournamentServer) {

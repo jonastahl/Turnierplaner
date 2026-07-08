@@ -128,7 +128,12 @@
 		"loadingDetailsFailed": "Couldn't load tournament details",
 		"tournamentUpdated": "Tournament updated",
 		"tournamentUpdateFailed": "Updating tournament failed",
-		"tournamentUpdate": "Update tournament"
+		"tournamentDeleted": "Tournament deleted",
+		"tournamentDeleteFailed": "Deleting tournament failed",
+		"tournamentUpdate": "Update tournament",
+		"confirmDelete": "Are you sure you want to delete this tournament"
+	},
+	"ViewTournament": {
 	},
 	"ViewCompetitions": {
 		"loadingFailed": "Couldn't load competitions",
