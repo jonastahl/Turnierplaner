@@ -13,9 +13,9 @@
 							@click="randomize"
 						>
 							<template #icon>
-								<span class="material-symbols-outlined mb-1 symbols-prep"
-									>casino</span
-								>
+								<i-material-symbols-casino-outline
+									class="symbols-prep size-1dot5rem"
+								/>
 							</template>
 						</SplitButton>
 					</div>

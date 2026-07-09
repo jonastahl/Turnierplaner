@@ -27,12 +27,12 @@
 				<span class="mr-1">
 					{{ t("settings.admin_needed") }}
 				</span>
-				<span
+				<div
 					v-tooltip.bottom="t('settings.admin_needed_summary')"
-					class="material-symbols-outlined cursor-pointer"
+					class="flex align-items-center"
 				>
-					help
-				</span>
+					<i-material-symbols-help-outline class="cursor-pointer" />
+				</div>
 			</div>
 			<InputSwitch
 				v-model="adminNeeded"
