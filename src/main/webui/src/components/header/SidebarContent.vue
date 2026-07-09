@@ -8,27 +8,23 @@
 			/>
 			<Button v-if="isLoggedIn" rounded outlined size="small" @click="settings">
 				<template #icon>
-					<span class="material-symbols-outlined">settings</span>
+					<i-material-symbols-settings-outline class="size-1dot5rem" />
 				</template>
 			</Button>
 		</div>
 
-		<span
+		<i-material-symbols-login
 			v-if="!isLoggedIn"
-			class="material-symbols-outlined cursor-pointer bigger"
+			class="w-3rem h-3rem cursor-pointer"
 			@click="login"
-		>
-			login
-		</span>
+		/>
 		<template v-else>
 			<div class="flex flex-row align-items-center gap-3">
 				<span>{{ currentUser }}</span>
-				<span
-					class="material-symbols-outlined cursor-pointer bigger"
+				<i-material-symbols-logout
+					class="w-3rem h-3rem cursor-pointer"
 					@click="logout"
-				>
-					logout
-				</span>
+				/>
 			</div>
 		</template>
 	</div>

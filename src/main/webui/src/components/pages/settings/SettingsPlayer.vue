@@ -29,11 +29,10 @@
 			</template>
 			<template #body="{ data }">
 				<div class="flex flex-row align-items-center gap-2">
-					<span
-						class="material-symbols-outlined cursor-pointer"
+					<i-material-symbols-edit-outline
+						class="cursor-pointer"
 						@click="edit(data)"
-						>edit</span
-					>
+					/>
 					<LinkPlayerName :player="data" />
 				</div>
 			</template>

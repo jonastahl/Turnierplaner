@@ -18,7 +18,7 @@
 							class="h-2rem"
 							@click="verifyPlayer(data)"
 						>
-							<span class="material-symbols-outlined">check_circle</span>
+							<i-material-symbols-check-circle-outline class="size-1dot5rem" />
 						</Button>
 						<Button
 							severity="danger"
@@ -32,7 +32,9 @@
 								}
 							"
 						>
-							<span class="material-symbols-outlined">delete_forever</span>
+							<i-material-symbols-delete-forever-outline
+								class="size-1dot5rem"
+							/>
 						</Button>
 					</div>
 				</div>

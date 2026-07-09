@@ -1,7 +1,7 @@
 <template>
 	<Button v-if="isDirector" rounded outlined size="small" @click="settings">
 		<template #icon>
-			<span class="material-symbols-outlined">settings</span>
+			<i-material-symbols-settings-outline class="size-1dot5rem" />
 		</template>
 	</Button>
 	<Dropdown
@@ -10,21 +10,17 @@
 		@change="(event) => saveLanguage(event.value)"
 	/>
 
-	<span
+	<i-material-symbols-login
 		v-if="!isLoggedIn"
-		class="material-symbols-outlined cursor-pointer bigger"
+		class="w-3rem h-3rem cursor-pointer"
 		@click="login"
-	>
-		login
-	</span>
+	/>
 	<template v-else>
 		<span>{{ currentUser }}</span>
-		<span
-			class="material-symbols-outlined cursor-pointer bigger"
+		<i-material-symbols-logout
+			class="w-3rem h-3rem cursor-pointer"
 			@click="logout"
-		>
-			logout
-		</span>
+		/>
 	</template>
 </template>
 

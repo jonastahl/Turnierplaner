@@ -36,7 +36,7 @@
 					@click.stop
 				>
 					<template #icon>
-						<span class="material-symbols-outlined">settings</span>
+						<i-material-symbols-settings-outline class="size-1dot5rem" />
 					</template>
 				</Button>
 			</div>

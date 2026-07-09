@@ -22,7 +22,9 @@
 							class="h-2rem"
 							@click="deletePlayer(data)"
 						>
-							<span class="material-symbols-outlined">delete_forever</span>
+							<i-material-symbols-delete-forever-outline
+								class="size-1dot5rem"
+							/>
 						</Button>
 					</div>
 				</template>
@@ -66,7 +68,9 @@
 							class="h-2rem"
 							@click="deletePlayer(data)"
 						>
-							<span class="material-symbols-outlined">delete_forever</span>
+							<i-material-symbols-delete-forever-outline
+								class="size-1dot5rem"
+							/>
 						</Button>
 					</div>
 				</template>
@@ -94,7 +98,9 @@
 							class="h-2rem"
 							@click="deletePlayer(data)"
 						>
-							<span class="material-symbols-outlined">delete_forever</span>
+							<i-material-symbols-delete-forever-outline
+								class="size-1dot5rem"
+							/>
 						</Button>
 					</div>
 				</template>
@@ -124,7 +130,9 @@
 								class="h-2rem"
 								@click="deletePlayer(data)"
 							>
-								<span class="material-symbols-outlined">delete_forever</span>
+								<i-material-symbols-delete-forever-outline
+									class="size-1dot5rem"
+								/>
 							</Button>
 						</div>
 					</template>
@@ -151,7 +159,9 @@
 								class="h-2rem"
 								@click="deletePlayer(data)"
 							>
-								<span class="material-symbols-outlined">delete_forever</span>
+								<i-material-symbols-delete-forever-outline
+									class="delete_forever"
+								/>
 							</Button>
 						</div>
 					</template>

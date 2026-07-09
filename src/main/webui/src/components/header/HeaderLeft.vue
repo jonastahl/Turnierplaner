@@ -3,9 +3,10 @@
 		id="header"
 		class="flex flex-row pl-2 lg:pl-3 align-items-center gap-2 lg:gap-3"
 	>
-		<span class="material-symbols-outlined cursor-pointer icon" @click="toHome">
-			sports_tennis
-		</span>
+		<i-material-symbols-sports-tennis-outline
+			class="cursor-pointer icon"
+			@click="toHome"
+		/>
 		<div class="flex flex-column lg:flex-row align-items-center lg:gap-3">
 			<h1 id="colorHeadLine" class="m-0 cursor-pointer title" @click="toHome">
 				{{
