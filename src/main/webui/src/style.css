@@ -58,3 +58,9 @@ body {
 .min-team-height {
 	min-height: calc(5rem);
 }
+
+.size-1dot5rem {
+	width: 1.5rem;
+	height: 1.5rem;
+	flex-shrink: 0;
+}
