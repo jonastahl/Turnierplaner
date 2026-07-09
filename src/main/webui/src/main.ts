@@ -28,9 +28,6 @@ import "primevue/resources/themes/lara-light-blue/theme.css"
 import "primeicons/primeicons.css"
 import "./style.css"
 
-/* Icons */
-import "material-symbols/outlined.css"
-
 /* yup validation */
 import { setLocale } from "yup"
 import { VueQueryPlugin, VueQueryPluginOptions } from "@tanstack/vue-query"
