@@ -87,8 +87,7 @@ const { data: exMatches } = getScheduledMatchEventsExceptCompetition(
 
 const selectedDate = ref(new Date())
 watch(tournament, () => {
-	if (tournament.value)
-		selectedDate.value = tournament.value?.game_phase.begin
+	if (tournament.value) selectedDate.value = tournament.value?.game_phase.begin
 })
 
 const events = defineModel<MatchCalEvent[]>({ default: [] })
@@ -191,6 +190,7 @@ function onEventDrop(
 
 function onEventDelete(event: MatchCalEvent) {
 	emit("deleteSchedule", event.data)
+	emit("eventFinished")
 }
 
 function onEventChange(event: MatchCalEvent) {
