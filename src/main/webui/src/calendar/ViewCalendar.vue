@@ -3,11 +3,11 @@
 		id="vuecal"
 		ref="vuecal"
 		:key="calid"
+		v-model:active-view="activeView"
 		:events="events"
 		:selected-date="selectedDate"
 		:time-from="props.timeFrom"
 		:time-to="props.timeTo"
-		v-model:active-view="activeView"
 		:disable-views="props.disabledViews"
 		:min-date="props.minDate"
 		:max-date="props.maxDate"
@@ -130,13 +130,10 @@ watch(
 		once: true,
 	},
 )
-watch(
-	[() => props.splitDays, () => props.selectedDate],
-	() => {
-		selectedDate.value = props.selectedDate
-		updateView()
-	},
-)
+watch([() => props.splitDays, () => props.selectedDate], () => {
+	selectedDate.value = props.selectedDate
+	updateView()
+})
 
 function updateView() {
 	if (!vuecal.value || !props.selectedDate) return

@@ -193,7 +193,7 @@ function onEventDelete(event: MatchCalEvent) {
 	emit("eventFinished")
 }
 
-function onEventChange(event: MatchCalEvent) {
+function onEventChange() {
 	emit("eventFinished")
 }
 

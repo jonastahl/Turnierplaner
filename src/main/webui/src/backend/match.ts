@@ -21,7 +21,11 @@ export function useUpdateMatches(
 ) {
 	const queryClient = useQueryClient()
 	return useMutation({
-		mutationFn: (data: { complete: boolean; matches: Match[] }) =>
+		mutationFn: (data: {
+			complete: boolean
+			notify: boolean
+			matches: Match[]
+		}) =>
 			axios.post(
 				`/tournament/${<string>route.params.tourId}/competition/${<string>route.params.compId}/updateSchedule`,
 				{
@@ -29,13 +33,14 @@ export function useUpdateMatches(
 					data: data.matches.map(matchClientToServer),
 				},
 			),
-		onSuccess() {
-			toast.add({
-				severity: "success",
-				summary: t("general.success"),
-				detail: t("general.saved"),
-				life: 3000,
-			})
+		onSuccess(_, options) {
+			if (options.notify)
+				toast.add({
+					severity: "success",
+					summary: t("general.success"),
+					detail: t("general.saved"),
+					life: 3000,
+				})
 			queryClient.invalidateQueries({
 				queryKey: ["knockout", route.params.tourId, route.params.compId],
 				refetchType: "all",

@@ -41,7 +41,7 @@
 						}
 					"
 					@delete-schedule="(match) => matches.push(remSchedule(match))"
-					@event-finished="save"
+					@event-finished="save(false)"
 				/>
 			</div>
 		</div>
@@ -50,7 +50,7 @@
 		:loading="isUpdating"
 		is-complete
 		@reset="resetDialog = true"
-		@save="save"
+		@save="save(true)"
 		@complete="complete"
 	/>
 	<DialogResetProgress v-model="resetDialog" />
@@ -102,12 +102,13 @@ watch(
 	{ immediate: true },
 )
 
-function save(complete = false) {
+function save(notify: boolean, complete = false) {
 	isUpdating.value = true
 	updateCourts(selectedCourts.value)
 	updateMatches(
 		{
 			complete,
+			notify,
 			matches: [
 				...scheduledMatches.value
 					.filter((event) => !event.secondary)
@@ -149,7 +150,7 @@ function complete() {
 		})
 		return
 	}
-	save(true)
+	save(true, true)
 }
 
 function remSchedule(match: AnnotatedMatch) {
