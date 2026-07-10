@@ -13,6 +13,7 @@
 		@on-event-drop="onEventDrop"
 		@on-event-delete="onEventDelete"
 		@on-view-change="onViewChange"
+		@on-event-change="onEventChange"
 	>
 		<template #event="{ event }">
 			<EventMatch
@@ -55,6 +56,7 @@ function reload() {
 const emit = defineEmits<{
 	removeId: [id: string]
 	deleteSchedule: [event: AnnotatedMatch]
+	eventFinished: []
 }>()
 const props = defineProps<{
 	courts: Court[]
@@ -87,12 +89,15 @@ const events = defineModel<MatchCalEvent[]>({ default: [] })
 watch(
 	[knockout, groups],
 	() => {
-		if (!knockoutSuc.value || !groupSuc.value || events.value.length) return
+		events.value.splice(0, events.value.length)
 
-		if (competition.value?.tourType === CompType.KNOCKOUT && knockout.value) {
+		if (competition.value?.tourType === CompType.KNOCKOUT &&
+			knockoutSuc.value &&
+			knockout.value) {
 			extractKnockoutMatches(knockout.value, addMatch)
 		} else if (
 			competition.value?.tourType === CompType.GROUPS &&
+			groupSuc.value &&
 			groups.value
 		) {
 			extractGroupMatches(groups.value, addMatch)
@@ -178,6 +183,10 @@ function onEventDrop(
 
 function onEventDelete(event: MatchCalEvent) {
 	emit("deleteSchedule", event.data)
+}
+
+function onEventChange(event: MatchCalEvent) {
+	emit("eventFinished")
 }
 
 const splitDays = computed(() => {

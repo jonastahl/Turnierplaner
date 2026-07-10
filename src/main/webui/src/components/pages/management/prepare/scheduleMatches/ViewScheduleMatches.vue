@@ -41,6 +41,7 @@
 						}
 					"
 					@delete-schedule="(match) => matches.push(remSchedule(match))"
+					@event-finished="save"
 				/>
 			</div>
 		</div>

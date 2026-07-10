@@ -37,15 +37,11 @@ export function useUpdateMatches(
 				life: 3000,
 			})
 			queryClient.invalidateQueries({
-				queryKey: ["competitionList", route.params.tourId],
+				queryKey: ["knockout", route.params.tourId, route.params.compId],
 				refetchType: "all",
 			})
 			queryClient.invalidateQueries({
-				queryKey: [
-					"competitionDetails",
-					route.params.tourId,
-					route.params.compId,
-				],
+				queryKey: ["group", route.params.tourId, route.params.compId],
 				refetchType: "all",
 			})
 		},
