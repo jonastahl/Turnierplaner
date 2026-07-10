@@ -49,6 +49,18 @@ export function useUpdateMatches(
 				queryKey: ["group", route.params.tourId, route.params.compId],
 				refetchType: "all",
 			})
+			queryClient.invalidateQueries({
+				queryKey: ["competitionList"],
+				refetchType: "all",
+			})
+			queryClient.invalidateQueries({
+				queryKey: [
+					"competitionDetails",
+					route.params.tourId,
+					route.params.compId,
+				],
+				refetchType: "all",
+			})
 		},
 		onError(error) {
 			toast.add({

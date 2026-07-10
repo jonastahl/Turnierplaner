@@ -459,6 +459,22 @@ public class CompetitionResource {
     }
 
     @POST
+    @Path("/{compName}/reopenSchedule")
+    @Transactional
+    @RolesAllowed("director")
+    public String reopenSchedule(@PathParam("tourName") String tourName, @PathParam("compName") String compName) {
+        Competition competition = competitions.getByName(tourName, compName);
+        if (competition == null) throw new NotFoundException("Competition could not be found");
+        if (competition.getcProgress() != CreationProgress.PUBLISHING)
+            throw new BadRequestException("Can only reopen a competition that is ready for publishing");
+
+        competition.setcProgress(CreationProgress.SCHEDULING);
+        competitions.persist(competition);
+
+        return "Schedule reopened for editing";
+    }
+
+    @POST
     @Path("/publish")
     @Transactional
     @RolesAllowed("director")

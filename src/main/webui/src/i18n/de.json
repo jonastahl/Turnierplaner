@@ -293,6 +293,7 @@
 		"publish": "Veröffentlichen",
 		"publishall": "Alle veröffentlichen",
 		"prepare": "Vorbereiten",
+		"editSchedule": "Zeiteinteilung bearbeiten",
 		"update_schedule_header": "Die folgenden Spiele wurden verschoben"
 	},
 	"validation": {

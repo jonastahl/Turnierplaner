@@ -408,6 +408,39 @@ export function useResetPreparation(
 	})
 }
 
+export function useReopenSchedule(
+	route: RouteLocationNormalizedLoaded,
+	t: (s: string) => string,
+	toast: ToastServiceMethods,
+) {
+	const queryClient = useQueryClient()
+	return useMutation({
+		mutationFn: (compName: string) =>
+			axios.post(
+				`/tournament/${<string>route.params.tourId}/competition/${compName}/reopenSchedule`,
+			),
+		onSuccess(_, compName: string) {
+			queryClient.invalidateQueries({
+				queryKey: ["competitionList"],
+				refetchType: "all",
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["competitionDetails", route.params.tourId, compName],
+				refetchType: "all",
+			})
+		},
+		onError(error) {
+			toast.add({
+				severity: "error",
+				summary: t("general.failure"),
+				detail: t("general.failure"),
+				life: 3000,
+			})
+			console.log(error)
+		},
+	})
+}
+
 export function usePublishCompetitions(
 	route: RouteLocationNormalizedLoaded,
 	t: (s: string) => string,
