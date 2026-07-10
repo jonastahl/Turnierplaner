@@ -4,10 +4,10 @@
 		ref="vuecal"
 		:key="calid"
 		:events="events"
-		:selected-date="props.selectedDate"
+		:selected-date="selectedDate"
 		:time-from="props.timeFrom"
 		:time-to="props.timeTo"
-		:active-view="props.activeView"
+		v-model:active-view="activeView"
 		:disable-views="props.disabledViews"
 		:min-date="props.minDate"
 		:max-date="props.maxDate"
@@ -69,7 +69,6 @@ const props = withDefaults(
 		selectedDate?: Date
 		timeFrom?: number
 		timeTo?: number
-		activeView?: View
 		disabledViews?: View[]
 		minDate?: Date
 		maxDate?: Date
@@ -109,6 +108,9 @@ const props = withDefaults(
 
 const events = defineModel<CalEvent<T>[]>({ default: [] })
 
+const activeView = defineModel<View>("activeView", { default: View.day })
+const selectedDate = ref(props.selectedDate)
+
 const emit = defineEmits<{
 	onEventDrop: [CalEvent<T>, CalEvent<T>, boolean]
 	onEventChange: [CalEvent<T>, CalEvent<T>]
@@ -119,12 +121,30 @@ const emit = defineEmits<{
 const vuecal = ref()
 const calid = ref<number>(0)
 
-watch([vuecal, () => props.selectedDate], () => {
+watch(
+	[vuecal],
+	() => {
+		updateView()
+	},
+	{
+		once: true,
+	},
+)
+watch(
+	[() => props.splitDays, () => props.selectedDate],
+	() => {
+		selectedDate.value = props.selectedDate
+		updateView()
+	},
+)
+
+function updateView() {
 	if (!vuecal.value || !props.selectedDate) return
+
 	// needed to always trigger the onViewChange
-	vuecal.value.previous()
-	vuecal.value.switchView("day", props.selectedDate)
-})
+	vuecal.value.switchView(activeView.value, selectedDate.value)
+	adjustScroll()
+}
 
 function previous() {
 	if (vuecal.value) vuecal.value.previous()
@@ -184,7 +204,7 @@ function onEventDelete(event: CalEvent<T>) {
 	emit("onEventDelete", event)
 }
 
-async function onViewChange({
+function onViewChange({
 	startDate,
 	endDate,
 }: {
@@ -193,6 +213,11 @@ async function onViewChange({
 }) {
 	emit("onViewChange", startDate, endDate)
 
+	selectedDate.value = endDate
+	adjustScroll()
+}
+
+async function adjustScroll() {
 	await sleep(500)
 	const calendar = document.querySelector("#vuecal .vuecal__bg")
 	if (calendar)

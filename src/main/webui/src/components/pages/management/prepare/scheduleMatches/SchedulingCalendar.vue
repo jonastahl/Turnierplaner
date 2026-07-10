@@ -4,7 +4,7 @@
 		ref="calendar"
 		v-model="events"
 		style="height: 1000px"
-		:selected-date="tournament.game_phase.begin"
+		:selected-date="selectedDate"
 		:min-date="tournament.game_phase.begin"
 		:max-date="tournament.game_phase.end"
 		:split-days="splitDays"
@@ -85,15 +85,23 @@ const { data: exMatches } = getScheduledMatchEventsExceptCompetition(
 	curEnd,
 )
 
+const selectedDate = ref(new Date())
+watch(tournament, () => {
+	if (tournament.value)
+		selectedDate.value = tournament.value?.game_phase.begin
+})
+
 const events = defineModel<MatchCalEvent[]>({ default: [] })
 watch(
 	[knockout, groups],
 	() => {
 		events.value.splice(0, events.value.length)
 
-		if (competition.value?.tourType === CompType.KNOCKOUT &&
+		if (
+			competition.value?.tourType === CompType.KNOCKOUT &&
 			knockoutSuc.value &&
-			knockout.value) {
+			knockout.value
+		) {
 			extractKnockoutMatches(knockout.value, addMatch)
 		} else if (
 			competition.value?.tourType === CompType.GROUPS &&
