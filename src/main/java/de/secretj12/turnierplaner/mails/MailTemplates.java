@@ -144,11 +144,14 @@ public class MailTemplates {
         List<PlayersCompetitions<PlayersMatches>> playerCompetitions = playersMatches.entrySet().stream().map(
             entry -> new PlayersCompetitions<>(
                                              entry.getKey().getName(), entry.getValue().stream().map(
-                                                 m -> new PlayersMatches(
-                                                                         getOpponentTeam(player, m).getPlayerA(),
-                                                                         getOpponentTeam(player, m).getPlayerB(),
-                                                                         dateFormat.format(Date.from(m.getBegin())),
-                                                                         m.getCourt().getName())
+                                                 m -> {
+                                                     Team team = getOpponentTeam(player, m);
+                                                     return new PlayersMatches(
+                                                         team == null ? null : team.getPlayerA(),
+                                                         team == null ? null : team.getPlayerB(),
+                                                         dateFormat.format(Date.from(m.getBegin())),
+                                                         m.getCourt().getName());
+                                                 }
                                              ).toList()
             )
         ).toList();
