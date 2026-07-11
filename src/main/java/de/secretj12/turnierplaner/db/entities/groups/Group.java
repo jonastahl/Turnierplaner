@@ -1,6 +1,9 @@
 package de.secretj12.turnierplaner.db.entities.groups;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.secretj12.turnierplaner.db.entities.Match;
 import de.secretj12.turnierplaner.db.entities.competition.Competition;
 import jakarta.persistence.*;
@@ -27,7 +30,8 @@ public class Group {
 
     @ManyToOne
     @JoinColumn(name = "competition_id", nullable = false)
-    @JsonIgnore
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Competition competition;
 
     @OneToMany(mappedBy = "groupA", cascade = CascadeType.REMOVE)

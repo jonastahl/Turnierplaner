@@ -80,8 +80,10 @@ import {
 } from "@/backend/config"
 import axios from "axios"
 import { useConfirm } from "primevue/useconfirm"
+import { useToast } from "primevue/usetoast"
 
 const { t, locale, availableLocales } = useI18n()
+const toast = useToast()
 const isLoggedIn = inject("loggedIn", ref(false))
 const confirm = useConfirm()
 
@@ -108,32 +110,18 @@ const backupDialog = ref(false)
 const restoreConfirmDialog = ref(false)
 
 async function downloadBackup() {
-	const response = await axios.get("/backup/download", {
-		responseType: "blob",
-	})
-
-	const blob = new Blob([response.data], {
-		type: response.headers["content-type"],
-	})
-	const downloadUrl = window.URL.createObjectURL(blob)
-	const link = document.createElement("a")
-	link.href = downloadUrl
-
-	const contentDisposition = response.headers["content-disposition"]
-	let filename = "backup.zip"
-	if (contentDisposition) {
-		const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/)
-		if (filenameMatch && filenameMatch[1]) {
-			filename = filenameMatch[1]
-		}
-	}
-	link.setAttribute("download", filename)
-
-	document.body.appendChild(link)
-	link.click()
-
-	link.remove()
-	window.URL.revokeObjectURL(downloadUrl)
+	axios
+		.post<string>("/backup/generateDownload")
+		.then((resp) => {
+			window.open(`/backup/download?token=${resp.data}`, "_blank")
+		})
+		.catch(() => {
+			toast.add({
+				severity: "error",
+				summary: t("general.failure"),
+				life: 3000,
+			})
+		})
 }
 
 function restoreBackup() {
@@ -144,7 +132,37 @@ function restoreBackup() {
 		acceptIcon: "pi pi-exclamation-triangle",
 		acceptClass: "p-button-danger",
 		accept: () => {
-			// TODO
+			const fileInput = document.createElement("input")
+			fileInput.type = "file"
+			fileInput.accept = ".turnier" // Limit selection to your custom extension
+			fileInput.style.display = "none"
+
+			// Listen for the user selecting a file
+			fileInput.onchange = async (event) => {
+				if (!event.target) return
+
+				const file = event.target.files[0]
+				if (!file) return
+
+				try {
+					await axios.post("/backup/upload", file, {
+						headers: {
+							"Content-Type": "application/octet-stream",
+						},
+					})
+
+					console.log("Backup successfully restored.")
+					window.location.reload()
+				} catch (error) {
+					console.error("Failed to upload backup:", error)
+				} finally {
+					// Clean up the DOM
+					fileInput.remove()
+				}
+			}
+
+			document.body.appendChild(fileInput)
+			fileInput.click()
 		},
 	})
 }
