@@ -27,7 +27,9 @@
 								{#if game.oldOpponentA}
 									<a style="color: red; text-decoration: line-through; white-space: pre-line; margin: 0" href="{url}/player/overview/{game.oldOpponentA.getId()}">{game.oldOpponentA.getFullName()}</a>
 								{/if}
-								<a style="color: green; white-space: pre-line; margin: 0; text-decoration: none" href="{url}/player/overview/{game.opponentA.getId()}">{game.opponentA.getFullName()}</a>
+                                {#if game.opponentA}
+								    <a style="color: green; white-space: pre-line; margin: 0; text-decoration: none" href="{url}/player/overview/{game.opponentA.getId()}">{game.opponentA.getFullName()}</a>
+								{/if}
               {#else}
 								{#if game.opponentA}
 									<a style="white-space: pre-line; margin: 0; color: inherit; text-decoration: none" href="{url}/player/overview/{game.opponentA.getId()}">{game.opponentA.getFullName()}</a>
@@ -39,7 +41,9 @@
 										{#if game.oldOpponentB}
 											<a style="color: red; text-decoration: line-through; white-space: pre-line; margin: 0" href="{url}/player/overview/{game.oldOpponentB.getId()}">{game.oldOpponentB.getFullName()}</a>
 										{/if}
-										<a style="color: green; white-space: pre-line; margin: 0; text-decoration: none" href="{url}/player/overview/{game.opponentB.getId()}">{game.opponentB.getFullName()}</a>
+                                        {#if game.opponentB}
+										    <a style="color: green; white-space: pre-line; margin: 0; text-decoration: none" href="{url}/player/overview/{game.opponentB.getId()}">{game.opponentB.getFullName()}</a>
+										{/if}
                   {#else}
 										{#if game.opponentB}
 											<a style="white-space: pre-line; margin: 0; color: inherit; text-decoration: none" href="{url}/player/overview/{game.opponentB.getId()}">{game.opponentB.getFullName()}</a>
