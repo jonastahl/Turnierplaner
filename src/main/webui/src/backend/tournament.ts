@@ -158,20 +158,24 @@ export function useDeleteTournament(
 				params: { tourName: String(route.params.tourId) },
 			}),
 		onSuccess() {
-			Promise.all([
-				queryClient.invalidateQueries({
-					queryKey: ["competitionList"],
-					refetchType: "all",
-				}),
-				queryClient.invalidateQueries({
-					queryKey: [
-						"competitionDetails",
-						route.params.tourId,
-						route.params.compId,
-					],
-					refetchType: "none",
-				}),
-			]).then(() => {
+		Promise.all([
+			queryClient.invalidateQueries({
+				queryKey: ["tournamentList"],
+				refetchType: "all",
+			}),
+			queryClient.invalidateQueries({
+				queryKey: ["tournament"],
+				refetchType: "none",
+			}),
+			queryClient.invalidateQueries({
+				queryKey: ["competitionList"],
+				refetchType: "all",
+			}),
+			queryClient.invalidateQueries({
+				queryKey: ["competitionDetails"],
+				refetchType: "none",
+			}),
+		]).then(() => {
 				toast.add({
 					severity: "success",
 					summary: t("general.success"),
