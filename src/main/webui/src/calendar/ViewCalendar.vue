@@ -5,7 +5,7 @@
 		:key="calid"
 		v-model:active-view="activeView"
 		:events="events"
-		:selected-date="selectedDate"
+		:selected-date="usersDate"
 		:time-from="props.timeFrom"
 		:time-to="props.timeTo"
 		:disable-views="props.disabledViews"
@@ -63,7 +63,6 @@ import VueCal from "vue-cal"
 import "vue-cal/dist/vuecal.css"
 import { Ref, ref, watch } from "vue"
 import { CalEvent, DaySplit, View } from "@/calendar/CalendarInterfaces"
-import { sleep } from "@/backend/Tracker"
 import { useRoute, useRouter } from "vue-router"
 
 const props = withDefaults(
@@ -114,9 +113,12 @@ const route = useRoute()
 const events = defineModel<CalEvent<T>[]>({ default: [] })
 
 const activeView = ref(route.query.view == "week" ? View.week : View.day)
-const selectedDate = ref(
-	route.query.date ? new Date(route.query.date as string) : props.selectedDate,
-)
+const usersDate = ref(genSelDate())
+function genSelDate() {
+	return route.query.date
+		? new Date(route.query.date as string)
+		: props.selectedDate
+}
 
 const emit = defineEmits<{
 	onEventDrop: [CalEvent<T>, CalEvent<T>, boolean]
@@ -138,16 +140,14 @@ watch(
 	},
 )
 watch([() => props.splitDays, () => props.selectedDate], () => {
-	selectedDate.value = props.selectedDate
+	usersDate.value = genSelDate()
 	updateView()
 })
 
 function updateView() {
 	if (!vuecal.value || !props.selectedDate) return
 
-	// needed to always trigger the onViewChange
-	vuecal.value.switchView(activeView.value, selectedDate.value)
-	adjustScroll()
+	vuecal.value.switchView(activeView.value, usersDate.value)
 }
 
 function previous() {
@@ -217,24 +217,13 @@ function onViewChange({
 }) {
 	emit("onViewChange", startDate, endDate)
 
-	selectedDate.value = endDate
+	usersDate.value = endDate
 	router.replace({
 		query: {
 			date: endDate.toISOString().split("T")[0],
 			view: activeView.value,
 		},
 	})
-}
-
-async function adjustScroll() {
-	await sleep(500)
-	const calendar = document.querySelector("#vuecal .vuecal__bg")
-
-	if (calendar && calendar.scrollTop === 0)
-		calendar.scrollTo({
-			top: (60 / props.timeStep) * 8 * props.timeCellHeight,
-			behavior: "smooth",
-		})
 }
 </script>
 
