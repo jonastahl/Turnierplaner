@@ -34,7 +34,6 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n"
-import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
 import UpdatedMatch from "@/components/pages/management/execution/calendar/UpdatedMatch.vue"
 import MatchEventColor from "@/components/items/MatchEventColor.vue"
 import { useToast } from "primevue/usetoast"

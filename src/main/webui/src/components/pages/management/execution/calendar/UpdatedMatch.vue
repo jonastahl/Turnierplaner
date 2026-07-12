@@ -19,9 +19,7 @@
 		<span
 			>{{ t("general.end") }}:
 			<ValOrEdited
-				:original="
-					props.from.end?.toLocaleString(t('lang'), dateOptions) || ''
-				"
+				:original="props.from.end?.toLocaleString(t('lang'), dateOptions) || ''"
 				:edited="props.to.end?.toLocaleString(t('lang'), dateOptions) || ''"
 			/>
 		</span>
