@@ -46,7 +46,6 @@ import {
 	useUpdateTournament,
 } from "@/backend/tournament"
 import { useI18n } from "vue-i18n"
-import { useDeleteCompetition } from "@/backend/competition"
 import { useConfirm } from "primevue/useconfirm"
 
 const { t } = useI18n()
