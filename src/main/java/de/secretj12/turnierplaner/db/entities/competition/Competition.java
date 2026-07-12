@@ -318,4 +318,36 @@ public class Competition {
     public void setNumberSets(NumberSets numberSets) {
         this.numberSets = numberSets;
     }
+
+    public SexFilter getPlayerASexFilter() {
+        return playerASexFilter;
+    }
+
+    public void setPlayerASexFilter(SexFilter playerASexFilter) {
+        this.playerASexFilter = playerASexFilter;
+    }
+
+    public boolean isPlayerAhasMinAge() {
+        return playerAhasMinAge;
+    }
+
+    public boolean isPlayerAhasMaxAge() {
+        return playerAhasMaxAge;
+    }
+
+    public SexFilter getPlayerBSexFilter() {
+        return playerBSexFilter;
+    }
+
+    public void setPlayerBSexFilter(SexFilter playerBSexFilter) {
+        this.playerBSexFilter = playerBSexFilter;
+    }
+
+    public boolean isPlayerBhasMinAge() {
+        return playerBhasMinAge;
+    }
+
+    public boolean isPlayerBhasMaxAge() {
+        return playerBhasMaxAge;
+    }
 }

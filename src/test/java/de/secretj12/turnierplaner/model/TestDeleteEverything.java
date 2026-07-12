@@ -9,6 +9,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,6 +35,10 @@ public class TestDeleteEverything {
     SetRepository setRepository;
     @Inject
     TeamRepository teamRepository;
+    @Inject
+    CourtRepositiory courtRepository;
+    @Inject
+    PlayerRepository playerRepository;
 
     @Inject
     TestdataGenerator testdataGenerator;
@@ -61,5 +66,16 @@ public class TestDeleteEverything {
         assertEquals(0, matchOfGroupRepository.count());
         assertEquals(0, setRepository.count());
         assertEquals(0, teamRepository.count());
+    }
+
+    @AfterEach
+    @Transactional
+    public void clearData() {
+        tournamentRepository.findAll().stream().forEach(t -> tournamentRepository.delete(t));
+        playerRepository.deleteAll();
+        courtRepository.deleteAll();
+
+        Panache.getEntityManager().flush();
+        Panache.getEntityManager().clear();
     }
 }

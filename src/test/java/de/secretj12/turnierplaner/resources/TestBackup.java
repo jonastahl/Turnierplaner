@@ -8,6 +8,7 @@ import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -38,7 +39,7 @@ public class TestBackup {
     TestdataGenerator testdataGenerator;
 
     @Test
-    @TestSecurity(user = "admin", roles = "director")
+    @TestSecurity(user = "admin", roles = "admin")
     public void testBackupCycle() {
         // 1. Generate random data
         generateTestData();
@@ -59,9 +60,16 @@ public class TestBackup {
         assertTrue(courtCount > 0, "Should have at least one court");
 
         // 3. Download everything
+        String token = given()
+            .when()
+            .post("/backup/generateDownload")
+            .then()
+            .statusCode(200)
+            .extract().asString();
+
         byte[] backupData = given()
             .when()
-            .get("/backup/download")
+            .get("/backup/download?token=" + token)
             .then()
             .statusCode(200)
             .extract().asByteArray();
@@ -106,9 +114,11 @@ public class TestBackup {
         Panache.getEntityManager().clear();
     }
 
+    @AfterEach
     @Transactional
     public void deleteAllData() {
         tournamentRepository.findAll().stream().forEach(t -> tournamentRepository.delete(t));
+        teamRepository.deleteAll();
         playerRepository.deleteAll();
         courtRepository.deleteAll();
 
