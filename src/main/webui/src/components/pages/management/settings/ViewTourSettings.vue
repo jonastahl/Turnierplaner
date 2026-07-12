@@ -79,9 +79,7 @@ function save() {
 
 function askDeleteTournament() {
 	confirm.require({
-		message: t("ViewEditTournament.confirmDelete"),
-		header: t("ViewEditTournament.deleting_tournament"),
-		icon: "pi pi-exclamation-triangle",
+		header: t("general.delete"),
 		rejectClass: "p-button-secondary p-button-outlined",
 		rejectLabel: t("general.cancel"),
 		acceptClass: "p-button-danger",
