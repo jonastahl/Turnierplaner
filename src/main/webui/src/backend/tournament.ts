@@ -153,11 +153,10 @@ export function useDeleteTournament(
 ) {
 	const queryClient = useQueryClient()
 	return useMutation({
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		mutationFn: (_: void) =>
-			axios.delete(
-				`/tournament/delete?tourName=${<string>route.params.tourId}`,
-			),
+		mutationFn: () =>
+			axios.delete("/tournament/delete", {
+				params: { tourName: String(route.params.tourId) },
+			}),
 		onSuccess() {
 			Promise.all([
 				queryClient.invalidateQueries({
