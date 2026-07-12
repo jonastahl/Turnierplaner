@@ -3,7 +3,7 @@
 		v-if="tournament"
 		v-model:events="events"
 		style="height: 800px"
-		:selected-date="tournament.game_phase.begin"
+		:selected-date="selected_date"
 		:min-date="tournament.game_phase.begin"
 		:max-date="tournament.game_phase.end"
 		:split-days="splitDays"
@@ -34,6 +34,14 @@ const toast = useToast()
 
 const curStart = ref<Date | undefined>()
 const curEnd = ref<Date | undefined>()
+
+const selected_date = computed(() => {
+	const now = new Date()
+	if (!tournament.value) return now
+	const game_phase = tournament.value.game_phase
+	if (game_phase.begin <= now && game_phase.end >= now) return now
+	else return game_phase.begin
+})
 
 const { data: courts } = getTournamentCourts(route)
 const { data: tournament } = getTournamentDetails(route, t, toast)

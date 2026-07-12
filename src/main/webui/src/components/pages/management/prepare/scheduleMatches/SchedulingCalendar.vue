@@ -87,7 +87,14 @@ const { data: exMatches } = getScheduledMatchEventsExceptCompetition(
 
 const selectedDate = ref(new Date())
 watch(tournament, () => {
-	if (tournament.value) selectedDate.value = tournament.value?.game_phase.begin
+	if (tournament.value) {
+		const game_phase = tournament.value.game_phase
+		const now = new Date()
+		if (game_phase.begin <= now && game_phase.end >= now)
+			selectedDate.value = now
+		else
+			selectedDate.value = game_phase.begin
+	}
 })
 
 const events = defineModel<MatchCalEvent[]>({ default: [] })
