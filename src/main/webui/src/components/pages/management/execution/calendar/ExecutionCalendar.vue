@@ -135,6 +135,9 @@ function onEventChange(event: MatchCalEvent) {
 		console.error("Event has no id")
 		return
 	}
+	// this is necessary as event is serialized and uses its object properties
+	event.data.begin = new Date(event.data.begin as unknown as string)
+	event.data.end = new Date(event.data.end as unknown as string)
 
 	changeSet.delete(event.data.id)
 
