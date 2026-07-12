@@ -157,11 +157,9 @@ public class TournamentResource {
     @Transactional
     @Produces(MediaType.TEXT_PLAIN)
     public String deleteTournament(@QueryParam("tourName") String tourName) {
-        System.out.println("Deleting tournament: " + tourName);
-        System.err.println("Deleting tournament: " + tourName);
+        if (tourName == null || tourName.isBlank())
+            throw new BadRequestException("Tournament name is empty");
         Tournament tournament = tournaments.getByName(tourName);
-        System.out.println("Deleting tournament: " + tourName);
-        System.err.println("Deleting tournament: " + tourName);
         if (tournament == null)
             throw new NotFoundException("Tournament with this id does not exist");
         tournaments.delete(tournament);
