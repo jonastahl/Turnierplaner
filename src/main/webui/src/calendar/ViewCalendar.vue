@@ -64,6 +64,7 @@ import "vue-cal/dist/vuecal.css"
 import { Ref, ref, watch } from "vue"
 import { CalEvent, DaySplit, View } from "@/calendar/CalendarInterfaces"
 import { sleep } from "@/backend/Tracker"
+import { useRoute, useRouter } from "vue-router"
 
 const props = withDefaults(
 	defineProps<{
@@ -107,10 +108,15 @@ const props = withDefaults(
 	},
 )
 
+const router = useRouter()
+const route = useRoute()
+
 const events = defineModel<CalEvent<T>[]>({ default: [] })
 
-const activeView = defineModel<View>("activeView", { default: View.day })
-const selectedDate = ref(props.selectedDate)
+const activeView = ref(route.query.view == "week" ? View.week : View.day)
+const selectedDate = ref(
+	route.query.date ? new Date(route.query.date as string) : props.selectedDate,
+)
 
 const emit = defineEmits<{
 	onEventDrop: [CalEvent<T>, CalEvent<T>, boolean]
@@ -212,13 +218,19 @@ function onViewChange({
 	emit("onViewChange", startDate, endDate)
 
 	selectedDate.value = endDate
-	adjustScroll()
+	router.replace({
+		query: {
+			date: endDate.toISOString().split("T")[0],
+			view: activeView.value,
+		},
+	})
 }
 
 async function adjustScroll() {
 	await sleep(500)
 	const calendar = document.querySelector("#vuecal .vuecal__bg")
-	if (calendar)
+
+	if (calendar && calendar.scrollTop === 0)
 		calendar.scrollTo({
 			top: (60 / props.timeStep) * 8 * props.timeCellHeight,
 			behavior: "smooth",
