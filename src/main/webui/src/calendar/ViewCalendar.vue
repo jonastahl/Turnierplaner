@@ -27,6 +27,7 @@
 			delete: props.deletableEvents,
 			create: false,
 		}"
+		todayButton
 		@event-drop="onEventDrop"
 		@event-change="onEventChange"
 		@event-delete="onEventDelete"
