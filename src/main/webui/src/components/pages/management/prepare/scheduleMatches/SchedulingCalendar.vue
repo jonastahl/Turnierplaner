@@ -92,8 +92,7 @@ watch(tournament, () => {
 		const now = new Date()
 		if (game_phase.begin <= now && game_phase.end >= now)
 			selectedDate.value = now
-		else
-			selectedDate.value = game_phase.begin
+		else selectedDate.value = game_phase.begin
 	}
 })
 
