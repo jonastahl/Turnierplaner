@@ -129,7 +129,7 @@
 		"tournamentDeleted": "Turnier gelöscht",
 		"tournamentDeleteFailed": "Löschen fehlgeschlagen",
 		"tournamentUpdate": "Turnier aktualisieren",
-		"confirmDelete": "Möchten Sie diesen Turnier wirklich löschen?"
+		"confirmDelete": "Möchten Sie dieses Turnier wirklich löschen?"
 	},
 	"ViewCompetitions": {
 		"loadingFailed": "Konkurrenzen konnten nicht geladen werden",
