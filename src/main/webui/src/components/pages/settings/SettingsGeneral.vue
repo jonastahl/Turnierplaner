@@ -42,7 +42,7 @@
 			</InputSwitch>
 		</div>
 		<div class="mt-2 flex flex-row justify-content-end">
-			<Button @click="backupDialog = true" severity="danger">
+			<Button severity="danger" @click="backupDialog = true">
 				{{ t("settings.backup") }}
 			</Button>
 		</div>
@@ -53,16 +53,16 @@
 		<p>{{ t("settings.backup_restore_warning") }}</p>
 		<div class="flex flex-row justify-content-end">
 			<Button
-				@click="downloadBackup"
 				icon="pi pi-download"
 				:label="t('settings.download_backup')"
+				@click="downloadBackup"
 			/>
 			<Button
 				class="ml-2"
-				@click="restoreBackup"
 				severity="danger"
 				icon="pi pi-history"
 				:label="t('settings.restore_backup')"
+				@click="restoreBackup"
 			/>
 		</div>
 	</Dialog>
@@ -107,7 +107,6 @@ watch(
 )
 
 const backupDialog = ref(false)
-const restoreConfirmDialog = ref(false)
 
 async function downloadBackup() {
 	axios
