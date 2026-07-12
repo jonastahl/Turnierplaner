@@ -9,6 +9,7 @@
 		:split-days="splitDays"
 		editable-events
 		@on-view-change="onViewChange"
+		@on-event-change="onEventChange"
 	>
 		<template #event="{ event }">
 			<MatchEvent
@@ -20,10 +21,11 @@
 	</ViewCalendar>
 	<ChangeDialog
 		v-model:visible="chgoverviewvisible"
-		:change-set="changeSet"
+		:change-set="changeSet.values().toArray()"
 		@publishing="
 			() => {
-				events.splice(0, events.length)
+				changeSet.clear()
+				changeSize = 0
 				chgoverviewvisible = false
 			}
 		"
@@ -41,7 +43,11 @@ import { computed, ref, watch } from "vue"
 import { getTournamentCourts } from "@/backend/court"
 import { getTournamentDetails } from "@/backend/tournament"
 import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
-import { getScheduledMatchesEvents } from "@/backend/match"
+import {
+	eventToAnnotatedMatch,
+	getScheduledMatchesEvents,
+	matchToEvent,
+} from "@/backend/match"
 import ChangeDialog from "@/components/pages/management/execution/calendar/ChangeDialog.vue"
 
 const changeSize = defineModel<number>("changeSize", { default: 0 })
@@ -74,18 +80,30 @@ function onViewChange(startDate: Date, endDate: Date) {
 const events = ref<MatchCalEvent[]>([])
 
 watch(matches, () => {
-	if (!isSuccess.value || changeSet.value.length || !matches.value) return
+	if (!isSuccess.value || !matches.value) return
 	events.value.splice(0, events.value.length)
 
 	matches.value.forEach((match) => {
 		const otherTour = match.data.tourName !== route.params.tourId
+
+		if (match.data.id && !changeSet.has(match.data.id)) {
+			events.value.push({
+				draggable: !otherTour,
+				resizable: !otherTour,
+				deletable: !otherTour,
+				secondary: otherTour,
+				class: otherTour ? "superextern" : "",
+				...match,
+			})
+		}
+	})
+	changeSet.values().forEach(([, to]: [AnnotatedMatch, AnnotatedMatch]) => {
 		events.value.push({
-			draggable: !otherTour,
-			resizable: !otherTour,
-			deletable: !otherTour,
-			secondary: otherTour,
-			class: otherTour ? "superextern" : "",
-			...match,
+			draggable: true,
+			resizable: true,
+			deletable: true,
+			secondary: false,
+			...matchToEvent(to),
 		})
 	})
 })
@@ -102,17 +120,30 @@ const splitDays = computed(() => {
 	})
 })
 
-const changeSet = computed<MatchCalEvent[]>(() => {
-	return events.value.filter(
-		(event) =>
-			event.start.getTime() !== event.data.begin?.getTime() ||
-			event.end.getTime() !== event.data.end?.getTime() ||
-			event.split !== event.data.court,
+const changeSet = new Map<string, [AnnotatedMatch, AnnotatedMatch]>()
+
+function changed(event: MatchCalEvent): boolean {
+	return (
+		event.start.getTime() !== event.data.begin?.getTime() ||
+		event.end.getTime() !== event.data.end?.getTime() ||
+		event.split !== event.data.court
 	)
-})
-watch(changeSet, () => {
-	changeSize.value = changeSet.value.length
-})
+}
+
+function onEventChange(event: MatchCalEvent) {
+	if (!event.data.id) {
+		console.error("Event has no id")
+		return
+	}
+
+	changeSet.delete(event.data.id)
+
+	if (changed(event)) {
+		changeSet.set(event.data.id, [event.data, eventToAnnotatedMatch(event)])
+	}
+
+	changeSize.value = changeSet.size
+}
 
 function save() {
 	chgoverviewvisible.value = true

@@ -8,11 +8,11 @@
 	>
 		<div class="flex flex-row flex-wrap gap-2">
 			<MatchEventColor
-				v-for="match in props.changeSet"
-				:key="match.id"
+				v-for="[from, to] in props.changeSet"
+				:key="from.id"
 				class="border-round"
 			>
-				<UpdatedMatch :match="match" />
+				<UpdatedMatch :from="from" :to="to" />
 			</MatchEventColor>
 		</div>
 		<div class="flex justify-content-end">
@@ -24,7 +24,7 @@
 				@click="
 					() => {
 						emit('publishing')
-						reschedule(props.changeSet)
+						reschedule(props.changeSet.map(([, to]) => to))
 					}
 				"
 			/>
@@ -40,9 +40,10 @@ import MatchEventColor from "@/components/items/MatchEventColor.vue"
 import { useToast } from "primevue/usetoast"
 import { useRescheduleMatches } from "@/backend/match"
 import { useRoute } from "vue-router"
+import { AnnotatedMatch } from "@/interfaces/match"
 
 const visible = defineModel<boolean>()
-const props = defineProps<{ changeSet: MatchCalEvent[] }>()
+const props = defineProps<{ changeSet: [AnnotatedMatch, AnnotatedMatch][] }>()
 
 const route = useRoute()
 const { t } = useI18n()

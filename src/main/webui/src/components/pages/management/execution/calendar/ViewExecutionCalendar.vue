@@ -11,7 +11,7 @@
 					<Button
 						v-if="calendarView.id === CALENDAR"
 						:size="'small'"
-						:label="t('general.saveandpublish')"
+						:label="t('general.reviewchanges')"
 						:disabled="changeSize === 0"
 						:badge="changeSize.toString()"
 						@click="calendar?.save()"

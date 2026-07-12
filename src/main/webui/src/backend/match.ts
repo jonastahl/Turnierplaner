@@ -81,12 +81,12 @@ export function useRescheduleMatches(
 ) {
 	const queryClient = useQueryClient()
 	return useMutation({
-		mutationFn: (matches: MatchEvent[]) =>
+		mutationFn: (matches: AnnotatedMatch[]) =>
 			axios.post(
 				`/tournament/${<string>route.params.tourId}/competition/reschedule`,
-				matches.map(eventToAnnotatedMatch).map(matchClientToServer),
+				matches.map(matchClientToServer),
 			),
-		onSuccess(data: AxiosResponse, matches: MatchEvent[]) {
+		onSuccess(data: AxiosResponse, matches: AnnotatedMatch[]) {
 			let message
 			if (data.status == 200) {
 				if (matches.length === 1) {
