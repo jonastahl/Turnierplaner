@@ -161,7 +161,7 @@ public class TournamentResource {
             throw new BadRequestException("Tournament name is empty");
         Tournament tournament = tournaments.getByName(tourName);
         if (tournament == null)
-            throw new NotFoundException("Tournament with this id does not exist");
+            throw new NotFoundException("Tournament with this name does not exist");
         tournaments.delete(tournament);
         return "Tournament deleted successfully";
     }
