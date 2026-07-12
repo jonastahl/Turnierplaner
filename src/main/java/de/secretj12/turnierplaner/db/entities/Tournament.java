@@ -39,9 +39,9 @@ public class Tournament {
 
     @ManyToMany
     @JoinTable(
-        name = "court_of_tournament",
-        joinColumns = {@JoinColumn(name = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "name")}
+               name = "court_of_tournament",
+               joinColumns = {@JoinColumn(name = "id")},
+               inverseJoinColumns = {@JoinColumn(name = "name")}
     )
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
     @JsonIdentityReference(alwaysAsId = true)
