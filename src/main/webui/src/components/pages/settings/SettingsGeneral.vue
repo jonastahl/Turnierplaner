@@ -140,7 +140,10 @@ function restoreBackup() {
 			fileInput.onchange = async (event) => {
 				if (!event.target) return
 
-				const file = event.target.files[0]
+				const target = event.target as HTMLInputElement
+				if (!target || !target.files) return
+
+				const file = target.files[0]
 				if (!file) return
 
 				try {
