@@ -146,6 +146,7 @@ export function getScheduledMatches(
 					matches.data.map(annotatedMatchServerToClient),
 				)
 		},
+		enabled: computed(() => from.value !== undefined && to.value != undefined),
 	})
 }
 export function getScheduledMatchesEvents(

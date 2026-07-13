@@ -2,13 +2,14 @@
 	<ViewCalendar
 		v-if="tournament"
 		v-model="events"
+		v-model:start-date="curStart"
+		v-model:end-date="curEnd"
 		style="height: 800px"
 		:selected-date="selected_date"
 		:min-date="tournament.game_phase.begin"
 		:max-date="tournament.game_phase.end"
 		:split-days="splitDays"
 		editable-events
-		@on-view-change="onViewChange"
 		@on-event-change="onEventChange"
 	>
 		<template #event="{ event }">
@@ -71,11 +72,6 @@ const selected_date = computed(() => {
 	if (game_phase.begin <= now && game_phase.end >= now) return now
 	else return game_phase.begin
 })
-
-function onViewChange(startDate: Date, endDate: Date) {
-	curStart.value = startDate
-	curEnd.value = endDate
-}
 
 const events = ref<MatchCalEvent[]>([])
 

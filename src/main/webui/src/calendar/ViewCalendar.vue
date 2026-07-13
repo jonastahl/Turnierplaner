@@ -111,6 +111,8 @@ const router = useRouter()
 const route = useRoute()
 
 const events = defineModel<CalEvent<T>[]>({ default: [] })
+const myStartDate = defineModel<Date>("startDate", { default: new Date() })
+const myEndDate = defineModel<Date>("endDate", { default: new Date() })
 
 const activeView = ref(route.query.view == "week" ? View.week : View.day)
 const usersDate = ref(genSelDate())
@@ -132,12 +134,11 @@ const calid = ref<number>(0)
 
 watch(
 	[vuecal],
-	() => {
-
-		// needed to always trigger onViewChange
-		vuecal.value.previous()
-		vuecal.value.next()
-		updateView()
+	async () => {
+		if (vuecal.value) {
+			myStartDate.value = vuecal.value.view.startDate
+			myEndDate.value = vuecal.value.view.endDate
+		}
 	},
 	{
 		once: true,
@@ -151,7 +152,7 @@ watch([() => props.splitDays, () => props.selectedDate], () => {
 function updateView() {
 	if (!vuecal.value || !props.selectedDate) return
 
-	vuecal.value.switchView(activeView.value, usersDate.value)
+	// vuecal.value.switchView(activeView.value, usersDate.value)
 }
 
 function previous() {
@@ -163,7 +164,7 @@ function next() {
 }
 
 function switchView(view: View, date?: Date) {
-	if (vuecal.value) switchView(view, date)
+	if (vuecal.value) vuecal.value.switchView(view, date)
 }
 
 function reload() {
@@ -219,6 +220,8 @@ function onViewChange({
 	startDate: Date
 	endDate: Date
 }) {
+	myStartDate.value = startDate
+	myEndDate.value = endDate
 	emit("onViewChange", startDate, endDate)
 
 	usersDate.value = endDate
