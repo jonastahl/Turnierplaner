@@ -6,15 +6,13 @@ import de.secretj12.turnierplaner.db.entities.Player;
 import de.secretj12.turnierplaner.db.entities.Tournament;
 import de.secretj12.turnierplaner.db.entities.competition.Competition;
 import de.secretj12.turnierplaner.db.entities.competition.Competition_;
+import de.secretj12.turnierplaner.db.entities.competition.Team;
 import de.secretj12.turnierplaner.db.entities.competition.Team_;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -82,11 +80,14 @@ public class MatchRepository implements PanacheRepository<Match> {
             predicates.add(cb.equal(root.get(Match_.COMPETITION).get(Competition_.TOURNAMENT), tournament));
         }
         if (player != null) {
+            Join<Match, Team> teamAJoin = root.join(Match_.TEAM_A, JoinType.LEFT);
+            Join<Match, Team> teamBJoin = root.join(Match_.TEAM_B, JoinType.LEFT);
+
             predicates.add(cb.or(
-                cb.equal(root.get(Match_.TEAM_A).get(Team_.PLAYER_A), player),
-                cb.equal(root.get(Match_.TEAM_A).get(Team_.PLAYER_B), player),
-                cb.equal(root.get(Match_.TEAM_B).get(Team_.PLAYER_A), player),
-                cb.equal(root.get(Match_.TEAM_B).get(Team_.PLAYER_B), player)
+                cb.equal(teamAJoin.get(Team_.PLAYER_A), player),
+                cb.equal(teamAJoin.get(Team_.PLAYER_B), player),
+                cb.equal(teamBJoin.get(Team_.PLAYER_A), player),
+                cb.equal(teamBJoin.get(Team_.PLAYER_B), player)
             ));
         }
         if (from != null) {
