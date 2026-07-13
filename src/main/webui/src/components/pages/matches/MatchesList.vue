@@ -202,9 +202,7 @@ import LinkCompetition from "@/components/links/LinkCompetition.vue"
 import { genTitle, getScheduledMatches } from "@/backend/match"
 import ResultCompact from "@/components/items/ResultCompact.vue"
 
-const props = defineProps<{
-	tourId?: string
-	playerId?: string
+defineProps<{
 	editResult?: boolean
 }>()
 
@@ -262,8 +260,8 @@ const { data: matches } = getScheduledMatches(
 		new Date(),
 	computed(() => (<DataTableFilterMetaData>filters.value.end).value) ||
 		new Date().setMonth(new Date().getMonth() + 2),
-	computed(() => props.playerId),
-	computed(() => props.tourId),
+	computed(() => route.params.playerId as string | undefined),
+	computed(() => route.params.tourId as string | undefined),
 )
 
 const dateOptions: Intl.DateTimeFormatOptions = {
