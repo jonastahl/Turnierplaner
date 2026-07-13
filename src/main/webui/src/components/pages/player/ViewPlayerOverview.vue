@@ -5,7 +5,7 @@
 				{{ t("ViewPlayerOverview.header") }} - {{ player?.name }}</template
 			>
 			<template #content>
-				<MatchesList :player-id="player?.id" edit-result />
+				<MatchesList :player-id="player?.id" />
 			</template>
 		</Card>
 	</div>

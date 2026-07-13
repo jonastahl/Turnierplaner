@@ -8,7 +8,7 @@
 					</template>
 				</SelectButton>
 				<MatchesCalendar v-if="calendarView.id === 'calendar'" />
-				<MatchesList v-else-if="calendarView.id === 'list'" edit-result />
+				<MatchesList v-else-if="calendarView.id === 'list'" />
 			</template>
 		</Card>
 	</div>

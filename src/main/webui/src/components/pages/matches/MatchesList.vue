@@ -176,7 +176,10 @@
 		<!-- TODO add results -->
 		<Column sortable field="sets" :header="t('general.result')">
 			<template #body="{ data }">
-				<ResultCompact :edit-result="editResult" :match="data" />
+				<ResultCompact
+					:edit-result="mayEditMatch(!!isDirector, !!isReporter, data)"
+					:match="data"
+				/>
 			</template>
 		</Column>
 	</DataTable>
@@ -186,7 +189,7 @@
 import { getTournamentDetails } from "@/backend/tournament"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { computed, ref } from "vue"
+import { computed, inject, ref } from "vue"
 import { getTournamentCourts } from "@/backend/court"
 import { FilterMatchMode, FilterService } from "primevue/api"
 import {
@@ -201,16 +204,18 @@ import LinkTournament from "@/components/links/LinkTournament.vue"
 import LinkCompetition from "@/components/links/LinkCompetition.vue"
 import { genTitle, getScheduledMatches } from "@/backend/match"
 import ResultCompact from "@/components/items/ResultCompact.vue"
-
-defineProps<{
-	editResult?: boolean
-}>()
+import { mayEditMatch } from "@/backend/set"
+import { getIsDirector, getIsReporter } from "@/backend/security"
 
 const route = useRoute()
 const { t } = useI18n()
 const toast = useToast()
 const { data: tournament } = getTournamentDetails(route, t, toast)
 const { data: courts } = getTournamentCourts(route)
+
+const isLoggedIn = inject("loggedIn", ref(false))
+const { data: isReporter } = getIsReporter(isLoggedIn)
+const { data: isDirector } = getIsDirector(isLoggedIn)
 
 const TEAMS_FILTER = "TEAMS_FILTER"
 const TITLE_FILTER = "TITLE_FILTER"

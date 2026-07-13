@@ -25,7 +25,6 @@
 				<MatchesList
 					v-else-if="calendarView.id === LIST"
 					:tour-id="tournament?.id || undefined"
-					edit-result
 				/>
 			</template>
 		</Card>
