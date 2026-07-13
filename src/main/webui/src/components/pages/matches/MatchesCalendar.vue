@@ -11,7 +11,12 @@
 		:split-days="splitDays"
 	>
 		<template #event="{ event }">
-			<MatchEvent :match="<AnnotatedMatch>event.data" />
+			<MatchEvent
+				:match="<AnnotatedMatch>event.data"
+				:edit-result="
+					mayEditMatch(!!isDirector, !!isReporter, <AnnotatedMatch>event.data)
+				"
+			/>
 		</template>
 	</ViewCalendar>
 </template>
@@ -23,11 +28,13 @@ import MatchEvent from "@/components/items/MatchEvent.vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
-import { computed, ref, watch } from "vue"
+import { computed, inject, ref, watch } from "vue"
 import { getTournamentCourts } from "@/backend/court"
 import { getTournamentDetails } from "@/backend/tournament"
 import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
 import { getScheduledTournamentMatchEvents } from "@/backend/match"
+import { mayEditMatch } from "@/backend/set"
+import { getIsDirector, getIsReporter } from "@/backend/security"
 
 const route = useRoute()
 const { t } = useI18n()
@@ -35,6 +42,10 @@ const toast = useToast()
 
 const curStart = ref<Date | undefined>()
 const curEnd = ref<Date | undefined>()
+
+const isLoggedIn = inject("loggedIn", ref(false))
+const { data: isReporter } = getIsReporter(isLoggedIn)
+const { data: isDirector } = getIsDirector(isLoggedIn)
 
 const selected_date = computed(() => {
 	const now = new Date()
