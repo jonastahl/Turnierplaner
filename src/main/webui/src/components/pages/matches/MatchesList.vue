@@ -6,6 +6,7 @@
 		:loading="!matches"
 		:value="matches"
 		filter-display="row"
+		:global-filter-fields="['teamA', 'teamB']"
 	>
 		<template #empty> No matches found.</template>
 		<template #loading> Loading matches...</template>
@@ -142,14 +143,13 @@
 			<template #body="{ data }">
 				<ViewTeamNames :team="<Team>data.teamA" />
 			</template>
-			<template #filter="{ filterModel, filterCallback }">
+			<template #filter="{}">
 				<InputText
-					v-model="filterModel.value"
+					v-model="filters['global'].value"
 					size="small"
 					type="text"
 					class="p-column-filter"
 					:placeholder="t('general.filter_by_name')"
-					@input="filterCallback()"
 				/>
 			</template>
 		</Column>
@@ -161,16 +161,6 @@
 		>
 			<template #body="{ data }">
 				<ViewTeamNames :team="<Team>data.teamB" />
-			</template>
-			<template #filter="{ filterModel, filterCallback }">
-				<InputText
-					v-model="filterModel.value"
-					size="small"
-					type="text"
-					class="p-column-filter"
-					:placeholder="t('general.filter_by_name')"
-					@input="filterCallback()"
-				/>
 			</template>
 		</Column>
 		<!-- TODO add results -->
@@ -240,11 +230,13 @@ const filters = ref<DataTableFilterMeta>({
 		value: tournament.value ? tournament.value?.game_phase.end : endFallback,
 		matchMode: FilterMatchMode.DATE_BEFORE,
 	},
+	global: { value: null, matchMode: TEAMS_FILTER },
 	teamA: { value: null, matchMode: TEAMS_FILTER },
 	teamB: { value: null, matchMode: TEAMS_FILTER },
 })
 
 function teamFilter(team: Team | null, filter: string | null) {
+	console.log(team)
 	const filterValue = filter?.toLowerCase() || ""
 	const playerA = team?.playerA?.name.toLowerCase() || ""
 	const playerB = team?.playerB?.name.toLowerCase() || ""
