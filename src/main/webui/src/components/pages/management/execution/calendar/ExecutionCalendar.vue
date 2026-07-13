@@ -75,7 +75,8 @@ const selected_date = computed(() => {
 
 const events = ref<MatchCalEvent[]>([])
 
-watch(matches, () => {
+watch(matches, reloadEvents)
+function reloadEvents() {
 	if (!isSuccess.value || !matches.value) return
 	events.value.splice(0, events.value.length)
 
@@ -102,7 +103,7 @@ watch(matches, () => {
 			...matchToEvent(to),
 		})
 	})
-})
+}
 
 const splitDays = computed(() => {
 	if (!courts.value) return []
@@ -142,6 +143,7 @@ function onEventChange(event: MatchCalEvent) {
 	}
 
 	changeSize.value = changeSet.size
+	reloadEvents()
 }
 
 function save() {
