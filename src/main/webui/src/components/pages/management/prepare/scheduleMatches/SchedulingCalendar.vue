@@ -3,6 +3,8 @@
 		v-if="tournament"
 		ref="calendar"
 		v-model="events"
+		v-model:start-date="curStart"
+		v-model:end-date="curEnd"
 		style="height: 1000px"
 		:selected-date="selectedDate"
 		:min-date="tournament.game_phase.begin"
@@ -12,7 +14,6 @@
 		deletable-events
 		@on-event-drop="onEventDrop"
 		@on-event-delete="onEventDelete"
-		@on-view-change="onViewChange"
 		@on-event-change="onEventChange"
 	>
 		<template #event="{ event }">
@@ -86,15 +87,19 @@ const { data: exMatches } = getScheduledMatchEventsExceptCompetition(
 )
 
 const selectedDate = ref(new Date())
-watch(tournament, () => {
-	if (tournament.value) {
-		const game_phase = tournament.value.game_phase
-		const now = new Date()
-		if (game_phase.begin <= now && game_phase.end >= now)
-			selectedDate.value = now
-		else selectedDate.value = game_phase.begin
-	}
-})
+watch(
+	tournament,
+	() => {
+		if (tournament.value) {
+			const game_phase = tournament.value.game_phase
+			const now = new Date()
+			if (game_phase.begin <= now && game_phase.end >= now)
+				selectedDate.value = now
+			else selectedDate.value = game_phase.begin
+		}
+	},
+	{ immediate: true },
+)
 
 const events = defineModel<MatchCalEvent[]>({ default: [] })
 watch(
@@ -147,13 +152,6 @@ function updateExisting() {
 				})
 			})
 	}
-}
-
-// on onViewChange: load events from begin to end for courts
-// -> display as unchangeable event
-function onViewChange(startDate: Date, endDate: Date) {
-	curStart.value = startDate
-	curEnd.value = endDate
 }
 
 function addMatch(match: Match, title: AnnotatedMatch["title"]) {

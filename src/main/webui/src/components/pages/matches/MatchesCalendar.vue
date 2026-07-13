@@ -2,12 +2,13 @@
 	<ViewCalendar
 		v-if="tournament"
 		v-model:events="events"
+		v-model:start-date="curStart"
+		v-model:end-date="curEnd"
 		style="height: 800px"
 		:selected-date="selected_date"
 		:min-date="tournament.game_phase.begin"
 		:max-date="tournament.game_phase.end"
 		:split-days="splitDays"
-		@on-view-change="onViewChange"
 	>
 		<template #event="{ event }">
 			<MatchEvent :match="<AnnotatedMatch>event.data" />
@@ -51,11 +52,6 @@ const { data: matches } = getScheduledTournamentMatchEvents(
 	curStart,
 	curEnd,
 )
-
-function onViewChange(startDate: Date, endDate: Date) {
-	curStart.value = startDate
-	curEnd.value = endDate
-}
 
 const events = ref<MatchCalEvent[]>([])
 
