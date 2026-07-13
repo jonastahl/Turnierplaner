@@ -145,7 +145,7 @@
 			</template>
 			<template #filter="{}">
 				<InputText
-					v-model="filters['global'].value"
+					v-model="(filters['global'] as DataTableFilterMetaData).value"
 					size="small"
 					type="text"
 					class="p-column-filter"
@@ -179,7 +179,7 @@
 import { getTournamentDetails } from "@/backend/tournament"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { computed, inject, ref } from "vue"
+import { computed, inject, ref, watch } from "vue"
 import { getTournamentCourts } from "@/backend/court"
 import { FilterMatchMode, FilterService } from "primevue/api"
 import {
@@ -221,13 +221,11 @@ const filters = ref<DataTableFilterMeta>({
 	title: { value: null, matchMode: TITLE_FILTER },
 	court: { value: null, matchMode: FilterMatchMode.IN },
 	begin: {
-		value: tournament.value
-			? tournament.value?.game_phase.begin
-			: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000),
+		value: null,
 		matchMode: FilterMatchMode.DATE_AFTER,
 	},
 	end: {
-		value: tournament.value ? tournament.value?.game_phase.end : endFallback,
+		value: null,
 		matchMode: FilterMatchMode.DATE_BEFORE,
 	},
 	global: { value: null, matchMode: TEAMS_FILTER },
@@ -242,6 +240,29 @@ function teamFilter(team: Team | null, filter: string | null) {
 	const playerB = team?.playerB?.name.toLowerCase() || ""
 	return playerA.includes(filterValue) || playerB.includes(filterValue)
 }
+
+watch(
+	() => (filters.value.begin as DataTableFilterMetaData).value,
+	(newValue) => {
+		if (!newValue) {
+			;(filters.value.begin as DataTableFilterMetaData).value = tournament.value
+				? tournament.value?.game_phase.begin
+				: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
+		}
+	},
+	{ immediate: true },
+)
+watch(
+	() => (filters.value.end as DataTableFilterMetaData).value,
+	(newValue) => {
+		if (!newValue) {
+			;(filters.value.end as DataTableFilterMetaData).value = tournament.value
+				? tournament.value?.game_phase.end
+				: endFallback
+		}
+	},
+	{ immediate: true },
+)
 
 function titleFilter(
 	title: AnnotatedMatch["title"] | null,
