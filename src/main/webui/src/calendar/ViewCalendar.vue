@@ -133,6 +133,10 @@ const calid = ref<number>(0)
 watch(
 	[vuecal],
 	() => {
+
+		// needed to always trigger onViewChange
+		vuecal.value.previous()
+		vuecal.value.next()
 		updateView()
 	},
 	{
