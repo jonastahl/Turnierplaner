@@ -94,13 +94,14 @@ function reloadEvents() {
 			})
 		}
 	})
-	changeSet.values().forEach(([, to]: [AnnotatedMatch, AnnotatedMatch]) => {
+	changeSet.values().forEach(([from, to]: [AnnotatedMatch, AnnotatedMatch]) => {
 		events.value.push({
 			draggable: true,
 			resizable: true,
 			deletable: true,
 			secondary: false,
 			...matchToEvent(to),
+			data: from,
 		})
 	})
 }
