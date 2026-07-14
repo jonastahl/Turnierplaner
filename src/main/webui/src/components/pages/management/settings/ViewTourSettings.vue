@@ -56,7 +56,12 @@ const form = ref<InstanceType<typeof FormTournament> | null>(null)
 const router = useRouter()
 const confirm = useConfirm()
 
-const { mutate: deleteTournament } = useDeleteTournament(route, t, toast)
+const { mutate: deleteTournament } = useDeleteTournament(
+	route,
+	t,
+	toast,
+	router,
+)
 
 const isUpdating = defineModel<boolean>("isUpdating", { default: false })
 
@@ -86,7 +91,7 @@ function askDeleteTournament() {
 		acceptLabel: t("general.delete"),
 		accept: () =>
 			deleteTournament(undefined, {
-				onSuccess: () => router.back(),
+				onSuccess: () => {},
 			}),
 	})
 }

@@ -6,7 +6,6 @@ import {
 	tournamentServerToClient,
 } from "@/interfaces/tournament"
 import { ToastServiceMethods } from "primevue/toastservice"
-import { RouteLocationNormalizedLoaded } from "vue-router"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 
 export function getTournamentList(
@@ -150,39 +149,39 @@ export function useDeleteTournament(
 	route: RouteLocationNormalizedLoaded,
 	t: (s: string) => string,
 	toast: ToastServiceMethods,
+	router: Router,
 ) {
 	const queryClient = useQueryClient()
+	const tourId = String(route.params.tourId)
 	return useMutation({
 		mutationFn: () =>
 			axios.delete("/tournament/delete", {
-				params: { tourName: String(route.params.tourId) },
+				params: { tourName: tourId },
 			}),
 		onSuccess() {
-		Promise.all([
-			queryClient.invalidateQueries({
-				queryKey: ["tournamentList"],
-				refetchType: "all",
-			}),
-			queryClient.invalidateQueries({
-				queryKey: ["tournament"],
-				refetchType: "none",
-			}),
-			queryClient.invalidateQueries({
-				queryKey: ["competitionList"],
-				refetchType: "all",
-			}),
-			queryClient.invalidateQueries({
-				queryKey: ["competitionDetails"],
-				refetchType: "none",
-			}),
-		]).then(() => {
-				toast.add({
-					severity: "success",
-					summary: t("general.success"),
-					detail: t("ViewEditTournament.tournamentDeleted"),
-					life: 3000,
-				})
+			queryClient.removeQueries({
+				queryKey: ["tournament", tourId],
 			})
+			queryClient.removeQueries({
+				queryKey: ["competitionList", tourId],
+			})
+			queryClient.removeQueries({
+				queryKey: ["competitionDetails", tourId],
+			})
+			queryClient
+				.invalidateQueries({
+					queryKey: ["tournamentList"],
+					refetchType: "all",
+				})
+				.then(() => {
+					router.push("/")
+					toast.add({
+						severity: "success",
+						summary: t("general.success"),
+						detail: t("ViewEditTournament.tournamentDeleted"),
+						life: 3000,
+					})
+				})
 		},
 		onError() {
 			toast.add({
