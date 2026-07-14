@@ -501,9 +501,11 @@ public class CompetitionResource {
                         .add(m))
                 );
         }
-        boolean allSuc = true;
-        for (var entry : players.entrySet())
-            allSuc &= mailTemplates.sendPublishedMail(entry.getKey(), tourName, entry.getValue());
+
+        boolean allSuc = mailTemplates.sendAllAtomic(
+            players.entrySet(),
+            entry -> mailTemplates.createPublishedMail(entry.getKey(),
+                tourName, entry.getValue()));
 
         return RestResponse.ResponseBuilder
             .create(allSuc ? Response.Status.OK : Response.Status.PARTIAL_CONTENT, "Mails published")
@@ -546,9 +548,10 @@ public class CompetitionResource {
                     .add(Tuple2.of(match, oldData)));
         }
 
-        boolean allSuc = true;
-        for (var entry : players.entrySet())
-            allSuc &= mailTemplates.sendRescheduleMail(entry.getKey(), tourName, entry.getValue());
+        boolean allSuc = mailTemplates.sendAllAtomic(
+            players.entrySet(),
+            entry -> mailTemplates.createRescheduleMail(entry.getKey(), tourName, entry.getValue())
+        );
 
         return RestResponse.ResponseBuilder
             .create(allSuc ? Response.Status.OK : Response.Status.PARTIAL_CONTENT, "Mails published")

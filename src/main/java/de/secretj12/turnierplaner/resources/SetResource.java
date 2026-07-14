@@ -114,11 +114,11 @@ public class SetResource {
         matchRepository.persist(match);
         adjustNext(match, playerNotifications);
 
-        boolean allSuc = true;
-        for (var entry : playerNotifications.entrySet())
-            allSuc &= mailTemplates.sendMatchUpdateMail(entry.getKey(), tourId, compId,
+        boolean allSuc = mailTemplates.sendAllAtomic(
+            playerNotifications.entrySet(),
+            entry -> mailTemplates.createMatchUpdateMail(entry.getKey(), tourId, compId,
                 entry.getValue().update,
-                entry.getValue().add);
+                entry.getValue().add));
 
         return RestResponse.ResponseBuilder
             .create(allSuc ? Response.Status.OK : Response.Status.PARTIAL_CONTENT, "Mails published")
