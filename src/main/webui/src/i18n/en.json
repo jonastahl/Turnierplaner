@@ -133,8 +133,7 @@
 		"tournamentUpdate": "Update tournament",
 		"confirmDelete": "Are you sure you want to delete this tournament?"
 	},
-	"ViewTournament": {
-	},
+	"ViewTournament": {},
 	"ViewCompetitions": {
 		"loadingFailed": "Couldn't load competitions",
 		"add_title": "New competition",
