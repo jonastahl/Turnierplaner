@@ -34,6 +34,8 @@
 						<td style="width: 50%; padding: 10px; vertical-align: middle">
 							{#if game.opponentA != null}
 								<a style="white-space: pre-line; margin: 0; color: inherit; text-decoration: none" href="{url}/player/overview/{game.opponentA.getId()}">{game.opponentA.getFullName()}</a>
+							{#else}
+								???
               {/if}
 							{#if game.opponentB != null}
 								<br>
