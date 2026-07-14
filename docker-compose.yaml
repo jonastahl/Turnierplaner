@@ -17,6 +17,9 @@ services:
       TURNIERPLANER_REALM: Quarkus # used by user query for admin
       TURNIERPLANER_OIDC_FRONTEND: http://localhost:7777/realms/Quarkus # address used by frontend
 
+      # set this correctly for the date inside the mails
+      TZ: Europe/Berlin
+
       # remove next to line for a clean setup without testdata
       TURNIERPLANER_TESTDATA: true
       QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION: drop-and-create

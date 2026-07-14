@@ -14,7 +14,7 @@ public class VerificationCode {
     private UUID id;
 
     @OneToOne
-    @JoinColumn(name = "player_id")
+    @JoinColumn(name = "player_id", nullable = false)
     private Player player;
 
     @Column(name = "expiration_date")

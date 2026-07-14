@@ -29,6 +29,11 @@
 				</strong>
 				<div class="flex flex-row gap-3">
 					<Button
+						v-if="comp.cProgress === Progress.PUBLISHING"
+						:label="t('ViewManage.editSchedule')"
+						@click="editSchedule(comp.name)"
+					/>
+					<Button
 						:disabled="progressOrder(comp.cProgress) > 3"
 						:label="t('ViewManage.prepare')"
 						@click="
@@ -71,6 +76,7 @@
 import {
 	getCompetitionsList,
 	usePublishCompetitions,
+	useReopenSchedule,
 } from "@/backend/competition"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
@@ -91,6 +97,18 @@ const isLoggedIn = inject("loggedIn", ref(false))
 
 const { data: competitions } = getCompetitionsList(route, isLoggedIn, t, toast)
 const { mutate: publishCompetition } = usePublishCompetitions(route, t, toast)
+const { mutate: reopenSchedule } = useReopenSchedule(route, t, toast)
+
+function editSchedule(compName: string) {
+	reopenSchedule(compName, {
+		onSuccess() {
+			router.push({
+				name: Routes.ManagePrepare,
+				params: { tourId: route.params.tourId, compId: compName },
+			})
+		},
+	})
+}
 
 function publish(competitions: string[]) {
 	confirm.require({

@@ -6,6 +6,7 @@
 		:loading="!matches"
 		:value="matches"
 		filter-display="row"
+		:global-filter-fields="['teamA', 'teamB']"
 	>
 		<template #empty> No matches found.</template>
 		<template #loading> Loading matches...</template>
@@ -142,14 +143,13 @@
 			<template #body="{ data }">
 				<ViewTeamNames :team="<Team>data.teamA" />
 			</template>
-			<template #filter="{ filterModel, filterCallback }">
+			<template #filter="{}">
 				<InputText
-					v-model="filterModel.value"
+					v-model="(filters['global'] as DataTableFilterMetaData).value"
 					size="small"
 					type="text"
 					class="p-column-filter"
 					:placeholder="t('general.filter_by_name')"
-					@input="filterCallback()"
 				/>
 			</template>
 		</Column>
@@ -162,21 +162,14 @@
 			<template #body="{ data }">
 				<ViewTeamNames :team="<Team>data.teamB" />
 			</template>
-			<template #filter="{ filterModel, filterCallback }">
-				<InputText
-					v-model="filterModel.value"
-					size="small"
-					type="text"
-					class="p-column-filter"
-					:placeholder="t('general.filter_by_name')"
-					@input="filterCallback()"
-				/>
-			</template>
 		</Column>
 		<!-- TODO add results -->
 		<Column sortable field="sets" :header="t('general.result')">
 			<template #body="{ data }">
-				<ResultCompact :edit-result="editResult" :match="data" />
+				<ResultCompact
+					:edit-result="mayEditMatch(!!isDirector, !!isReporter, data)"
+					:match="data"
+				/>
 			</template>
 		</Column>
 	</DataTable>
@@ -186,7 +179,7 @@
 import { getTournamentDetails } from "@/backend/tournament"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { computed, ref } from "vue"
+import { computed, inject, ref, watch } from "vue"
 import { getTournamentCourts } from "@/backend/court"
 import { FilterMatchMode, FilterService } from "primevue/api"
 import {
@@ -201,18 +194,18 @@ import LinkTournament from "@/components/links/LinkTournament.vue"
 import LinkCompetition from "@/components/links/LinkCompetition.vue"
 import { genTitle, getScheduledMatches } from "@/backend/match"
 import ResultCompact from "@/components/items/ResultCompact.vue"
-
-const props = defineProps<{
-	tourId?: string
-	playerId?: string
-	editResult?: boolean
-}>()
+import { mayEditMatch } from "@/backend/set"
+import { getIsDirector, getIsReporter } from "@/backend/security"
 
 const route = useRoute()
 const { t } = useI18n()
 const toast = useToast()
 const { data: tournament } = getTournamentDetails(route, t, toast)
 const { data: courts } = getTournamentCourts(route)
+
+const isLoggedIn = inject("loggedIn", ref(false))
+const { data: isReporter } = getIsReporter(isLoggedIn)
+const { data: isDirector } = getIsDirector(isLoggedIn)
 
 const TEAMS_FILTER = "TEAMS_FILTER"
 const TITLE_FILTER = "TITLE_FILTER"
@@ -228,25 +221,48 @@ const filters = ref<DataTableFilterMeta>({
 	title: { value: null, matchMode: TITLE_FILTER },
 	court: { value: null, matchMode: FilterMatchMode.IN },
 	begin: {
-		value: tournament.value
-			? tournament.value?.game_phase.begin
-			: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000),
+		value: null,
 		matchMode: FilterMatchMode.DATE_AFTER,
 	},
 	end: {
-		value: tournament.value ? tournament.value?.game_phase.end : endFallback,
+		value: null,
 		matchMode: FilterMatchMode.DATE_BEFORE,
 	},
+	global: { value: null, matchMode: TEAMS_FILTER },
 	teamA: { value: null, matchMode: TEAMS_FILTER },
 	teamB: { value: null, matchMode: TEAMS_FILTER },
 })
 
 function teamFilter(team: Team | null, filter: string | null) {
+	console.log(team)
 	const filterValue = filter?.toLowerCase() || ""
 	const playerA = team?.playerA?.name.toLowerCase() || ""
 	const playerB = team?.playerB?.name.toLowerCase() || ""
 	return playerA.includes(filterValue) || playerB.includes(filterValue)
 }
+
+watch(
+	() => (filters.value.begin as DataTableFilterMetaData).value,
+	(newValue) => {
+		if (!newValue) {
+			;(filters.value.begin as DataTableFilterMetaData).value = tournament.value
+				? tournament.value?.game_phase.begin
+				: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
+		}
+	},
+	{ immediate: true },
+)
+watch(
+	() => (filters.value.end as DataTableFilterMetaData).value,
+	(newValue) => {
+		if (!newValue) {
+			;(filters.value.end as DataTableFilterMetaData).value = tournament.value
+				? tournament.value?.game_phase.end
+				: endFallback
+		}
+	},
+	{ immediate: true },
+)
 
 function titleFilter(
 	title: AnnotatedMatch["title"] | null,
@@ -262,8 +278,8 @@ const { data: matches } = getScheduledMatches(
 		new Date(),
 	computed(() => (<DataTableFilterMetaData>filters.value.end).value) ||
 		new Date().setMonth(new Date().getMonth() + 2),
-	computed(() => props.playerId),
-	computed(() => props.tourId),
+	computed(() => route.params.playerId as string | undefined),
+	computed(() => route.params.tourId as string | undefined),
 )
 
 const dateOptions: Intl.DateTimeFormatOptions = {

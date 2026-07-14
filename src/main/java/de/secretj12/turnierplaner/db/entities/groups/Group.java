@@ -1,5 +1,9 @@
 package de.secretj12.turnierplaner.db.entities.groups;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.secretj12.turnierplaner.db.entities.Match;
 import de.secretj12.turnierplaner.db.entities.competition.Competition;
 import jakarta.persistence.*;
@@ -17,17 +21,25 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
+
     @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private Set<MatchOfGroup> matchesOfGroup;
     @Column(name = "index")
     private byte index;
+
     @ManyToOne
     @JoinColumn(name = "competition_id", nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Competition competition;
 
     @OneToMany(mappedBy = "groupA", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private Set<FinalOfGroup> finalOfGroupA;
+
     @OneToMany(mappedBy = "groupB", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private Set<FinalOfGroup> finalOfGroupB;
 
     public UUID getId() {
@@ -62,6 +74,7 @@ public class Group {
         this.matchesOfGroup = matchesOfGroup;
     }
 
+    @JsonIgnore
     public Set<Match> getMatches() {
         if (matchesOfGroup == null)
             return Set.of();

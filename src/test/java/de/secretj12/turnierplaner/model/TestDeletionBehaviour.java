@@ -247,4 +247,13 @@ public class TestDeletionBehaviour {
         matchRepository.delete(all.getFirst());
         assertEquals(0, setRepository.findAll().count());
     }
+
+    @AfterEach
+    @Transactional
+    public void clearData() {
+        tournamentRepository.findAll().stream().forEach(t -> tournamentRepository.delete(t));
+
+        Panache.getEntityManager().flush();
+        Panache.getEntityManager().clear();
+    }
 }

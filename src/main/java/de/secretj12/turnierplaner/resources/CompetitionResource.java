@@ -459,6 +459,22 @@ public class CompetitionResource {
     }
 
     @POST
+    @Path("/{compName}/reopenSchedule")
+    @Transactional
+    @RolesAllowed("director")
+    public String reopenSchedule(@PathParam("tourName") String tourName, @PathParam("compName") String compName) {
+        Competition competition = competitions.getByName(tourName, compName);
+        if (competition == null) throw new NotFoundException("Competition could not be found");
+        if (competition.getcProgress() != CreationProgress.PUBLISHING)
+            throw new BadRequestException("Can only reopen a competition that is ready for publishing");
+
+        competition.setcProgress(CreationProgress.SCHEDULING);
+        competitions.persist(competition);
+
+        return "Schedule reopened for editing";
+    }
+
+    @POST
     @Path("/publish")
     @Transactional
     @RolesAllowed("director")
@@ -485,9 +501,11 @@ public class CompetitionResource {
                         .add(m))
                 );
         }
-        boolean allSuc = true;
-        for (var entry : players.entrySet())
-            allSuc &= mailTemplates.sendPublishedMail(entry.getKey(), tourName, entry.getValue());
+
+        boolean allSuc = mailTemplates.sendAllAtomic(
+            players.entrySet(),
+            entry -> mailTemplates.createPublishedMail(entry.getKey(),
+                tourName, entry.getValue()));
 
         return RestResponse.ResponseBuilder
             .create(allSuc ? Response.Status.OK : Response.Status.PARTIAL_CONTENT, "Mails published")
@@ -530,9 +548,10 @@ public class CompetitionResource {
                     .add(Tuple2.of(match, oldData)));
         }
 
-        boolean allSuc = true;
-        for (var entry : players.entrySet())
-            allSuc &= mailTemplates.sendRescheduleMail(entry.getKey(), tourName, entry.getValue());
+        boolean allSuc = mailTemplates.sendAllAtomic(
+            players.entrySet(),
+            entry -> mailTemplates.createRescheduleMail(entry.getKey(), tourName, entry.getValue())
+        );
 
         return RestResponse.ResponseBuilder
             .create(allSuc ? Response.Status.OK : Response.Status.PARTIAL_CONTENT, "Mails published")

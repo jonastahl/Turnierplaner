@@ -1,21 +1,17 @@
 <template>
-	<span
-		v-if="props.player"
-		class="cursor-pointer hover:underline"
-		@click="click"
-	>
+	<LinkStub v-if="props.player" :route-target="routeTarget">
 		<template v-if="inverted">
 			{{ props.player.lastName }}, {{ firstShort }}
 		</template>
 		<template v-else>{{ firstShort }} {{ props.player.lastName }}</template>
-	</span>
+	</LinkStub>
 </template>
 
 <script setup lang="ts">
 import { Player } from "@/interfaces/player"
-import { router } from "@/main"
 import { computed } from "vue"
 import { Routes } from "@/routes"
+import LinkStub from "@/components/links/LinkStub.vue"
 
 const props = withDefaults(
 	defineProps<{
@@ -36,15 +32,17 @@ const firstShort = computed(() => {
 	else return props.player.firstName
 })
 
-function click() {
-	if (props.player)
-		router.push({
+const routeTarget = computed(() => {
+	if (props.player) {
+		return {
 			name: Routes.PlayerOverview,
 			params: {
 				playerId: props.player.id,
 			},
-		})
-}
+		}
+	}
+	return null
+})
 </script>
 
 <style scoped>

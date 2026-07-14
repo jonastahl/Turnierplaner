@@ -1,5 +1,9 @@
 package de.secretj12.turnierplaner.db.entities.knockout;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.secretj12.turnierplaner.db.entities.Match;
 import jakarta.persistence.*;
 
@@ -15,13 +19,19 @@ public class NextMatch {
     @MapsId
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JoinColumn(name = "next_match", referencedColumnName = "id", nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Match nextMatch;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "previous_a", referencedColumnName = "id", nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Match previousA;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "previous_b", referencedColumnName = "id", nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Match previousB;
 
     @JoinColumn(name = "winner")

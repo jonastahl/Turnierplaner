@@ -1,26 +1,28 @@
 <template>
-	<span class="cursor-pointer hover:underline" @click="click">
+	<LinkStub :route-target="routeTarget">
 		{{ props.tournament }}
-	</span>
+	</LinkStub>
 </template>
 
 <script setup lang="ts">
-import { router } from "@/main"
 import { Routes } from "@/routes"
+import { computed } from "vue"
 
 const props = defineProps<{
 	tournament?: string
 }>()
 
-function click() {
-	if (props.tournament)
-		router.push({
+const routeTarget = computed(() => {
+	if (props.tournament) {
+		return {
 			name: Routes.Competitions,
 			params: {
 				tourId: props.tournament,
 			},
-		})
-}
+		}
+	}
+	return null
+})
 </script>
 
 <style scoped></style>

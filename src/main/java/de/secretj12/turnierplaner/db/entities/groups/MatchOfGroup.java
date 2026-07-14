@@ -1,5 +1,9 @@
 package de.secretj12.turnierplaner.db.entities.groups;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.secretj12.turnierplaner.db.entities.Match;
 import jakarta.persistence.*;
 
@@ -14,11 +18,15 @@ public class MatchOfGroup {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", referencedColumnName = "id", nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Group group;
 
     @MapsId
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JoinColumn(name = "match", referencedColumnName = "id", nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Match match;
 
     public UUID getId() {

@@ -1,5 +1,9 @@
 package de.secretj12.turnierplaner.db.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.secretj12.turnierplaner.db.entities.competition.Competition;
 import jakarta.persistence.*;
 
@@ -39,9 +43,12 @@ public class Tournament {
                joinColumns = {@JoinColumn(name = "id")},
                inverseJoinColumns = {@JoinColumn(name = "name")}
     )
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<Court> courts;
 
     @OneToMany(mappedBy = "tournament", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private Set<Competition> competitions;
 
     public UUID getId() {

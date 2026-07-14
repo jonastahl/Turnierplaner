@@ -29,6 +29,7 @@
 		"saveandcont": "Save and continue",
 		"saveandcomp": "Save and complete",
 		"saveandpublish": "Save and publish",
+		"reviewchanges": "Review changes",
 		"saved": "Changes saved",
 		"save_failed": "Something went wrong while saving",
 		"loading_failed": "Something went wrong while loading",
@@ -297,6 +298,7 @@
 		"publish": "Publish",
 		"publishall": "Publish all",
 		"prepare": "Prepare",
+		"editSchedule": "Edit schedule",
 		"update_schedule_header": "The following matches were changed"
 	},
 	"validation": {
@@ -338,7 +340,12 @@
 		"player": "Player management",
 		"player_updated": "Player updated",
 		"player_update_headline": "Update player",
-		"language": "Language"
+		"language": "Language",
+		"backup": "Backup",
+		"backup_download_warning": "Downloading a backup may time some minutes. Please be patient.",
+		"backup_restore_warning": "Restoring a backup deletes all existing data. Please make sure you have a backup before restoring.",
+		"download_backup": "Download backup",
+		"restore_backup": "Restore backup"
 	},
 	"language": {
 		"en": "English",

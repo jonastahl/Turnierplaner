@@ -1,5 +1,9 @@
 package de.secretj12.turnierplaner.db.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.secretj12.turnierplaner.db.entities.competition.Competition;
 import de.secretj12.turnierplaner.db.entities.competition.Team;
 import de.secretj12.turnierplaner.db.entities.groups.FinalOfGroup;
@@ -35,9 +39,13 @@ public class Match {
     @Fetch(FetchMode.SELECT)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition_id", nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Competition competition;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "court")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
+    @JsonIdentityReference(alwaysAsId = true)
     private Court court;
 
     @Column(name = "begin_time")
@@ -57,32 +65,42 @@ public class Match {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_a")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Team teamA;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_b")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Team teamB;
 
     @Column(name = "number")
     private int number;
 
     @OneToOne(mappedBy = "nextMatch", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private NextMatch dependentOn;
 
     @OneToMany(mappedBy = "previousA", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private Collection<NextMatch> previousOfA;
 
     @OneToMany(mappedBy = "previousB", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private Collection<NextMatch> previousOfB;
 
     @Fetch(FetchMode.SELECT)
     @OneToOne(mappedBy = "nextMatch", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private FinalOfGroup finalOfGroup;
 
     @Fetch(FetchMode.SELECT)
     @OneToOne(mappedBy = "match", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private MatchOfGroup group;
 
     @OneToMany(mappedBy = "key.match", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Set> sets;
 
     public static Match copy(Match match) {
@@ -96,6 +114,7 @@ public class Match {
         return m;
     }
 
+    @JsonIgnore
     public Stream<Player> getPlayers() {
         return Stream.of(this.getTeamA(), this.getTeamB()).filter(Objects::nonNull)
             .flatMap(t -> Stream.of(t.getPlayerA(), t.getPlayerB())).filter(Objects::nonNull);

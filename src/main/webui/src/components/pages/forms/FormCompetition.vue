@@ -55,12 +55,11 @@
 			>
 				<template #value="slotProps">
 					<div v-if="slotProps.value" class="flex align-items-center">
-						<span
+						<i-material-symbols-grid-view-outline
 							v-if="slotProps.value === 'GROUPS'"
-							class="material-symbols-outlined mr-2"
-							>grid_view</span
-						>
-						<span v-else class="material-symbols-outlined mr-2">groups</span>
+							class="mr-2"
+						/>
+						<i-material-symbols-groups-outline v-else class="mr-2" />
 						<div v-if="slotProps.value === 'GROUPS'" class="mt-1">
 							{{ t("CompetitionSettings.groups") }}
 						</div>
@@ -74,12 +73,11 @@
 				</template>
 				<template #option="slotProps">
 					<div class="flex flex-row align-items-center">
-						<span
+						<i-material-symbols-grid-view-outline
 							v-if="slotProps.option.value === 'GROUPS'"
-							class="material-symbols-outlined mr-2"
-							>grid_view</span
-						>
-						<span v-else class="material-symbols-outlined mr-2">groups</span>
+							class="mr-2"
+						/>
+						<i-material-symbols-groups-outline v-else class="mr-2" />
 						<div class="mt-1">{{ slotProps.option.name }}</div>
 					</div>
 				</template>
@@ -103,13 +101,11 @@
 			>
 				<template #value="slotProps">
 					<div v-if="slotProps.value" class="flex align-items-center">
-						<span
+						<i-material-symbols-group-outline
 							v-if="slotProps.value === 'DOUBLE'"
-							class="material-symbols-outlined mr-2"
-						>
-							group
-						</span>
-						<span v-else class="material-symbols-outlined mr-2">person</span>
+							class="mr-2"
+						/>
+						<i-material-symbols-person-outline v-else class="mr-2" />
 						<div v-if="slotProps.value === 'DOUBLE'" class="mt-1">
 							{{ t("CompetitionSettings.double") }}
 						</div>
@@ -123,12 +119,11 @@
 				</template>
 				<template #option="slotProps">
 					<div class="flex align-items-center">
-						<span
+						<i-material-symbols-group-outline
 							v-if="slotProps.option.value === 'DOUBLE'"
-							class="material-symbols-outlined mr-2"
-							>group</span
-						>
-						<span v-else class="material-symbols-outlined mr-2">person</span>
+							class="mr-2"
+						/>
+						<i-material-symbols-person-outline v-else class="mr-2" />
 						<div class="mt-1">{{ slotProps.option.name }}</div>
 					</div>
 				</template>
@@ -161,15 +156,11 @@
 			>
 				<template #value="slotProps">
 					<div v-if="slotProps.value" class="flex align-items-center">
-						<span
+						<i-material-symbols-group-work-outline
 							v-if="slotProps.value == 'TOGETHER'"
-							class="material-symbols-outlined mr-2"
-						>
-							group_work
-						</span>
-						<span v-else class="material-symbols-outlined mr-2"
-							>workspaces</span
-						>
+							class="mr-2"
+						/>
+						<i-material-symbols-workspaces-outline v-else class="mr-2" />
 						<div v-if="slotProps.value === 'TOGETHER'" class="mt-1">
 							{{ t("CompetitionSettings.together") }}
 						</div>
@@ -183,14 +174,11 @@
 				</template>
 				<template #option="slotProps">
 					<div class="flex align-items-center">
-						<span
+						<i-material-symbols-group-work-outline
 							v-if="slotProps.option.value === 'TOGETHER'"
-							class="material-symbols-outlined mr-2"
-							>group_work</span
-						>
-						<span v-else class="material-symbols-outlined mr-2"
-							>workspaces</span
-						>
+							class="mr-2"
+						/>
+						<i-material-symbols-workspaces v-else class="mr-2" />
 						<div>{{ slotProps.option.name }}</div>
 					</div>
 				</template>

@@ -265,7 +265,8 @@ public class PlayerResource {
         for (var code : codes) {
             if (code.getPlayer() != null)
                 playerRepository.delete(code.getPlayer());
-            verificationCodeRepository.delete(code);
+            else
+                verificationCodeRepository.delete(code);
         }
     }
 }

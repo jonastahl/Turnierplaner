@@ -3,11 +3,11 @@
 		id="vuecal"
 		ref="vuecal"
 		:key="calid"
+		v-model:active-view="activeView"
 		:events="events"
-		:selected-date="props.selectedDate"
+		:selected-date="usersDate"
 		:time-from="props.timeFrom"
 		:time-to="props.timeTo"
-		:active-view="props.activeView"
 		:disable-views="props.disabledViews"
 		:min-date="props.minDate"
 		:max-date="props.maxDate"
@@ -27,6 +27,7 @@
 			delete: props.deletableEvents,
 			create: false,
 		}"
+		today-button
 		@event-drop="onEventDrop"
 		@event-change="onEventChange"
 		@event-delete="onEventDelete"
@@ -62,14 +63,13 @@ import VueCal from "vue-cal"
 import "vue-cal/dist/vuecal.css"
 import { Ref, ref, watch } from "vue"
 import { CalEvent, DaySplit, View } from "@/calendar/CalendarInterfaces"
-import { sleep } from "@/backend/Tracker"
+import { useRoute, useRouter } from "vue-router"
 
 const props = withDefaults(
 	defineProps<{
 		selectedDate?: Date
 		timeFrom?: number
 		timeTo?: number
-		activeView?: View
 		disabledViews?: View[]
 		minDate?: Date
 		maxDate?: Date
@@ -107,7 +107,20 @@ const props = withDefaults(
 	},
 )
 
+const router = useRouter()
+const route = useRoute()
+
 const events = defineModel<CalEvent<T>[]>({ default: [] })
+const myStartDate = defineModel<Date>("startDate", { default: new Date() })
+const myEndDate = defineModel<Date>("endDate", { default: new Date() })
+
+const activeView = ref(route.query.view == "week" ? View.week : View.day)
+const usersDate = ref(genSelDate())
+function genSelDate() {
+	return route.query.date
+		? new Date(route.query.date as string)
+		: props.selectedDate
+}
 
 const emit = defineEmits<{
 	onEventDrop: [CalEvent<T>, CalEvent<T>, boolean]
@@ -119,12 +132,28 @@ const emit = defineEmits<{
 const vuecal = ref()
 const calid = ref<number>(0)
 
-watch([vuecal, () => props.selectedDate], () => {
-	if (!vuecal.value || !props.selectedDate) return
-	// needed to always trigger the onViewChange
-	vuecal.value.previous()
-	vuecal.value.switchView("day", props.selectedDate)
+watch(
+	[vuecal],
+	async () => {
+		if (vuecal.value) {
+			myStartDate.value = vuecal.value.view.startDate
+			myEndDate.value = vuecal.value.view.endDate
+		}
+	},
+	{
+		once: true,
+	},
+)
+watch([() => props.splitDays, () => props.selectedDate], () => {
+	usersDate.value = genSelDate()
+	updateView()
 })
+
+function updateView() {
+	if (!vuecal.value || !props.selectedDate) return
+
+	// vuecal.value.switchView(activeView.value, usersDate.value)
+}
 
 function previous() {
 	if (vuecal.value) vuecal.value.previous()
@@ -135,7 +164,7 @@ function next() {
 }
 
 function switchView(view: View, date?: Date) {
-	if (vuecal.value) switchView(view, date)
+	if (vuecal.value) vuecal.value.switchView(view, date)
 }
 
 function reload() {
@@ -184,22 +213,24 @@ function onEventDelete(event: CalEvent<T>) {
 	emit("onEventDelete", event)
 }
 
-async function onViewChange({
+function onViewChange({
 	startDate,
 	endDate,
 }: {
 	startDate: Date
 	endDate: Date
 }) {
+	myStartDate.value = startDate
+	myEndDate.value = endDate
 	emit("onViewChange", startDate, endDate)
 
-	await sleep(500)
-	const calendar = document.querySelector("#vuecal .vuecal__bg")
-	if (calendar)
-		calendar.scrollTo({
-			top: (60 / props.timeStep) * 8 * props.timeCellHeight,
-			behavior: "smooth",
-		})
+	usersDate.value = endDate
+	router.replace({
+		query: {
+			date: endDate.toISOString().split("T")[0],
+			view: activeView.value,
+		},
+	})
 }
 </script>
 

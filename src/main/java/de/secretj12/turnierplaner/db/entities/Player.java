@@ -1,5 +1,6 @@
 package de.secretj12.turnierplaner.db.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.secretj12.turnierplaner.enums.Language;
 import de.secretj12.turnierplaner.enums.Sex;
 import jakarta.persistence.*;
@@ -74,6 +75,7 @@ public class Player {
     private Language language;
 
     @OneToOne(mappedBy = "player", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private VerificationCode verificationCode;
 
     public Player() {
@@ -171,6 +173,7 @@ public class Player {
         this.language = language;
     }
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public String getFullName() {
         return firstName + " " + lastName;
     }

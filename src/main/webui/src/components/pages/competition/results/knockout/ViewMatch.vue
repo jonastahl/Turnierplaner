@@ -32,7 +32,7 @@
 						}"
 						@click="showPopUp(props.match)"
 					>
-						<span class="material-symbols-outlined">add_circle</span>
+						<i-material-symbols-add-circle-outline class="w-2rem h-2rem" />
 					</td>
 				</template>
 			</tr>

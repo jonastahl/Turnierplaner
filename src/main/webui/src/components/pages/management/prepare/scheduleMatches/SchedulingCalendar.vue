@@ -3,8 +3,10 @@
 		v-if="tournament"
 		ref="calendar"
 		v-model="events"
+		v-model:start-date="curStart"
+		v-model:end-date="curEnd"
 		style="height: 1000px"
-		:selected-date="tournament.game_phase.begin"
+		:selected-date="selectedDate"
 		:min-date="tournament.game_phase.begin"
 		:max-date="tournament.game_phase.end"
 		:split-days="splitDays"
@@ -12,7 +14,7 @@
 		deletable-events
 		@on-event-drop="onEventDrop"
 		@on-event-delete="onEventDelete"
-		@on-view-change="onViewChange"
+		@on-event-change="onEventChange"
 	>
 		<template #event="{ event }">
 			<EventMatch
@@ -55,6 +57,7 @@ function reload() {
 const emit = defineEmits<{
 	removeId: [id: string]
 	deleteSchedule: [event: AnnotatedMatch]
+	eventFinished: []
 }>()
 const props = defineProps<{
 	courts: Court[]
@@ -83,16 +86,36 @@ const { data: exMatches } = getScheduledMatchEventsExceptCompetition(
 	curEnd,
 )
 
+const selectedDate = ref(new Date())
+watch(
+	tournament,
+	() => {
+		if (tournament.value) {
+			const game_phase = tournament.value.game_phase
+			const now = new Date()
+			if (game_phase.begin <= now && game_phase.end >= now)
+				selectedDate.value = now
+			else selectedDate.value = game_phase.begin
+		}
+	},
+	{ immediate: true },
+)
+
 const events = defineModel<MatchCalEvent[]>({ default: [] })
 watch(
 	[knockout, groups],
 	() => {
-		if (!knockoutSuc.value || !groupSuc.value || events.value.length) return
+		events.value.splice(0, events.value.length)
 
-		if (competition.value?.tourType === CompType.KNOCKOUT && knockout.value) {
+		if (
+			competition.value?.tourType === CompType.KNOCKOUT &&
+			knockoutSuc.value &&
+			knockout.value
+		) {
 			extractKnockoutMatches(knockout.value, addMatch)
 		} else if (
 			competition.value?.tourType === CompType.GROUPS &&
+			groupSuc.value &&
 			groups.value
 		) {
 			extractGroupMatches(groups.value, addMatch)
@@ -129,13 +152,6 @@ function updateExisting() {
 				})
 			})
 	}
-}
-
-// on onViewChange: load events from begin to end for courts
-// -> display as unchangeable event
-function onViewChange(startDate: Date, endDate: Date) {
-	curStart.value = startDate
-	curEnd.value = endDate
 }
 
 function addMatch(match: Match, title: AnnotatedMatch["title"]) {
@@ -178,6 +194,11 @@ function onEventDrop(
 
 function onEventDelete(event: MatchCalEvent) {
 	emit("deleteSchedule", event.data)
+	emit("eventFinished")
+}
+
+function onEventChange() {
+	emit("eventFinished")
 }
 
 const splitDays = computed(() => {

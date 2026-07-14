@@ -41,11 +41,9 @@
 					@click="randomize"
 				>
 					<template #icon>
-						<span
-							class="material-symbols-outlined mb-1 symbols-prep"
-							style="font-size: 1.2rem"
-							>casino</span
-						>
+						<i-material-symbols-casino-outline
+							class="symbols-prep size-1dot5rem"
+						/>
 					</template>
 				</SplitButton>
 			</TeamList>

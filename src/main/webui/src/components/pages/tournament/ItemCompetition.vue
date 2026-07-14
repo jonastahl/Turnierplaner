@@ -14,7 +14,7 @@
 			<Button outlined disabled style="visibility: hidden"> </Button>
 			<Button v-if="type === 'GROUPS'" text outlined disabled class="icon">
 				<template #icon>
-					<span class="material-symbols-outlined">grid_view</span>
+					<i-material-symbols-grid-view-outline />
 				</template>
 			</Button>
 			<Button
@@ -25,7 +25,7 @@
 				class="icon"
 			>
 				<template #icon>
-					<span class="material-symbols-outlined">groups</span>
+					<i-material-symbols-groups-outline />
 				</template>
 			</Button>
 			<Button
@@ -37,7 +37,7 @@
 				@click.stop
 			>
 				<template #icon>
-					<span class="material-symbols-outlined">settings</span>
+					<i-material-symbols-settings-outline class="size-1dot5rem" />
 				</template>
 			</Button>
 		</template>

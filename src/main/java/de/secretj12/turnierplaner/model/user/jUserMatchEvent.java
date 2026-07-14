@@ -41,7 +41,7 @@ public class jUserMatchEvent extends jUserMatch {
         this.compName = match.getCompetition().getName();
         this.type = match.getGroup() != null ? CompetitionType.GROUPS : CompetitionType.KNOCKOUT;
         this.number = match.getNumber();
-        this.total = match.getCompetition().getTotal();
+        this.total = match.getCompetition().getTotalRounds();
         if (match.getDependentOn() == null) {
             if (match.getFinalOfGroup() == null) {
                 this.isFinal = true;

@@ -1,5 +1,8 @@
 package de.secretj12.turnierplaner.db.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -45,6 +48,8 @@ public class Set {
     public static class SetKey implements Serializable {
         @ManyToOne
         @JoinColumn(name = "match_id")
+        @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+        @JsonIdentityReference(alwaysAsId = true)
         private Match match;
         @Column(name = "index")
         private byte index;

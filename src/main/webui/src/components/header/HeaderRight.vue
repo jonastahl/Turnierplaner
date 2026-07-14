@@ -1,21 +1,17 @@
 <template>
 	<div v-if="windowWidth < 600">
-		<span
-			class="material-symbols-outlined cursor-pointer bigger pr-2"
+		<i-material-symbols-menu
+			class="cursor-pointer bigger pr-2"
 			@click="sidebar = true"
-		>
-			menu
-		</span>
+		/>
 		<Sidebar v-model:visible="sidebar" position="right">
 			<template #header>
 				<div class="flex flex-row align-items-center gap-2">
-					<span
-						class="material-symbols-outlined cursor-pointer icon"
+					<i-material-symbols-sports-tennis-outline
+						class="cursor-pointer"
 						style="font-size: 3rem"
 						@click="toHome"
-					>
-						sports_tennis
-					</span>
+					/>
 					<h1 class="m-0 cursor-pointer title" @click="toHome">
 						{{ config?.title ? t(config.title) : t("title") }}
 					</h1>

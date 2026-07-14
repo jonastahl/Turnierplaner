@@ -36,7 +36,7 @@ public class KnockoutTools {
             curTree = curTree.getPreviousA();
             total++;
         }
-        competition.setTotal(total);
+        competition.setTotalRounds(total);
         int tCount = countTeams(tree, total);
 
         competition.setFinale(updateKnockoutTree(competition, tree, finale, total - 1));

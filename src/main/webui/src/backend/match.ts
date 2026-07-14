@@ -21,7 +21,11 @@ export function useUpdateMatches(
 ) {
 	const queryClient = useQueryClient()
 	return useMutation({
-		mutationFn: (data: { complete: boolean; matches: Match[] }) =>
+		mutationFn: (data: {
+			complete: boolean
+			notify: boolean
+			matches: Match[]
+		}) =>
 			axios.post(
 				`/tournament/${<string>route.params.tourId}/competition/${<string>route.params.compId}/updateSchedule`,
 				{
@@ -29,15 +33,24 @@ export function useUpdateMatches(
 					data: data.matches.map(matchClientToServer),
 				},
 			),
-		onSuccess() {
-			toast.add({
-				severity: "success",
-				summary: t("general.success"),
-				detail: t("general.saved"),
-				life: 3000,
+		onSuccess(_, options) {
+			if (options.notify)
+				toast.add({
+					severity: "success",
+					summary: t("general.success"),
+					detail: t("general.saved"),
+					life: 3000,
+				})
+			queryClient.invalidateQueries({
+				queryKey: ["knockout", route.params.tourId, route.params.compId],
+				refetchType: "all",
 			})
 			queryClient.invalidateQueries({
-				queryKey: ["competitionList", route.params.tourId],
+				queryKey: ["group", route.params.tourId, route.params.compId],
+				refetchType: "all",
+			})
+			queryClient.invalidateQueries({
+				queryKey: ["competitionList"],
 				refetchType: "all",
 			})
 			queryClient.invalidateQueries({
@@ -68,12 +81,12 @@ export function useRescheduleMatches(
 ) {
 	const queryClient = useQueryClient()
 	return useMutation({
-		mutationFn: (matches: MatchEvent[]) =>
+		mutationFn: (matches: AnnotatedMatch[]) =>
 			axios.post(
 				`/tournament/${<string>route.params.tourId}/competition/reschedule`,
-				matches.map(eventToAnnotatedMatch).map(matchClientToServer),
+				matches.map(matchClientToServer),
 			),
-		onSuccess(data: AxiosResponse, matches: MatchEvent[]) {
+		onSuccess(data: AxiosResponse, matches: AnnotatedMatch[]) {
 			let message
 			if (data.status == 200) {
 				if (matches.length === 1) {
@@ -133,6 +146,7 @@ export function getScheduledMatches(
 					matches.data.map(annotatedMatchServerToClient),
 				)
 		},
+		enabled: computed(() => from.value !== undefined && to.value != undefined),
 	})
 }
 export function getScheduledMatchesEvents(

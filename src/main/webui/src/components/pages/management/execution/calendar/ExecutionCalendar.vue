@@ -2,13 +2,15 @@
 	<ViewCalendar
 		v-if="tournament"
 		v-model="events"
+		v-model:start-date="curStart"
+		v-model:end-date="curEnd"
 		style="height: 800px"
-		:selected-date="tournament.game_phase.begin"
+		:selected-date="selected_date"
 		:min-date="tournament.game_phase.begin"
 		:max-date="tournament.game_phase.end"
 		:split-days="splitDays"
 		editable-events
-		@on-view-change="onViewChange"
+		@on-event-change="onEventChange"
 	>
 		<template #event="{ event }">
 			<MatchEvent
@@ -20,10 +22,11 @@
 	</ViewCalendar>
 	<ChangeDialog
 		v-model:visible="chgoverviewvisible"
-		:change-set="changeSet"
+		:change-set="changeSet.values().toArray()"
 		@publishing="
 			() => {
-				events.splice(0, events.length)
+				changeSet.clear()
+				changeSize = 0
 				chgoverviewvisible = false
 			}
 		"
@@ -41,7 +44,11 @@ import { computed, ref, watch } from "vue"
 import { getTournamentCourts } from "@/backend/court"
 import { getTournamentDetails } from "@/backend/tournament"
 import { MatchCalEvent } from "@/components/pages/management/prepare/scheduleMatches/ScheduleMatchesHelper"
-import { getScheduledMatchesEvents } from "@/backend/match"
+import {
+	eventToAnnotatedMatch,
+	getScheduledMatchesEvents,
+	matchToEvent,
+} from "@/backend/match"
 import ChangeDialog from "@/components/pages/management/execution/calendar/ChangeDialog.vue"
 
 const changeSize = defineModel<number>("changeSize", { default: 0 })
@@ -58,29 +65,46 @@ const { data: courts } = getTournamentCourts(route)
 const { data: tournament } = getTournamentDetails(route, t, toast)
 const { data: matches, isSuccess } = getScheduledMatchesEvents(curStart, curEnd)
 
-function onViewChange(startDate: Date, endDate: Date) {
-	curStart.value = startDate
-	curEnd.value = endDate
-}
+const selected_date = computed(() => {
+	const now = new Date()
+	if (!tournament.value) return now
+	const game_phase = tournament.value.game_phase
+	if (game_phase.begin <= now && game_phase.end >= now) return now
+	else return game_phase.begin
+})
 
 const events = ref<MatchCalEvent[]>([])
 
-watch(matches, () => {
-	if (!isSuccess.value || changeSet.value.length || !matches.value) return
+watch(matches, reloadEvents)
+function reloadEvents() {
+	if (!isSuccess.value || !matches.value) return
 	events.value.splice(0, events.value.length)
 
 	matches.value.forEach((match) => {
 		const otherTour = match.data.tourName !== route.params.tourId
+
+		if (match.data.id && !changeSet.has(match.data.id)) {
+			events.value.push({
+				draggable: !otherTour,
+				resizable: !otherTour,
+				deletable: !otherTour,
+				secondary: otherTour,
+				class: otherTour ? "superextern" : "",
+				...match,
+			})
+		}
+	})
+	changeSet.values().forEach(([from, to]: [AnnotatedMatch, AnnotatedMatch]) => {
 		events.value.push({
-			draggable: !otherTour,
-			resizable: !otherTour,
-			deletable: !otherTour,
-			secondary: otherTour,
-			class: otherTour ? "superextern" : "",
-			...match,
+			draggable: true,
+			resizable: true,
+			deletable: true,
+			secondary: false,
+			...matchToEvent(to),
+			data: from,
 		})
 	})
-})
+}
 
 const splitDays = computed(() => {
 	if (!courts.value) return []
@@ -94,17 +118,34 @@ const splitDays = computed(() => {
 	})
 })
 
-const changeSet = computed<MatchCalEvent[]>(() => {
-	return events.value.filter(
-		(event) =>
-			event.start.getTime() !== event.data.begin?.getTime() ||
-			event.end.getTime() !== event.data.end?.getTime() ||
-			event.split !== event.data.court,
+const changeSet = new Map<string, [AnnotatedMatch, AnnotatedMatch]>()
+
+function changed(event: MatchCalEvent): boolean {
+	return (
+		event.start.getTime() !== event.data.begin?.getTime() ||
+		event.end.getTime() !== event.data.end?.getTime() ||
+		event.split !== event.data.court
 	)
-})
-watch(changeSet, () => {
-	changeSize.value = changeSet.value.length
-})
+}
+
+function onEventChange(event: MatchCalEvent) {
+	if (!event.data.id) {
+		console.error("Event has no id")
+		return
+	}
+	// this is necessary as event is serialized and uses its object properties
+	event.data.begin = new Date(event.data.begin as unknown as string)
+	event.data.end = new Date(event.data.end as unknown as string)
+
+	changeSet.delete(event.data.id)
+
+	if (changed(event)) {
+		changeSet.set(event.data.id, [event.data, eventToAnnotatedMatch(event)])
+	}
+
+	changeSize.value = changeSet.size
+	reloadEvents()
+}
 
 function save() {
 	chgoverviewvisible.value = true
