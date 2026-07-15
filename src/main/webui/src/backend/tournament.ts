@@ -5,7 +5,9 @@ import {
 	TournamentServer,
 	tournamentServerToClient,
 } from "@/interfaces/tournament"
+import { Routes } from "@/routes"
 import { ToastServiceMethods } from "primevue/toastservice"
+import { Router, RouteLocationNormalizedLoaded } from "vue-router"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 
 export function getTournamentList(
@@ -174,7 +176,7 @@ export function useDeleteTournament(
 					refetchType: "all",
 				})
 				.then(() => {
-					router.push("/")
+					router.push({ name: Routes.Tournaments })
 					toast.add({
 						severity: "success",
 						summary: t("general.success"),
