@@ -89,8 +89,7 @@ function askDeleteTournament() {
 		rejectLabel: t("general.cancel"),
 		acceptClass: "p-button-danger",
 		acceptLabel: t("general.delete"),
-		accept: () =>
-			deleteTournament(undefined,),
+		accept: () => deleteTournament(undefined),
 	})
 }
 
