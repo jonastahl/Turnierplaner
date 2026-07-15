@@ -150,4 +150,20 @@ public class TournamentResource {
         tournaments.persist(dbTournament);
         return "successfully changed";
     }
+
+    @DELETE
+    @Path("/delete")
+    @RolesAllowed("director")
+    @Transactional
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteTournament(@QueryParam("tourName") String tourName) {
+        if (tourName == null || tourName.isBlank())
+            throw new BadRequestException("Tournament name is empty");
+        Tournament tournament = tournaments.getByName(tourName);
+        if (tournament == null)
+            throw new NotFoundException("Tournament with this name does not exist");
+        tournaments.delete(tournament);
+        return "Tournament deleted successfully";
+    }
+
 }

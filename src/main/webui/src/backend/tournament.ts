@@ -5,8 +5,9 @@ import {
 	TournamentServer,
 	tournamentServerToClient,
 } from "@/interfaces/tournament"
+import { Routes } from "@/routes"
 import { ToastServiceMethods } from "primevue/toastservice"
-import { RouteLocationNormalizedLoaded } from "vue-router"
+import { Router, RouteLocationNormalizedLoaded } from "vue-router"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 
 export function getTournamentList(
@@ -142,6 +143,49 @@ export function useAddTournament(
 				life: 3000,
 			})
 			if (handler.err) handler.err()
+		},
+	})
+}
+
+export function useDeleteTournament(
+	route: RouteLocationNormalizedLoaded,
+	t: (s: string) => string,
+	toast: ToastServiceMethods,
+	router: Router,
+) {
+	const queryClient = useQueryClient()
+	const tourId = String(route.params.tourId)
+	return useMutation({
+		mutationFn: () =>
+			axios.delete("/tournament/delete", {
+				params: { tourName: tourId },
+			}),
+		onSuccess() {
+			queryClient.removeQueries({
+				queryKey: ["tournament", tourId],
+			})
+			queryClient
+				.invalidateQueries({
+					queryKey: ["tournamentList"],
+					refetchType: "all",
+				})
+				.then(() => {
+					router.push({ name: Routes.Tournaments })
+					toast.add({
+						severity: "success",
+						summary: t("general.success"),
+						detail: t("ViewEditTournament.tournamentDeleted"),
+						life: 3000,
+					})
+				})
+		},
+		onError() {
+			toast.add({
+				severity: "error",
+				summary: t("general.failure"),
+				detail: t("ViewEditTournament.tournamentDeleteFailed"),
+				life: 3000,
+			})
 		},
 	})
 }

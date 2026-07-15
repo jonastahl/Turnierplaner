@@ -23,16 +23,14 @@ export function getCompetitionsList(
 	t: (s: string) => string,
 	toast: ToastServiceMethods,
 ) {
+	const tourId = computed(() => route.params.tourId as string | undefined)
 	return useQuery({
-		queryKey: [
-			"competitionList",
-			computed(() => route.params.tourId),
-			isLoggedIn,
-		],
+		queryKey: ["competitionList", tourId, isLoggedIn],
 		queryFn: async () => {
+			if (!tourId.value) return []
 			return axios
 				.get<CompetitionServer[]>(
-					`/tournament/${route.params.tourId}/competition/list`,
+					`/tournament/${tourId.value}/competition/list`,
 				)
 				.then((response) => {
 					return response.data
