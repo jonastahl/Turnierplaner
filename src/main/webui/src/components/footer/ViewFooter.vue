@@ -36,6 +36,7 @@
 				{{ t("footer.privacy_policy") }}
 			</a>
 		</div>
+		<!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
 		<span>Turnierplaner v{{ version }}</span>
 	</div>
 </template>

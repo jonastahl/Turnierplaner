@@ -4,6 +4,7 @@
 		<ViewKnockoutSystem
 			v-else-if="competition.tourType === CompType.KNOCKOUT"
 		/>
+		<!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
 		<p v-else>Invalid type</p>
 	</template>
 </template>
