@@ -123,11 +123,6 @@ function separateByComp(
 			return teamServerToClient(team)
 		})
 	} else {
-		toast.add({
-			severity: "error",
-			summary: t("ViewSignUp.invalidMode"),
-			life: 3000,
-		})
 		throw new Error()
 	}
 
