@@ -90,9 +90,7 @@ function askDeleteTournament() {
 		acceptClass: "p-button-danger",
 		acceptLabel: t("general.delete"),
 		accept: () =>
-			deleteTournament(undefined, {
-				onSuccess: () => {},
-			}),
+			deleteTournament(undefined,),
 	})
 }
 
