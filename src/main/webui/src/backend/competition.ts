@@ -25,7 +25,6 @@ export function getCompetitionsList(
 ) {
 	const tourId = computed(() => route.params.tourId as string | undefined)
 	return useQuery({
-		enabled: computed(() => !!tourId.value),
 		queryKey: ["competitionList", tourId, isLoggedIn],
 		queryFn: async () => {
 			if (!tourId.value) return []
