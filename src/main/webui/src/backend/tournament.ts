@@ -164,12 +164,12 @@ export function useDeleteTournament(
 			queryClient.removeQueries({
 				queryKey: ["tournament", tourId],
 			})
-			queryClient.removeQueries({
-				queryKey: ["competitionList", tourId],
-			})
-			queryClient.removeQueries({
-				queryKey: ["competitionDetails", tourId],
-			})
+			// queryClient.removeQueries({
+			// 	queryKey: ["competitionList", tourId],
+			// })
+			// queryClient.removeQueries({
+			// 	queryKey: ["competitionDetails", tourId],
+			// })
 			queryClient
 				.invalidateQueries({
 					queryKey: ["tournamentList"],
