@@ -13,10 +13,11 @@ import { computed, ref, Ref } from "vue"
 import { v4 as uuidv4 } from "uuid"
 import { CompType } from "@/interfaces/competition"
 import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
+import { TranslateFunction } from "@/main"
 
 export function useUpdateMatches(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()

@@ -142,7 +142,7 @@ const { t } = useI18n()
 
 const props = withDefaults(
 	defineProps<{
-		disabled: boolean
+		disabled?: boolean
 		player: PlayerRegistrationForm
 	}>(),
 	{

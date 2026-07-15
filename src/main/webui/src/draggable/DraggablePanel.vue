@@ -195,7 +195,6 @@ function reload() {
 <script lang="ts">
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-// eslint-disable-next-line
 let selectedElement: T | null = null
 let targetSingle = false
 </script>

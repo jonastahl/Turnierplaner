@@ -36,7 +36,7 @@ const props = withDefaults(
 		players: Player[]
 		group: string
 		secondary?: boolean
-		isUpdating: boolean
+		isUpdating?: boolean
 	}>(),
 	{
 		id: "default",

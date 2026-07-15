@@ -1,6 +1,6 @@
 import { createApp } from "vue"
 import App from "./App.vue"
-import { createI18n, I18nOptions } from "vue-i18n"
+import { createI18n } from "vue-i18n"
 import * as VueRouter from "vue-router"
 
 import { settings } from "@/settings"
@@ -57,29 +57,23 @@ axios.interceptors.response.use(
 const messages = languages
 
 export type MessageSchema = (typeof messages)["de"]
+export type AvailableLocales = keyof typeof messages
 
-declare module "vue-i18n" {}
-
-const options: I18nOptions = {
-	locale: "de", // set locale
-	fallbackLocale: "en", // set fallback locale
+const i18n = createI18n<[MessageSchema], AvailableLocales>({
+	locale: "de",
+	fallbackLocale: "en",
 	warnHtmlMessage: false,
 	missingWarn: true,
 	fallbackWarn: false,
 	messages,
 	legacy: false,
-}
+})
+export default i18n
+export type TranslateFunction = typeof i18n.global.t
 
-const i18n = createI18n<false, typeof options>(options)
-
-declare module "@vue/runtime-core" {
-	interface ComponentCustomProperties {
-		$i18n: {
-			locale: string
-			availableLocales: string[]
-		}
-		$t: (_: string) => string
-	}
+declare module "vue-i18n" {
+	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+	export interface DefineLocaleMessage extends MessageSchema {}
 }
 
 /* add font awesome icon component */
