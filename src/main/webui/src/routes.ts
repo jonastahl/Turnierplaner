@@ -84,9 +84,7 @@ export default [
 				path: "prepare/:compId?",
 				name: Routes.ManagePrepare,
 				component: () =>
-					import(
-						"@/components/pages/management/prepare/ViewPrepareMatches.vue"
-					),
+					import("@/components/pages/management/prepare/ViewPrepareMatches.vue"),
 				meta: {
 					overview: "overview",
 					compSelector: true,
@@ -98,27 +96,21 @@ export default [
 						path: "editTeams",
 						name: Routes.EditTeams,
 						component: () =>
-							import(
-								"@/components/pages/management/prepare/editTeams/ViewEditTeams.vue"
-							),
+							import("@/components/pages/management/prepare/editTeams/ViewEditTeams.vue"),
 						meta: { step: 1, reset: true },
 					},
 					{
 						path: "assignMatches",
 						name: Routes.AssignMatches,
 						component: () =>
-							import(
-								"@/components/pages/management/prepare/assignMatches/ViewAssignMatches.vue"
-							),
+							import("@/components/pages/management/prepare/assignMatches/ViewAssignMatches.vue"),
 						meta: { step: 2, reset: true },
 					},
 					{
 						path: "scheduleMatches",
 						name: Routes.ScheduleMatches,
 						component: () =>
-							import(
-								"@/components/pages/management/prepare/scheduleMatches/ViewScheduleMatches.vue"
-							),
+							import("@/components/pages/management/prepare/scheduleMatches/ViewScheduleMatches.vue"),
 						meta: { step: 3, reset: false },
 					},
 				],
@@ -141,9 +133,7 @@ export default [
 							executionsel: Routes.ManageExecution,
 						},
 						component: () =>
-							import(
-								"@/components/pages/management/execution/calendar/ViewExecutionCalendar.vue"
-							),
+							import("@/components/pages/management/execution/calendar/ViewExecutionCalendar.vue"),
 					},
 					{
 						path: "plans/:compId?",
@@ -154,9 +144,7 @@ export default [
 							managepage: Routes.ManageExecutionPlans,
 						},
 						component: () =>
-							import(
-								"@/components/pages/management/execution/ViewExecutionPlans.vue"
-							),
+							import("@/components/pages/management/execution/ViewExecutionPlans.vue"),
 					},
 				],
 			},

@@ -1,7 +1,7 @@
 <template>
 	<Dialog v-model:visible="visible">
 		<div class="flex flex-column gap-3 w-20rem">
-			<span>{{ t("ViewPrepare.prepare_reset_warning") }}</span>
+			<span>{{ t("competition.manage.warning.prepare_reset") }}</span>
 			<Button severity="danger" :label="t('general.reset')" @click="trReset" />
 		</div>
 	</Dialog>

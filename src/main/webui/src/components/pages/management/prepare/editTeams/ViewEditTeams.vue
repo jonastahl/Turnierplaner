@@ -37,7 +37,7 @@
 					:disabled="isUpdating"
 					:model="randomizeItems"
 					class="w-fit"
-					:label="t('ViewPrepare.editTeams.randomize')"
+					:label="t('competition.manage.action.randomize')"
 					@click="randomize"
 				>
 					<template #icon>
@@ -234,12 +234,12 @@ async function reroll() {
 
 const randomizeItems = ref([
 	{
-		label: <string>(<unknown>$t("ViewPrepare.editTeams.reroll")),
+		label: <string>(<unknown>$t("competition.manage.action.reroll")),
 		icon: "pi pi-refresh",
 		command: reroll,
 	},
 	{
-		label: <string>(<unknown>$t("ViewPrepare.editTeams.reset")),
+		label: <string>(<unknown>$t("general.reset")),
 		icon: "pi pi-times",
 		command: clearTeams,
 	},
@@ -251,7 +251,7 @@ async function reload() {
 	toast.add({
 		severity: "info",
 		summary: t("general.reload"),
-		detail: t("ViewPrepare.restored"),
+		detail: t("competition.manage.restored"),
 		life: 3000,
 	})
 }

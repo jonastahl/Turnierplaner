@@ -3,7 +3,7 @@
 		<template #empty>
 			{{ t("settings.no_unverified") }}
 		</template>
-		<Column field="name" :header="t('general.name')">
+		<Column field="name" :header="t('general.name.label')">
 			<template #body="{ data }: { data: Player }">
 				<div class="flex flex-row justify-content-between align-items-center">
 					<div>

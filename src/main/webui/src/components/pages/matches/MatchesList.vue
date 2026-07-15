@@ -8,13 +8,13 @@
 		filter-display="row"
 		:global-filter-fields="['teamA', 'teamB']"
 	>
-		<template #empty> No matches found.</template>
-		<template #loading> Loading matches...</template>
+		<template #empty>{{ t("general.matches.empty") }}</template>
+		<template #loading>{{ t("general.matches.loading") }}</template>
 		<Column
 			v-if="!route.params.tourId"
 			sortable
 			field="tourName"
-			:header="t('general.tournament')"
+			:header="t('tournament.label')"
 			:show-filter-menu="false"
 		>
 			<template #body="{ data }">
@@ -34,7 +34,7 @@
 		<Column
 			sortable
 			field="compName"
-			:header="t('general.competition')"
+			:header="t('competition.label')"
 			:show-filter-menu="false"
 		>
 			<template #body="{ data }">
@@ -77,7 +77,7 @@
 		<Column
 			sortable
 			field="court"
-			:header="t('general.court')"
+			:header="t('general.court.single')"
 			:show-filter-menu="false"
 		>
 			<template #filter="{ filterModel, filterCallback }">
@@ -95,7 +95,7 @@
 		<Column
 			sortable
 			field="begin"
-			:header="t('general.from')"
+			:header="t('general.time.from')"
 			data-type="date"
 			:show-clear-button="false"
 		>
@@ -116,7 +116,7 @@
 		<Column
 			sortable
 			field="end"
-			:header="t('general.to')"
+			:header="t('general.time.to')"
 			data-type="date"
 			:show-clear-button="false"
 		>
@@ -137,7 +137,7 @@
 		<Column
 			sortable
 			field="teamA"
-			:header="t('general.team') + ' A'"
+			:header="t('general.team.label') + ' A'"
 			:show-filter-menu="false"
 		>
 			<template #body="{ data }">
@@ -156,7 +156,7 @@
 		<Column
 			sortable
 			field="teamB"
-			:header="t('general.team') + ' B'"
+			:header="t('general.team.label') + ' B'"
 			:show-filter-menu="false"
 		>
 			<template #body="{ data }">

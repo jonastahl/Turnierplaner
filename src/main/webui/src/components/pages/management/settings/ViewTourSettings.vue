@@ -6,8 +6,8 @@
 					v-if="!tournament || isUpdating"
 					:tour-details="TournamentDefault"
 					:disabled="true"
-					:submit-text="t('general.update')"
-					header="ViewEditTournament.tournamentUpdate"
+					:submit-text="t('general.action.update')"
+					header="tournament.action.update.label"
 					@submit="submit"
 				/>
 				<FormTournament
@@ -15,14 +15,18 @@
 					ref="form"
 					:tour-details="tournament"
 					:disabled="false"
-					:submit-text="t('general.update')"
-					header="ViewEditTournament.tournamentUpdate"
+					:submit-text="t('general.action.update')"
+					header="tournament.action.update.label"
 					@submit="submit"
 				/>
 			</template>
 			<template #footer>
 				<div class="flex flex-row justify-content-end">
-					<Button :label="t('general.save')" severity="success" @click="save" />
+					<Button
+						:label="t('general.action.save.label')"
+						severity="success"
+						@click="save"
+					/>
 				</div>
 			</template>
 		</Card>

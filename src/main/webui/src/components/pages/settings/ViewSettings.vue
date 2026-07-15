@@ -10,7 +10,7 @@
 		</SettingsItem>
 		<SettingsItem v-if="isDirector">
 			<Card>
-				<template #title>{{ t("general.courts") }}</template>
+				<template #title>{{ t("general.court.plural") }}</template>
 				<template #content>
 					<SettingsCourts />
 				</template>
@@ -38,7 +38,7 @@
 					<div class="flex justify-content-between">
 						<span>{{ t("settings.player") }}</span>
 						<Button
-							:label="t('general.create_player')"
+							:label="t('player.action.create.label')"
 							@click="router.push({ name: Routes.CreatePlayer })"
 						/>
 					</div>

@@ -4,12 +4,12 @@
 			<Card>
 				<template #title>
 					<div class="flex flex-row justify-content-between">
-						<div>Teams</div>
+						<div>{{ t("general.team.plural") }}</div>
 						<SplitButton
 							:model="randomizeItems"
 							:disabled="isUpdating"
 							class="w-fit"
-							:label="t('ViewPrepare.editTeams.randomize')"
+							:label="t('competition.manage.action.randomize')"
 							@click="randomize"
 						>
 							<template #icon>
@@ -32,9 +32,7 @@
 		</div>
 		<div class="col-8 flex flex-column gap-3">
 			<Card v-for="(group, i) in data.groups" :key="i">
-				<template #title
-					>{{ t("ViewPrepare.assignMatches.Group") }} {{ i + 1 }}
-				</template>
+				<template #title>{{ t("group.label") }} {{ i + 1 }} </template>
 				<template #content>
 					<TeamContainerDraggable
 						v-if="competition"
@@ -46,7 +44,7 @@
 			</Card>
 			<div class="flex flex-row gap-2">
 				<Button
-					:label="t('ViewPrepare.assignMatches.remove')"
+					:label="t('general.action.remove')"
 					:disabled="data.noGroups <= 1 || isUpdating"
 					severity="danger"
 					@click="
@@ -57,7 +55,7 @@
 					"
 				></Button>
 				<Button
-					:label="t('ViewPrepare.assignMatches.add')"
+					:label="t('general.action.add')"
 					:disabled="data.noGroups >= 64 || isUpdating"
 					severity="success"
 					@click="
@@ -188,8 +186,8 @@ function save(complete = false) {
 	if (data.value.groups.some((g) => g.length <= 1)) {
 		toast.add({
 			severity: "error",
-			summary: t("ViewPrepare.assignMatches.emptyGroupSum"),
-			detail: t("ViewPrepare.assignMatches.emptyGroupDet"),
+			summary: t("group.invalid"),
+			detail: t("group.min_two_teams"),
 			life: 3000,
 		})
 		return

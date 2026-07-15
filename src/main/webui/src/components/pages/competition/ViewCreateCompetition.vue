@@ -1,7 +1,7 @@
 <template>
 	<div class="flex justify-content-center w-full">
 		<Card id="card">
-			<template #title>{{ t("ViewCreateCompetition.header") }}</template>
+			<template #title>{{ t("competition.action.create.label") }}</template>
 			<template #content>
 				<FormCompetition
 					ref="form"
@@ -13,7 +13,7 @@
 			<template #footer>
 				<div class="justify-content-end flex">
 					<Button
-						:label="t('general.create')"
+						:label="t('general.action.create')"
 						severity="success"
 						@click="() => form !== null && form.onSubmit()"
 					/>

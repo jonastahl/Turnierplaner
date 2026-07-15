@@ -17,15 +17,13 @@ export function genRandomizeItems(
 	return ref([
 		{
 			label: <string>(
-				(<unknown>computed(() => t("ViewPrepare.editTeams.reroll")))
+				(<unknown>computed(() => t("competition.manage.action.reroll")))
 			),
 			icon: "pi pi-refresh",
 			command: reroll,
 		},
 		{
-			label: <string>(
-				(<unknown>computed(() => t("ViewPrepare.editTeams.reset")))
-			),
+			label: <string>(<unknown>computed(() => t("general.reset"))),
 			icon: "pi pi-times",
 			command: reset,
 		},

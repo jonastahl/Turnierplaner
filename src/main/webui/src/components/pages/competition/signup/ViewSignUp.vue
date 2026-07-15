@@ -5,10 +5,10 @@
 			<template #content>
 				<strong>{{ t("general.description") }}:</strong>
 				{{ props.competition.description }}<br />
-				<strong>{{ t("ViewCompetition.tournament_system") }}:</strong>
+				<strong>{{ t("competition.type.label") }}:</strong>
 				{{ t("CompetitionSettings." + props.competition.tourType.toLowerCase())
 				}}<br />
-				<strong>{{ t("ViewCompetition.game_mode") }}:</strong>
+				<strong>{{ t("competition.mode.label") }}:</strong>
 				{{ t("CompetitionSettings." + props.competition.mode.toLowerCase()) }}
 			</template>
 		</Card>
@@ -17,16 +17,16 @@
 		<Card class="mt-2 mb-2 w-12 md:w-10 lg:w-8 xl:w-7">
 			<template #content>
 				<p v-if="!allowRegistration" style="text-align: center">
-					{{ t("ViewCompetition.registration_over") }}
+					{{ t("competition.action.signup.state.over") }}
 				</p>
 				<template v-else>
 					<div class="grid ml-0 mr-0">
 						<span class="col-6">
-							{{ t("ViewCompetition.warning_register_before_signup") }}
+							{{ t("competition.action.signup.warning.register_before") }}
 						</span>
 						<Button
 							class="col-6"
-							:label="t('general.create_player')"
+							:label="t('player.action.create.label')"
 							@click="router.push({ name: Routes.CreatePlayer })"
 						/>
 					</div>

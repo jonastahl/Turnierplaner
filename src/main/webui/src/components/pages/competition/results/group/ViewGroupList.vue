@@ -3,12 +3,11 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<!--TOOD internalization-->
-					<th scope="col">Begin Time</th>
-					<th scope="col">Court</th>
-					<th scope="col">Player 1</th>
-					<th scope="col">Player 2</th>
-					<th scope="col">Result</th>
+					<th scope="col">{{ t("general.time.begin") }}</th>
+					<th scope="col">{{ t("general.court.single") }}</th>
+					<th scope="col">{{ t("competition.player.A") }}</th>
+					<th scope="col">{{ t("competition.player.B") }}</th>
+					<th scope="col">{{ t("general.result") }}}</th>
 				</tr>
 			</thead>
 			<tbody class="table-group-divider">
@@ -30,6 +29,9 @@
 
 <script lang="ts" setup>
 import { Group } from "@/interfaces/groupSystem"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const props = defineProps<{
 	group: Group

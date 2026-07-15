@@ -29,25 +29,25 @@ function $t(name: string) {
 
 const stepList = computed(() => [
 	{
-		label: <string>(<unknown>$t("ViewPrepare.steps.editTeams")),
+		label: <string>(<unknown>$t("competition.steps.editTeams")),
 		name: "editTeams",
 	},
 	{
-		label: <string>(<unknown>$t("ViewPrepare.steps.assignMatches")),
+		label: <string>(<unknown>$t("competition.steps.assignMatches")),
 		name: "assignMatches",
 	},
 	{
-		label: <string>(<unknown>$t("ViewPrepare.steps.scheduleMatches")),
+		label: <string>(<unknown>$t("competition.steps.scheduleMatches")),
 		name: "scheduleMatches",
 	},
 	...(props.overview
 		? [
 				{
-					label: <string>(<unknown>$t("ViewPrepare.steps.publishing")),
+					label: <string>(<unknown>$t("competition.steps.publishing")),
 					name: "publishing",
 				},
 				{
-					label: <string>(<unknown>$t("ViewPrepare.steps.done")),
+					label: <string>(<unknown>$t("competition.steps.done")),
 					name: "done",
 				},
 			]

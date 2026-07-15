@@ -33,12 +33,12 @@ const menuComps = [
 		route: Routes.ManageSettings,
 	},
 	{
-		label: "ViewPrepare.preparation",
+		label: "competition.manage.views.preparation",
 		icon: "pi pi-hammer",
 		route: Routes.ManagePrepare,
 	},
 	{
-		label: "ViewManage.execution",
+		label: "competition.manage.views.execution",
 		icon: "pi pi-wave-pulse",
 		route: Routes.ManageExecution,
 	},

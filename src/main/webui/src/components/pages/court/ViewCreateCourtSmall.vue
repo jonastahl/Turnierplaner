@@ -8,7 +8,7 @@
 			option-label="name"
 			:placeholder="t('court.type')"
 		/>
-		<Button size="small" @click="add">{{ t("general.add") }}</Button>
+		<Button size="small" @click="add">{{ t("general.action.add") }}</Button>
 	</InputGroup>
 </template>
 
@@ -40,7 +40,7 @@ function add() {
 	else
 		toast.add({
 			severity: "error",
-			summary: t("general.error_saving"),
+			summary: t("general.action.save.error"),
 			detail: t("court.not_selected"),
 			life: 3000,
 		})

@@ -1,13 +1,11 @@
 {
 	"competition": {
 		"action": {
-			"add": {
-				"title": "Click to add new competition"
-			},
 			"create": {
 				"failed": "Couldn't create competition",
-				"label": "Creating competition",
-				"success": "Competition created"
+				"label": "Create competition",
+				"success": "Competition created",
+				"suggestion": "Click to create new competition"
 			},
 			"delete": {
 				"confirm": "Are you sure you want to delete this competition?",
@@ -38,6 +36,9 @@
 				"error_cont_not_scheduled": "All matches need to be scheduled before continuing"
 			},
 			"signup": {
+				"action": "Sign up",
+				"conflict": "Conflict during sign up",
+				"exists": "$name is already signed up",
 				"failed": "Signup failed",
 				"label": "Sign Up",
 				"not_found": "Can't find yourself? Maybe you forgot to register yourself.",
@@ -55,6 +56,8 @@
 					"not_started": "Registration hasn't started yet. Signup phase starts on",
 					"over": "Registration phase is over."
 				},
+				"success": "Players was successfully signed up",
+				"success_team": "Team was successfully signed up",
 				"warning": {
 					"no_player_selected": "No player selected",
 					"register_before": "Players need to be registered before signup",
@@ -88,6 +91,7 @@
 				"randomize": "Randomize",
 				"reroll": "Reroll"
 			},
+			"no_deleted_player": "No deleted player",
 			"restored": "Restored initial configuration",
 			"views": {
 				"execution": "Execution",
@@ -124,7 +128,7 @@
 			"scheduleMatches": "Schedule matches"
 		},
 		"type": {
-			"label": "Tournament type",
+			"label": "Type of tournament",
 			"options": {
 				"group": "Group system",
 				"knockout": "Knockout"
@@ -196,7 +200,11 @@
 			"action": "Loading...",
 			"failed": "Something went wrong while loading"
 		},
-		"matches": "Matches",
+		"matches": {
+			"empty": "No matches found.",
+			"label": "Matches",
+			"loading": "Loading matches..."
+		},
 		"name": {
 			"label": "Name",
 			"missing": "Please input a name"
@@ -212,7 +220,15 @@
 		"serverside_error": "Serverside error",
 		"settings": "Settings",
 		"success": "Success",
+		"team": {
+			"delete": {
+				"success": "Team deleted"
+			},
+			"label": "Team",
+			"plural": "Teams"
+		},
 		"time": {
+			"begin": "Begin",
 			"calendar": "Calendar",
 			"end": "End",
 			"from": "Von",
@@ -244,24 +260,17 @@
 	"player": {
 		"action": {
 			"create": {
-				"conflict": "Conflict at registration",
 				"disclaimer": "By creating a player, you agree to the Privacy Policy. Additionally, you agree that your name will be visible to other visitors. Your date of birth and email address will never be displayed publicly.",
-				"exists": "$name is alreader registered",
-				"failed": "Player registration failed",
+				"failed": "Creation of player failed",
+				"failed_detail": "Please check your input and if your player already exists.",
 				"follow_up": "Thank you for registration! Please confirm your e-mail with the verification link, we sent you to your email.",
 				"label": "Create player",
 				"success": "Successful created"
-			},
-			"created": {
-				"failed_detail": "Please check your input and if your player already exists."
 			},
 			"delete": {
 				"confirm": "Are you sure you want to delete this player?",
 				"label": "Deleting player",
 				"success": "Player deleted"
-			},
-			"registration": {
-				"success": "Player registered successfully"
 			},
 			"search": {
 				"failed": "Querying player failed",
@@ -348,18 +357,11 @@
 		"user": "User management",
 		"verification": "Verification"
 	},
-	"team": {
-		"delete": {
-			"success": "Team deleted"
-		},
-		"label": "Team",
-		"plural": "Teams"
-	},
 	"title": "TOURNAMENT PLANNER",
 	"tournament": {
 		"action": {
 			"add": {
-				"click_content": "Click to add new tournament"
+				"suggestion": "Click to create new tournament"
 			},
 			"create": {
 				"failed": "Couldn't create tournament",

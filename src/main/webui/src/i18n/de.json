@@ -1,13 +1,11 @@
 {
 	"competition": {
 		"action": {
-			"add": {
-				"title": "Klicke um neue Konkurrenz hinzuzufügen"
-			},
 			"create": {
 				"failed": "Konkurrenz konnte nicht erstellt werden",
-				"label": "Konkurrenzerstellung",
-				"success": "Konkurrenz erstellt"
+				"label": "Neue Konkurrenz erstellen",
+				"success": "Konkurrenz erstellt",
+				"suggestion": "Klicke um neue Konkurrenz zu erstellen"
 			},
 			"delete": {
 				"confirm": "Möchten Sie diese Konkurrenz wirklich löschen?",
@@ -38,6 +36,9 @@
 				"error_cont_not_scheduled": "Alle Spiele müssen verplant werden!"
 			},
 			"signup": {
+				"action": "Anmelden",
+				"conflict": "Konflikt bei der Anmeldung",
+				"exists": "$name ist bereits für das Turnier angemeldet",
 				"failed": "Anmeldung ist fehlgeschlagen",
 				"label": "Anmeldung",
 				"not_found": "Bevor du dich anmelden kannst musst du dich einmalig registrieren",
@@ -55,6 +56,8 @@
 					"not_started": "Die Anmeldung ist noch nicht verfügbar. Die Anmeldephase started am",
 					"over": "Die Anmeldephase ist vorbei."
 				},
+				"success": "Spieler wurde erfolgreich angemeldet",
+				"success_team": "Team wurde erfolgreich angemeldet",
 				"warning": {
 					"no_player_selected": "Keinen Spieler ausgewählt",
 					"register_before": "Spieler müssen vor der Anmeldung registriert werden",
@@ -88,6 +91,7 @@
 				"randomize": "Auslosen",
 				"reroll": "Neu auslosen"
 			},
+			"no_deleted_player": "Kein gelöschter Spieler",
 			"restored": "Ursprüngliche Konfiguration wieder hergestellt",
 			"views": {
 				"execution": "Durchführung",
@@ -124,7 +128,7 @@
 			"scheduleMatches": "Zeiteinteilung"
 		},
 		"type": {
-			"label": "Turniertyp",
+			"label": "Turniersystem",
 			"options": {
 				"group": "Gruppenphase",
 				"knockout": "KO-System"
@@ -196,7 +200,11 @@
 			"action": "Lädt...",
 			"failed": "Während dem Laden ist etwas schiefgelaufen"
 		},
-		"matches": "Spiele",
+		"matches": {
+			"empty": "Keine Spiele gefunden.",
+			"label": "Spiele",
+			"loading": "Lade Spiele..."
+		},
 		"name": {
 			"label": "Name",
 			"missing": "Bitte gib einen Namen ein"
@@ -212,7 +220,15 @@
 		"serverside_error": "Serverseitiger Fehler",
 		"settings": "Einstellungen",
 		"success": "Erfolgreich",
+		"team": {
+			"delete": {
+				"success": "Team gelöscht"
+			},
+			"label": "Team",
+			"plural": "Teams"
+		},
 		"time": {
+			"begin": "Beginn",
 			"calendar": "Kalender",
 			"end": "Ende",
 			"from": "Von",
@@ -244,24 +260,17 @@
 	"player": {
 		"action": {
 			"create": {
-				"conflict": "Konflikt bei der Registrierung",
 				"disclaimer": "Mit der Erstellung des Spielers stimmst du der Datenschutzerklärung zu. Außerdem stimmst du zu, dass dein Name für andere Besucher sichtbar ist. Dein Geburtstag und deine E-Mail-Adresse werden niemals öffentlich angezeigt.",
-				"exists": "$name ist bereits für das Turnier registriert",
-				"failed": "Die Spielerregistrierung ist fehlgeschlagen",
+				"failed": "Die Spielererstellung ist fehlgeschlagen",
+				"failed_detail": "Bitte überprüfe Ihre Eingaben und ob Ihr Spieler bereits existiert.",
 				"follow_up": "Vielen Dank für die Registrierung. Bitte bestätigen Sie ihre E-Mail mit dem Link in ihrer Verifizierungsmail.",
 				"label": "Spieler erstellen",
 				"success": "Der Spieler wurde erfolgreich erstellt"
-			},
-			"created": {
-				"failed_detail": "Bitte überprüfe Ihre Eingaben und ob Ihr Spieler bereits existiert."
 			},
 			"delete": {
 				"confirm": "Sind Sie sicher, dass Sie diesen Spieler löschen möchten?",
 				"label": "Spieler löschen",
 				"success": "Spieler gelöscht"
-			},
-			"registration": {
-				"success": "Die Registrierung war erfolgreich"
 			},
 			"search": {
 				"failed": "Abrufen der Spieler ist fehlgeschlagen",
@@ -348,18 +357,11 @@
 		"user": "Benutzerverwaltung",
 		"verification": "Verifikation"
 	},
-	"team": {
-		"delete": {
-			"success": "Team gelöscht"
-		},
-		"label": "Team",
-		"plural": "Teams"
-	},
 	"title": "TURNIERPLANER",
 	"tournament": {
 		"action": {
 			"add": {
-				"click_content": "Klicke um neues Turnier hinzuzufügen"
+				"suggestion": "Klicke um neues Turnier zu erstellen"
 			},
 			"create": {
 				"failed": "Turnier konnte nicht erstellt werden",

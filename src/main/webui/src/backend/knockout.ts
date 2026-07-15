@@ -9,6 +9,7 @@ import {
 } from "@/interfaces/knockoutSystem"
 import { ToastServiceMethods } from "primevue/toastservice"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
+import { TranslateFunction } from "@/main"
 
 export function getKnockout(
 	route: RouteLocationNormalizedLoaded,
@@ -32,7 +33,7 @@ export function getKnockout(
 
 export function useInitKnockout(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()
@@ -66,7 +67,7 @@ export function useInitKnockout(
 					toast.add({
 						severity: "success",
 						summary: t("general.success"),
-						detail: t("general.saved"),
+						detail: t("general.action.save.success"),
 						life: 3000,
 					})
 				})
@@ -74,7 +75,7 @@ export function useInitKnockout(
 					toast.add({
 						severity: "error",
 						summary: t("general.failure"),
-						detail: t("general.save_failed"),
+						detail: t("general.action.save.failed"),
 						life: 3000,
 					})
 				}),

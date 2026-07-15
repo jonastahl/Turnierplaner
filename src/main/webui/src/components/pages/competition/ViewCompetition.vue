@@ -2,7 +2,7 @@
 	<div id="container">
 		<template v-if="tournamentSuc && tournament">
 			<template v-if="new Date() < tournament.registration_phase.begin">
-				{{ t("ViewCompetition.registration_not_started") }}
+				{{ t("competition.action.signup.state.not_started") }}
 				{{
 					tournament.registration_phase.begin.toLocaleString(
 						t("lang"),

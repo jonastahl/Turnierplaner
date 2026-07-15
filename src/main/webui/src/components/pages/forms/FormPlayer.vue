@@ -1,9 +1,7 @@
 <template>
 	<div class="formgrid grid">
 		<div class="field col-6">
-			<label for="first_name">{{
-				t("ViewPlayerRegistration.first_name.field")
-			}}</label>
+			<label for="first_name">{{ t("player.first_name.field") }}</label>
 			<InputText
 				id="first_name"
 				v-model="firstName"
@@ -19,9 +17,7 @@
 			</InlineMessage>
 		</div>
 		<div class="field col-6">
-			<label for="name">{{
-				t("ViewPlayerRegistration.last_name.field")
-			}}</label>
+			<label for="name">{{ t("player.last_name.label") }}</label>
 			<InputText
 				id="name"
 				v-model="lastName"
@@ -37,9 +33,7 @@
 			</InlineMessage>
 		</div>
 		<div class="field col-6">
-			<label for="birthdate">{{
-				t("ViewPlayerRegistration.birthdate.field")
-			}}</label>
+			<label for="birthdate">{{ t("player.birthdate.field") }}</label>
 			<Calendar
 				v-model="birthday"
 				show-icon
@@ -55,18 +49,18 @@
 			</InlineMessage>
 		</div>
 		<div class="field col-6">
-			<label for="sex">{{ t("ViewPlayerRegistration.sex.field") }}</label>
+			<label for="sex">{{ t("player.sex.label") }}</label>
 			<Dropdown
 				v-model="sex"
 				v-bind="sexAttrs"
 				:disabled="disabled"
 				:options="[
-					{ name: t('general.male'), value: Sex.MALE },
-					{ name: t('general.female'), value: Sex.FEMALE },
+					{ name: t('player.sex.options.male'), value: Sex.MALE },
+					{ name: t('player.sex.options.female'), value: Sex.FEMALE },
 				]"
 				option-label="name"
 				option-value="value"
-				:placeholder="t(`CompetitionSettings.sex`)"
+				:placeholder="t(`player.sex.label`)"
 				class="w-full"
 				:class="{ 'p-invalid': errors.sex }"
 			>
@@ -81,9 +75,7 @@
 			</InlineMessage>
 		</div>
 		<div class="field col-6">
-			<label for="language">{{
-				t("ViewPlayerRegistration.language.field")
-			}}</label>
+			<label for="language">{{ t("player.language.field") }}</label>
 			<Dropdown
 				v-model="language"
 				v-bind="languageAttrs"
@@ -109,7 +101,7 @@
 			</InlineMessage>
 		</div>
 		<div class="field col-12">
-			<label for="email">{{ t("ViewPlayerRegistration.email.field") }}</label>
+			<label for="email">{{ t("player.email.field") }}</label>
 			<InputText
 				id="email"
 				v-model="email"
@@ -124,7 +116,7 @@
 				>{{ t(errors.email || "") }}
 			</InlineMessage>
 			<p>
-				{{ t("ViewPlayerRegistration.disclaimer") }}
+				{{ t("player.action.create.disclaimer") }}
 			</p>
 		</div>
 	</div>

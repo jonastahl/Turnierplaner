@@ -88,12 +88,12 @@ setLocale({
 	// use constant translation keys for messages without values
 	mixed: {
 		default: "field_invalid",
-		required: "validation.field_required",
+		required: "validation.required.general",
 	},
 	// use functions to generate an error object that includes the value from the schema
 	string: {
-		min: "validation.field_too_short",
-		max: "validation.field_too_big",
+		min: "validation.string.too_short",
+		max: "validation.string.too_long",
 	},
 })
 

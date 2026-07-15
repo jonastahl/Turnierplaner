@@ -18,8 +18,8 @@
 				/>
 				<AddItem
 					v-if="canEdit"
-					:title="t('ViewCompetitions.add_title')"
-					:content="t('ViewCompetitions.add_content')"
+					:title="t('competition.action.create.label')"
+					:content="t('competition.action.create.suggestion')"
 					@selected="addCompetition"
 				/>
 			</div>
@@ -44,19 +44,19 @@
 					<template #content="slotProps">
 						<div style="height: 3px"></div>
 						<template v-if="slotProps.item.registration">
-							<strong>{{ t("TournamentSettings.registration_phase") }}</strong>
+							<strong>{{ t("tournament.registration_phase") }}</strong>
 							<br />
-							<strong>{{ t("ViewCompetitions.from") }}</strong>
+							<strong>{{ t("general.time.from") }}</strong>
 							{{ formatDate(data?.registration_phase.begin) }}<br />
-							<strong>{{ t("ViewCompetitions.till") }}</strong>
+							<strong>{{ t("general.time.to") }}</strong>
 							{{ formatDate(data?.registration_phase.end) }}
 						</template>
 						<template v-else>
-							<strong>{{ t("TournamentSettings.game_phase") }}</strong
+							<strong>{{ t("tournament.game_phase") }}</strong
 							><br />
-							<strong>{{ t("ViewCompetitions.from") }}</strong>
+							<strong>{{ t("general.time.from") }}</strong>
 							{{ formatDate(data?.game_phase.begin) }}<br />
-							<strong>{{ t("ViewCompetitions.till") }}</strong>
+							<strong>{{ t("general.time.to") }}</strong>
 							{{ formatDate(data?.game_phase.end) }}
 						</template>
 					</template>
@@ -64,13 +64,13 @@
 				<Button
 					v-if="isLoggedIn"
 					class="button"
-					:label="t('ViewCompetition.manage') + ' >>'"
+					:label="t('tournament.manage') + ' >>'"
 					@click="gotoManage"
 				/>
 				<Button
 					v-if="openRegistration"
 					class="button"
-					:label="t('general.create_player') + ' >>'"
+					:label="t('player.action.create.label') + ' >>'"
 					@click="router.push({ name: Routes.CreatePlayer })"
 				/>
 				<Button

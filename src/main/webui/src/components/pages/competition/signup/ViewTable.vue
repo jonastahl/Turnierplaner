@@ -8,8 +8,10 @@
 			show-gridlines
 			removable-sort
 		>
-			<template #empty>{{ t("ViewCompetition.no_registration") }}</template>
-			<Column :header="t('general.name')" field="name" sortable>
+			<template #empty>{{
+				t("competition.action.signup.participants.empty")
+			}}</template>
+			<Column :header="t('general.name.label')" field="name" sortable>
 				<template #body="{ data }">
 					<div class="flex justify-content-between align-items-center">
 						<ViewPlayerName :player="<Player>data.playerA" />
@@ -39,9 +41,11 @@
 			show-gridlines
 			removable-sort
 		>
-			<template #empty>{{ t("ViewCompetition.no_registration") }}</template>
+			<template #empty>{{
+				t("competition.action.signup.participants.empty")
+			}}</template>
 			<Column
-				:header="t('ViewCompetition.playerA')"
+				:header="t('competition.player.A')"
 				sortable
 				field="playerA.name"
 				style="width: 50%"
@@ -51,7 +55,7 @@
 				</template>
 			</Column>
 			<Column
-				:header="t('ViewCompetition.playerB')"
+				:header="t('competition.player.B')"
 				sortable
 				field="playerB.name"
 				style="width: 50%"
@@ -84,8 +88,10 @@
 			show-gridlines
 			removable-sort
 		>
-			<template #empty>{{ t("ViewCompetition.no_registration") }}</template>
-			<Column :header="t('general.name')" sortable field="name">
+			<template #empty>{{
+				t("competition.action.signup.participants.empty")
+			}}</template>
+			<Column :header="t('general.name.label')" sortable field="name">
 				<template #body="{ data }">
 					<div class="flex justify-content-between align-items-center">
 						<ViewPlayerName :player="<Player>data.playerA" />
@@ -116,8 +122,10 @@
 				show-gridlines
 				removable-sort
 			>
-				<template #empty>{{ t("ViewCompetition.no_registration") }}</template>
-				<Column :header="t('ViewCompetition.playerA')" sortable field="name">
+				<template #empty>{{
+					t("competition.action.signup.participants.empty")
+				}}</template>
+				<Column :header="t('competition.player.A')" sortable field="name">
 					<template #body="{ data }">
 						<div class="flex justify-content-between align-items-center">
 							<ViewPlayerName :player="<Player>data.playerA" />
@@ -145,8 +153,10 @@
 				show-gridlines
 				removable-sort
 			>
-				<template #empty>{{ t("ViewCompetition.no_registration") }}</template>
-				<Column :header="t('ViewCompetition.playerB')" sortable field="name">
+				<template #empty>{{
+					t("competition.action.signup.participants.empty")
+				}}</template>
+				<Column :header="t('competition.player.B')" sortable field="name">
 					<template #body="{ data }">
 						<div class="flex justify-content-between align-items-center">
 							<ViewPlayerName :player="<Player>data.playerB" />
@@ -202,8 +212,8 @@ function deletePlayer(team: Team) {
 		severity: "success",
 		summary: t(
 			competition.value?.mode == Mode.SINGLE
-				? "ViewSignUp.playerDeleted"
-				: "ViewSignUp.teamDeleted",
+				? "player.action.delete.success"
+				: "team.delete.success",
 		),
 		life: 3000,
 	})

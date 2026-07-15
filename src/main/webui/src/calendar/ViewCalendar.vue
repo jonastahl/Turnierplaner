@@ -112,7 +112,9 @@ const route = useRoute()
 const { locale } = useI18n()
 
 const events = defineModel<CalEvent<T>[]>({ default: () => [] })
-const myStartDate = defineModel<Date>("startDate", { default: () => new Date() })
+const myStartDate = defineModel<Date>("startDate", {
+	default: () => new Date(),
+})
 const myEndDate = defineModel<Date>("endDate", { default: () => new Date() })
 
 const activeView = ref(route.query.view == "week" ? View.week : View.day)

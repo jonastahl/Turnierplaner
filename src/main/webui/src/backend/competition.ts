@@ -16,11 +16,12 @@ import {
 	useQuery,
 	useQueryClient,
 } from "@tanstack/vue-query"
+import { TranslateFunction } from "@/main"
 
 export function getCompetitionsList(
 	route: RouteLocationNormalizedLoaded,
 	isLoggedIn: Ref<boolean>,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return useQuery({
@@ -42,7 +43,7 @@ export function getCompetitionsList(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("ViewCompetitions.loadingFailed"),
+						summary: t("competition.action.load.failed"),
 						detail: error,
 						life: 3000,
 					})
@@ -55,7 +56,7 @@ export function getCompetitionsList(
 
 export function getCompetitionDetails(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return getCompetitionDetailsCustom(
@@ -67,7 +68,7 @@ export function getCompetitionDetails(
 }
 export function getCompetitionDetailsCustom(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	compId: Ref<string>,
 	toast: ToastServiceMethods,
 ) {
@@ -91,7 +92,7 @@ export function getCompetitionDetailsCustom(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("ViewEditTournament.loadingDetailsFailed"),
+						summary: t("tournament.details.failed"),
 						detail: error,
 						life: 3000,
 					})
@@ -104,7 +105,7 @@ export function getCompetitionDetailsCustom(
 
 export function useUpdateCompetition(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 	handler: {
 		suc?: (competition: CompetitionServer) => void
@@ -121,8 +122,8 @@ export function useUpdateCompetition(
 		onSuccess(_, competition) {
 			toast.add({
 				severity: "success",
-				summary: t("ViewEditCompetition.competitionUpdate"),
-				detail: t("ViewEditCompetition.competitionUpdated"),
+				summary: t("competition.action.update.label"),
+				detail: t("competition.action.update.success"),
 				life: 3000,
 			})
 
@@ -146,7 +147,7 @@ export function useUpdateCompetition(
 		onError(error) {
 			toast.add({
 				severity: "error",
-				summary: t("ViewEditCompetition.competitionUpdateFailed"),
+				summary: t("competition.action.update.failed"),
 				detail: error,
 				life: 3000,
 			})
@@ -157,7 +158,7 @@ export function useUpdateCompetition(
 
 export function useDeleteCompetition(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()
@@ -185,7 +186,7 @@ export function useDeleteCompetition(
 				toast.add({
 					severity: "success",
 					summary: t("general.success"),
-					detail: t("ViewEditCompetition.competitionDeleted"),
+					detail: t("competition.action.delete.success"),
 					life: 3000,
 				})
 			})
@@ -203,7 +204,7 @@ export function useDeleteCompetition(
 
 export function useAddCompetition(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 	handler: {
 		suc?: () => void
@@ -220,8 +221,8 @@ export function useAddCompetition(
 		onSuccess() {
 			toast.add({
 				severity: "success",
-				summary: t("ViewCreateCompetition.competitionCreation"),
-				detail: t("ViewCreateCompetition.competitionCreated"),
+				summary: t("competition.action.create.label"),
+				detail: t("competition.action.create.success"),
 				life: 3000,
 			})
 			queryClient
@@ -236,8 +237,8 @@ export function useAddCompetition(
 		onError() {
 			toast.add({
 				severity: "error",
-				summary: t("ViewCreateCompetition.competitionCreation"),
-				detail: t("ViewCreateCompetition.creationFailed"),
+				summary: t("competition.action.create.label"),
+				detail: t("competition.action.create.failed"),
 				life: 3000,
 			})
 			if (handler.err) handler.err()
@@ -247,7 +248,7 @@ export function useAddCompetition(
 
 export function useSignUpSingle(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 	queryClient: QueryClient,
 ) {
@@ -259,8 +260,8 @@ export function useSignUpSingle(
 			if (!data.player.value) {
 				toast.add({
 					severity: "error",
-					summary: t("ViewSignUp.noPlayerSelected"),
-					detail: t("ViewSignUp.selectPlayerFirst"),
+					summary: t("competition.action.signup.warning.no_player_selected"),
+					detail: t("competition.action.signup.warning.select_first"),
 					life: 3000,
 				})
 				throw new Error("No player selected")
@@ -284,7 +285,7 @@ export function useSignUpSingle(
 
 export function useSignUpDoubleTog(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 	queryClient: QueryClient,
 ) {
@@ -296,8 +297,8 @@ export function useSignUpDoubleTog(
 			if (!data.playerA.value || !data.playerB.value) {
 				toast.add({
 					severity: "error",
-					summary: t("ViewSignUp.noPlayerSelected"),
-					detail: t("ViewSignUp.selectPlayerFirst"),
+					summary: t("competition.action.signup.warning.no_player_selected"),
+					detail: t("competition.action.signup.warning.select_first"),
 					life: 3000,
 				})
 				throw new Error("No player selected")
@@ -319,7 +320,7 @@ export function useSignUpDoubleTog(
 
 function signUpOptions(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 	queryClient: QueryClient,
 	team?: boolean,
@@ -333,8 +334,8 @@ function signUpOptions(
 			toast.add({
 				severity: "success",
 				summary: team
-					? t("Player.register_success_team")
-					: t("Player.register_success"),
+					? t("competition.action.signup.success")
+					: t("competition.action.signup.success_team"),
 				life: 3000,
 			})
 		},
@@ -343,14 +344,14 @@ function signUpOptions(
 			if (error.response.status === 409)
 				toast.add({
 					severity: "error",
-					summary: t("Player.registration_conflict"),
+					summary: t("competition.action.signup.conflict"),
 					life: 3000,
 				})
 			else
 				toast.add({
 					severity: "error",
-					summary: t("Player.register_failed"),
-					detail: error,
+					summary: t("competition.action.signup.label"),
+					detail: t("competition.action.signup.failed"),
 					life: 3000,
 				})
 		},
@@ -359,7 +360,7 @@ function signUpOptions(
 
 export function useResetPreparation(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()
@@ -372,7 +373,7 @@ export function useResetPreparation(
 			toast.add({
 				severity: "success",
 				summary: t("general.success"),
-				detail: t("general.saved"),
+				detail: t("general.action.save.success"),
 				life: 3000,
 			})
 			queryClient.invalidateQueries({
@@ -410,7 +411,7 @@ export function useResetPreparation(
 
 export function useReopenSchedule(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()
@@ -443,7 +444,7 @@ export function useReopenSchedule(
 
 export function usePublishCompetitions(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()
@@ -457,15 +458,15 @@ export function usePublishCompetitions(
 			let message
 			if (data.status == 200) {
 				if (competitions.length === 1) {
-					message = "ViewPrepare.published_all"
+					message = "competition.action.publish.preparation.all"
 				} else {
-					message = "ViewPrepare.published_single"
+					message = "competition.action.publish.preparation.single"
 				}
 			} else {
 				if (competitions.length === 1) {
-					message = "ViewPrepare.published_all_missing"
+					message = "competition.action.publish.preparation.all_missing"
 				} else {
-					message = "ViewPrepare.published_single_missing"
+					message = "competition.action.publish.preparation.single_missing"
 				}
 			}
 			toast.add({

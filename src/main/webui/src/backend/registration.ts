@@ -2,9 +2,10 @@ import { ToastServiceMethods } from "primevue/toastservice"
 import axios from "axios"
 import { PlayerRegistration } from "@/interfaces/player"
 import { useMutation } from "@tanstack/vue-query"
+import { TranslateFunction } from "@/main"
 
 export function useRegisterPlayer(
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return useMutation({
@@ -21,8 +22,8 @@ export function useRegisterPlayer(
 		onSuccess() {
 			toast.add({
 				severity: "success",
-				summary: t("ViewPlayerRegistration.registration_successful"),
-				detail: t("ViewPlayerRegistration.after"),
+				summary: t("player.action.create.label"),
+				detail: t("player.action.create.success"),
 				life: 3000,
 			})
 		},
@@ -30,8 +31,8 @@ export function useRegisterPlayer(
 			console.log(error)
 			toast.add({
 				severity: "error",
-				summary: t("ViewPlayerRegistration.registration_failed"),
-				detail: t("ViewPlayerRegistration.registration_failed_detail"),
+				summary: t("player.action.create.failed"),
+				detail: t("player.action.create.failed_detail"),
 				life: 3000,
 			})
 		},

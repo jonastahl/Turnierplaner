@@ -2,7 +2,9 @@
 	<div class="w-full flex justify-content-center">
 		<template v-if="competition">
 			<ViewResults v-if="competition.cProgress === Progress.DONE" />
-			<span v-else>{{ t("ViewExecution.not_yet_published") }}</span>
+			<span v-else>{{
+				t("competition.manage.warning.not_yet_published")
+			}}</span>
 		</template>
 		<ProgressSpinner v-else />
 	</div>

@@ -13,7 +13,7 @@
 	>
 		<Column
 			field="name"
-			:header="t('general.name')"
+			:header="t('general.name.label')"
 			:show-filter-menu="false"
 			:show-clear-button="false"
 		>
@@ -37,10 +37,16 @@
 				</div>
 			</template>
 		</Column>
-		<Column field="sex" :header="t('general.sex')">
+		<Column field="sex" :header="t('player.sex.label')">
 			<template #body="{ data }">
 				<template v-if="(<Player>data).sex">
-					{{ t(data.sex === Sex.MALE ? "general.male" : "general.female") }}
+					{{
+						t(
+							data.sex === Sex.MALE
+								? "player.sex.options.male"
+								: "player.sex.options.female",
+						)
+					}}
 				</template>
 			</template>
 		</Column>

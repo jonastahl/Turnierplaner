@@ -1,7 +1,7 @@
 <template>
 	<div class="flex justify-content-center w-full">
 		<Card v-if="!isSuccess" id="card">
-			<template #title>{{ t("ViewPlayerRegistration.headline") }}</template>
+			<template #title>{{ t("player.action.create.label") }}</template>
 			<template #content>
 				<FormPlayer
 					ref="form"
@@ -13,7 +13,7 @@
 			<template #footer>
 				<div class="justify-content-end flex">
 					<Button
-						:label="t('general.create')"
+						:label="t('general.action.create')"
 						:disabled="disabled"
 						@click="() => form !== null && form.onSubmit()"
 					></Button>
@@ -24,7 +24,7 @@
 			<template #title>{{ t("general.success") }}</template>
 			<template #content>
 				<p>
-					{{ t("ViewPlayerRegistration.after") }}
+					{{ t("player.action.create.follow_up") }}
 				</p>
 			</template>
 		</Card>

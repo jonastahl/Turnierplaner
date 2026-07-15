@@ -2,7 +2,7 @@
 	<div class="grid">
 		<div class="col-4 flex flex-column gap-3">
 			<Card>
-				<template #title>{{ t("general.courts") }}</template>
+				<template #title>{{ t("general.court.plural") }}</template>
 				<template #content>
 					<CourtChooser v-if="selectedCourts" v-model="selectedCourts" />
 				</template>
@@ -145,7 +145,7 @@ function complete() {
 		toast.add({
 			severity: "error",
 			summary: t("general.failure"),
-			detail: t("ViewPrepare.scheduleMatches.error_cont_not_scheduled"),
+			detail: t("competition.action.scheduling.error_cont_not_scheduled"),
 			life: 3000,
 		})
 		return

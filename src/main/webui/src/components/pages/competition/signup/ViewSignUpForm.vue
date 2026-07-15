@@ -34,13 +34,13 @@
 		<template v-else>
 			<template v-if="windowWidth < 768">
 				<TabView :pt="{ panelContainer: 'p-0 pt-3' }">
-					<TabPanel :header="t('ViewCompetition.playerA')">
+					<TabPanel :header="t('competition.player.A')">
 						<div class="flex flex-column gap-2">
 							<ViewConditions />
 							<SignUpDropDown />
 						</div>
 					</TabPanel>
-					<TabPanel :header="t('ViewCompetition.playerB')">
+					<TabPanel :header="t('competition.player.B')">
 						<div class="flex flex-column gap-2">
 							<ViewConditions second />
 							<SignUpDropDown is-player-b />

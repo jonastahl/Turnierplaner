@@ -4,11 +4,11 @@
 			<Card>
 				<template #title>
 					<div class="flex flex-row justify-content-between">
-						<div>{{ t("ViewPrepare.assignMatches.teams") }}</div>
+						<div>{{ t("general.team.plural") }}</div>
 						<SplitButton
 							:model="randomizeItems"
 							class="w-fit"
-							:label="t('ViewPrepare.editTeams.randomize')"
+							:label="t('competition.manage.action.randomize')"
 							@click="randomize"
 						>
 							<template #icon>
@@ -31,7 +31,7 @@
 		</div>
 		<div class="col-9">
 			<Card class="w-full">
-				<template #title>{{ t("general.tournament_tree") }}</template>
+				<template #title>{{ t("tournament.tree") }}</template>
 				<template #content>
 					<ScrollPanel style="width: 100%; height: 500px">
 						<ViewKnockoutTree
@@ -237,7 +237,7 @@ function save(complete = false) {
 		toast.add({
 			severity: "error",
 			summary: t("general.failure"),
-			detail: t("ViewPrepare.assignMatches.knockout_not_assigned"),
+			detail: t("competition.manage.warning.knockout_not_assigned"),
 			life: 3000,
 		})
 		return

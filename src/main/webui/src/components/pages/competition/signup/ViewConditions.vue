@@ -9,7 +9,7 @@
 		<Tag
 			v-if="player.hasMinAge"
 			v-tooltip="
-				t('ViewCompetition.born_before') +
+				t('competition.age.min.born') +
 				' ' +
 				(player.minAge !== null
 					? player.minAge.toLocaleString(t('lang'), dateOptions)
@@ -22,7 +22,7 @@
 		<Tag
 			v-if="player.hasMaxAge"
 			v-tooltip="
-				t('ViewCompetition.born_after') +
+				t('competition.age.max.born') +
 				' ' +
 				(player.maxAge !== null
 					? player.maxAge.toLocaleString(t('lang'), dateOptions)
@@ -70,7 +70,7 @@ function generateAboveTag() {
 	const dif =
 		tournament.value.game_phase.begin.getFullYear() -
 		player.value.minAge.getFullYear()
-	return `${t("Player.over")}${dif}`
+	return `${t("player.age.over.short")}${dif}`
 }
 
 function generateUnderTag() {
@@ -79,7 +79,7 @@ function generateUnderTag() {
 	const dif =
 		tournament.value.game_phase.begin.getFullYear() -
 		player.value.maxAge.getFullYear()
-	return `${t("Player.under")}${dif - 1}`
+	return `${t("player.age.under.short")}${dif - 1}`
 }
 
 const dateOptions: Intl.DateTimeFormatOptions = {

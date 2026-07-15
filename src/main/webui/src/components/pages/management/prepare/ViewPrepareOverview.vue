@@ -8,7 +8,7 @@
 					) === -1
 				"
 				:severity="'success'"
-				:label="t('ViewManage.publishall')"
+				:label="t('general.action.publish.all')"
 				@click="
 					publish(
 						competitions
@@ -30,12 +30,12 @@
 				<div class="flex flex-row gap-3">
 					<Button
 						v-if="comp.cProgress === Progress.PUBLISHING"
-						:label="t('ViewManage.editSchedule')"
+						:label="t('competition.action.revert_to_schedule')"
 						@click="editSchedule(comp.name)"
 					/>
 					<Button
 						:disabled="progressOrder(comp.cProgress) > 3"
-						:label="t('ViewManage.prepare')"
+						:label="t('general.action.prepare')"
 						@click="
 							router.push({
 								name: Routes.ManagePrepare,
@@ -46,7 +46,7 @@
 					<Button
 						:disabled="comp.cProgress !== Progress.PUBLISHING"
 						:severity="'secondary'"
-						:label="t('ViewManage.publish')"
+						:label="t('competition.steps.publishing')"
 						@click="publish([comp.name])"
 					/>
 				</div>
@@ -114,18 +114,18 @@ function publish(competitions: string[]) {
 	confirm.require({
 		header: t(
 			competitions.length === 1
-				? "ViewManage.publish"
-				: "ViewManage.publishall",
+				? "competition.steps.publishing"
+				: "general.action.publish.all",
 		),
 		message:
-			t("ViewPrepare.publish_warning") +
+			t("competition.action.publish.preparation.warning") +
 			(competitions.length > 1
 				? ""
-				: "\n\n" + t("ViewPrepare.publish_consider_all")),
+				: "\n\n" + t("competition.action.publish.preparation.consider_all")),
 		icon: "pi pi-exclamation-triangle",
 		acceptClass: "p-button-success",
-		rejectLabel: t("general.cancel"),
-		acceptLabel: t("ViewManage.publish"),
+		rejectLabel: t("general.action.cancel"),
+		acceptLabel: t("competition.steps.publishing"),
 		accept: () => publishCompetition(competitions),
 		group: "publish",
 	})

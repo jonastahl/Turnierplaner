@@ -1,7 +1,7 @@
 <template>
 	<div class="formgrid grid">
 		<div class="field col-12">
-			<label for="name">{{ t("general.name") }}</label>
+			<label for="name">{{ t("general.name.label") }}</label>
 			<InputText
 				id="name"
 				v-model="name"
@@ -30,24 +30,24 @@
 			></textarea>
 		</div>
 		<Divider align="left">
-			<b>{{ t("CompetitionSettings.tournament_settings") }}</b>
+			<b>{{ t("tournament.settings") }}</b>
 		</Divider>
 		<div class="field col-12 md:col-6 md:mr-8">
-			<label for="name">{{ t("CompetitionSettings.type") }}</label>
+			<label for="name">{{ t("competition.type.label") }}</label>
 			<Dropdown
 				v-model="selectedTourType"
 				:disabled="disabled"
 				:options="[
 					{
-						name: t('CompetitionSettings.knockout'),
+						name: t('competition.type.options.knockout'),
 						value: CompType.KNOCKOUT,
 					},
 					{
-						name: t('CompetitionSettings.groups'),
+						name: t('competition.type.options.group'),
 						value: CompType.GROUPS,
 					},
 				]"
-				:placeholder="t(`CompetitionSettings.type`)"
+				:placeholder="t(`competition.type.label`)"
 				class="w-full"
 				option-label="name"
 				option-value="value"
@@ -61,10 +61,10 @@
 						/>
 						<i-material-symbols-groups-outline v-else class="mr-2" />
 						<div v-if="slotProps.value === 'GROUPS'" class="mt-1">
-							{{ t("CompetitionSettings.groups") }}
+							{{ t("competition.type.options.group") }}
 						</div>
 						<div v-else class="mt-1">
-							{{ t("CompetitionSettings.knockout") }}
+							{{ t("competition.type.options.knockout") }}
 						</div>
 					</div>
 					<span v-else>
@@ -85,15 +85,15 @@
 		</div>
 
 		<div class="field col-6">
-			<label for="name">{{ t("CompetitionSettings.mode") }}</label>
+			<label for="name">{{ t("competition.mode.label") }}</label>
 			<Dropdown
 				v-model="selectedTourMode"
 				:disabled="disabled"
 				:options="[
-					{ name: t('CompetitionSettings.single'), value: Mode.SINGLE },
-					{ name: t('CompetitionSettings.double'), value: Mode.DOUBLE },
+					{ name: t('competition.mode.options.single'), value: Mode.SINGLE },
+					{ name: t('competition.mode.options.double'), value: Mode.DOUBLE },
 				]"
-				:placeholder="t(`CompetitionSettings.mode`)"
+				:placeholder="t(`competition.mode.label`)"
 				class="w-full"
 				option-label="name"
 				option-value="value"
@@ -107,10 +107,10 @@
 						/>
 						<i-material-symbols-person-outline v-else class="mr-2" />
 						<div v-if="slotProps.value === 'DOUBLE'" class="mt-1">
-							{{ t("CompetitionSettings.double") }}
+							{{ t("competition.mode.options.double") }}
 						</div>
 						<div v-else class="mt-1">
-							{{ t("CompetitionSettings.single") }}
+							{{ t("competition.mode.options.single") }}
 						</div>
 					</div>
 					<span v-else>
@@ -134,21 +134,21 @@
 			v-if="values.mode === Mode.DOUBLE"
 			class="field col-6 flex flex-column"
 		>
-			<label for="name">{{ t("CompetitionSettings.signup") }}</label>
+			<label for="name">{{ t("competition.action.signup.label") }}</label>
 			<Dropdown
 				v-model="signUp"
 				:disabled="disabled"
 				:options="[
 					{
-						name: t('CompetitionSettings.individual'),
+						name: t('competition.action.signup.options.individual'),
 						value: SignUp.INDIVIDUAL,
 					},
 					{
-						name: t('CompetitionSettings.together'),
+						name: t('competition.action.signup.options.together'),
 						value: SignUp.TOGETHER,
 					},
 				]"
-				:placeholder="t(`CompetitionSettings.signup`)"
+				:placeholder="t(`competition.action.signup.label`)"
 				class="w-full"
 				option-label="name"
 				option-value="value"
@@ -162,10 +162,10 @@
 						/>
 						<i-material-symbols-workspaces-outline v-else class="mr-2" />
 						<div v-if="slotProps.value === 'TOGETHER'" class="mt-1">
-							{{ t("CompetitionSettings.together") }}
+							{{ t("competition.action.signup.options.together") }}
 						</div>
 						<div v-else class="mt-1">
-							{{ t("CompetitionSettings.individual") }}
+							{{ t("competition.action.signup.options.individual") }}
 						</div>
 					</div>
 					<span v-else>
@@ -186,20 +186,20 @@
 		</div>
 
 		<div class="field col-12 md:col-6 md:mr-8">
-			<label for="numberSets">{{ t("CompetitionSettings.numberSets") }}</label>
+			<label for="numberSets">{{ t("competition.sets.count") }}</label>
 			<Dropdown
 				v-model="numberSets"
 				v-bind="numberSetsAtrrs"
 				:options="numberSetsOptions"
 				option-label="name"
 				option-value="value"
-				:placeholder="t('CompetitionSettings.numberSets')"
+				:placeholder="t('competition.sets.count')"
 				class="w-full"
 			/>
 		</div>
 
 		<Divider align="left">
-			<b>{{ t("CompetitionSettings.player") }}</b>
+			<b>{{ t("player.settings") }}</b>
 		</Divider>
 		<div
 			v-if="values.mode === Mode.DOUBLE"
@@ -214,18 +214,18 @@
 				v-bind="playerB_differentAttrs"
 			/>
 			<label class="ml-2 mb-0 mt-1" for="playerB_different_input">{{
-				t("CompetitionSettings.differentB")
+				t("competition.differentB")
 			}}</label>
 		</div>
 
 		<div v-if="values.playerB_different" class="col-6">
 			<Divider align="left" class="col-6">
-				{{ t("CompetitionSettings.playerA") }}
+				{{ t("competition.player.A") }}
 			</Divider>
 		</div>
 		<div v-if="values.playerB_different" class="col-6">
 			<Divider align="left" class="col-6">
-				{{ t("CompetitionSettings.playerB") }}
+				{{ t("competition.player.B") }}
 			</Divider>
 		</div>
 
@@ -237,18 +237,18 @@
 			class="field flex flex-column"
 		>
 			<label class="text-900" for="playerASex">{{
-				t("CompetitionSettings.sex")
+				t("player.sex.label")
 			}}</label>
 			<Dropdown
 				v-model="playerASex"
 				v-bind="playerASexAttrs"
 				:disabled="disabled"
 				:options="[
-					{ name: t('general.male'), value: Sex.MALE },
-					{ name: t('general.female'), value: Sex.FEMALE },
-					{ name: t('CompetitionSettings.any'), value: Sex.ANY },
+					{ name: t('player.sex.options.male'), value: Sex.MALE },
+					{ name: t('player.sex.options.female'), value: Sex.FEMALE },
+					{ name: t('general.any'), value: Sex.ANY },
 				]"
-				:placeholder="t(`CompetitionSettings.sex`)"
+				:placeholder="t(`player.sex.label`)"
 				class="w-full"
 				option-label="name"
 				option-value="value"
@@ -262,17 +262,17 @@
 		</div>
 		<div v-if="values.playerB_different" class="field col-6 flex flex-column">
 			<label class="text-900" for="playerBSex">{{
-				t("CompetitionSettings.sex")
+				t("player.sex.label")
 			}}</label>
 			<Dropdown
 				v-model="playerBSex"
 				:disabled="disabled"
 				:options="[
-					{ name: t('general.male'), value: Sex.MALE },
-					{ name: t('general.female'), value: Sex.FEMALE },
-					{ name: t('CompetitionSettings.any'), value: Sex.ANY },
+					{ name: t('player.sex.options.male'), value: Sex.MALE },
+					{ name: t('player.sex.options.female'), value: Sex.FEMALE },
+					{ name: t('general.any'), value: Sex.ANY },
 				]"
-				:placeholder="t(`CompetitionSettings.sex`)"
+				:placeholder="t(`player.sex.label`)"
 				class="w-full"
 				option-label="name"
 				option-value="value"
@@ -292,7 +292,7 @@
 			class="field flex flex-column"
 		>
 			<label class="text-900" for="minAge">{{
-				t("CompetitionSettings.minAge")
+				t("competition.age.min.label")
 			}}</label>
 			<div class="flex flex-row align-items-center gap-2">
 				<Checkbox
@@ -317,7 +317,7 @@
 		</div>
 		<div v-if="values.playerB_different" class="field flex flex-column col-6">
 			<label class="text-900" for="minAge">{{
-				t("CompetitionSettings.minAge")
+				t("competition.age.min.label")
 			}}</label>
 			<div class="flex flex-row align-items-center gap-2">
 				<Checkbox
@@ -347,7 +347,7 @@
 			class="field flex flex-column"
 		>
 			<label class="text-900" for="minAge">{{
-				t("CompetitionSettings.maxAge")
+				t("competition.age.max.label")
 			}}</label>
 			<div class="flex flex-row align-items-center gap-2">
 				<Checkbox
@@ -372,7 +372,7 @@
 		</div>
 		<div v-if="values.playerB_different" class="field flex flex-column col-6">
 			<label class="text-900" for="minAge">{{
-				t("CompetitionSettings.maxAge")
+				t("competition.age.max.label")
 			}}</label>
 			<div class="flex flex-row align-items-center gap-2">
 				<Checkbox

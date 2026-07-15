@@ -2,7 +2,7 @@
 	<div class="w-full p-2">
 		<Card style="margin-top: -10px !important">
 			<template #title>
-				{{ t("ViewPlayerOverview.header") }} - {{ player?.name }}</template
+				{{ t("player.overview") }} - {{ player?.name }}</template
 			>
 			<template #content>
 				<MatchesList :player-id="player?.id" />

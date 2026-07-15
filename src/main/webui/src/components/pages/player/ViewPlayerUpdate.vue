@@ -19,13 +19,13 @@
 			<template #footer>
 				<div class="justify-content-between flex">
 					<Button
-						:label="t('general.delete')"
+						:label="t('general.action.delete')"
 						severity="danger"
 						:disabled="disabled"
 						@click="askDeletePlayer"
 					></Button>
 					<Button
-						:label="t('general.update')"
+						:label="t('general.action.update')"
 						:disabled="disabled"
 						@click="() => form !== null && form.onSubmit()"
 					></Button>
@@ -74,13 +74,13 @@ function reg(playerF: PlayerRegistration) {
 
 function askDeletePlayer() {
 	confirm.require({
-		message: t("Player.confirm_delete"),
-		header: t("Player.deleting_player"),
+		message: t("player.action.delete.confirm"),
+		header: t("player.action.delete.label"),
 		icon: "pi pi-exclamation-triangle",
 		rejectClass: "p-button-secondary p-button-outlined",
-		rejectLabel: t("general.cancel"),
+		rejectLabel: t("general.action.cancel"),
 		acceptClass: "p-button-danger",
-		acceptLabel: t("general.delete"),
+		acceptLabel: t("general.action.delete"),
 		accept: () => {
 			if (player.value)
 				deletePlayer(player.value.id, {

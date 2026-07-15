@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<Card>
-			<template #title>Teams</template>
+			<template #title>{{ t("general.team.plural") }}</template>
 			<template #content>
 				<slot></slot>
 
@@ -97,12 +97,15 @@ import DraggablePanel from "@/draggable/DraggablePanel.vue"
 import PlayerCard from "@/components/pages/management/prepare/components/PlayerCard.vue"
 import { Player } from "@/interfaces/player"
 import { TeamArray } from "@/interfaces/team"
+import { useI18n } from "vue-i18n"
 
 const props = defineProps<{
 	teams: TeamArray[]
 	competition: Competition
 	animated?: boolean
 }>()
+
+const { t } = useI18n()
 
 function memberRemoved(i: number) {
 	if (
