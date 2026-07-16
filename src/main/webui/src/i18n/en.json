@@ -231,8 +231,8 @@
 			"begin": "Begin",
 			"calendar": "Calendar",
 			"end": "End",
-			"from": "Von",
-			"to": "Bis"
+			"from": "From",
+			"to": "To"
 		},
 		"title": "Title",
 		"yes": "Yes"
