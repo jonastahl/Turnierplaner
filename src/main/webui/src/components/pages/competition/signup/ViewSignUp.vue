@@ -6,10 +6,16 @@
 				<strong>{{ t("general.description") }}:</strong>
 				{{ props.competition.description }}<br />
 				<strong>{{ t("competition.type.label") }}:</strong>
-				{{ t("CompetitionSettings." + props.competition.tourType.toLowerCase())
+				{{
+					t(
+						"competition.type.options." +
+							props.competition.tourType.toLowerCase(),
+					)
 				}}<br />
 				<strong>{{ t("competition.mode.label") }}:</strong>
-				{{ t("CompetitionSettings." + props.competition.mode.toLowerCase()) }}
+				{{
+					t("competition.mode.options." + props.competition.mode.toLowerCase())
+				}}
 			</template>
 		</Card>
 

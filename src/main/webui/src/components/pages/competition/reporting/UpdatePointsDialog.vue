@@ -5,9 +5,6 @@
 		modal
 		class="p-2 max-w-full xl:w-6"
 	>
-		<span class="text-surface-500 dark:text-surface-400 block mb-2">
-			{{ t("score.update.action") }}
-		</span>
 		<HorizontalScrollerOverflow>
 			<SetSelector
 				v-model:selected-set="selectedSet"

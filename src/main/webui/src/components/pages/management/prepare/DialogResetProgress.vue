@@ -25,7 +25,6 @@ function trReset() {
 	reset(undefined, {
 		onSuccess() {
 			visible.value = false
-			console.log("suc")
 		},
 	})
 }

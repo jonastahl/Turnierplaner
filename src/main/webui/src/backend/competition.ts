@@ -421,13 +421,17 @@ export function useReopenSchedule(
 				`/tournament/${<string>route.params.tourId}/competition/${compName}/reopenSchedule`,
 			),
 		onSuccess(_, compName: string) {
+			console.log("im invalidating", [
+				"competitionDetails",
+				route.params.tourId,
+				compName,
+			])
 			queryClient.invalidateQueries({
 				queryKey: ["competitionList"],
 				refetchType: "all",
 			})
-			queryClient.invalidateQueries({
+			queryClient.removeQueries({
 				queryKey: ["competitionDetails", route.params.tourId, compName],
-				refetchType: "all",
 			})
 		},
 		onError(error) {

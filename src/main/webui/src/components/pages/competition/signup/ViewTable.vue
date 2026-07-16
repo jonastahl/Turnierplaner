@@ -213,7 +213,7 @@ function deletePlayer(team: Team) {
 		summary: t(
 			competition.value?.mode == Mode.SINGLE
 				? "player.action.delete.success"
-				: "team.delete.success",
+				: "general.team.delete.success",
 		),
 		life: 3000,
 	})

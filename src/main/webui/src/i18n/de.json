@@ -87,7 +87,7 @@
 		"label": "Konkurrenz",
 		"manage": {
 			"action": {
-				"deleteBox": "Loslassen zum Löschen",
+				"deleteBox": "Hier ablegen zum Löschen",
 				"randomize": "Auslosen",
 				"reroll": "Neu auslosen"
 			},
@@ -332,7 +332,6 @@
 	},
 	"score": {
 		"update": {
-			"action": "Aktualisieren Sie die Punkte für das Spiel",
 			"title": "Ergebnismeldung"
 		}
 	},

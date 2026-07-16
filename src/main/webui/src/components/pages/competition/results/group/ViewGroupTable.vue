@@ -3,7 +3,7 @@
 		<tbody>
 			<tr>
 				<th id="first">
-					<span>{{ t("group.label") }} {{ props.group.index + 1 }}</span>
+					<span>{{ t("group.label") }} {{ props.group.index }}</span>
 				</th>
 				<template
 					v-for="(team, index) in props.group.teams.slice().reverse()"

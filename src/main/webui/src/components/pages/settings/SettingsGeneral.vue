@@ -130,6 +130,8 @@ function restoreBackup() {
 		icon: "pi pi-exclamation-triangle",
 		acceptIcon: "pi pi-exclamation-triangle",
 		acceptClass: "p-button-danger",
+		acceptLabel: t("general.yes"),
+		rejectLabel: t("general.no"),
 		accept: () => {
 			const fileInput = document.createElement("input")
 			fileInput.type = "file"

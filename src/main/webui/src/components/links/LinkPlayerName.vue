@@ -1,5 +1,5 @@
 <template>
-	<LinkStub v-if="props.player" :route-target="routeTarget">
+	<LinkStub v-if="props.player" :route-target="routeTarget" :white>
 		<template v-if="inverted">
 			{{ props.player.lastName }}, {{ firstShort }}
 		</template>
@@ -18,11 +18,13 @@ const props = withDefaults(
 		player?: Player | null
 		inverted?: boolean
 		short?: boolean
+		white?: boolean
 	}>(),
 	{
 		player: null,
 		inverted: false,
 		short: false,
+		white: false,
 	},
 )
 

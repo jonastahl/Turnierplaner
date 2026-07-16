@@ -74,7 +74,7 @@ export default [
 				component: () =>
 					import("@/components/pages/management/settings/ViewSettings.vue"),
 				meta: {
-					overview: "tournament",
+					overview: "tournament.label",
 					compSelector: true,
 					managesel: Routes.ManageSettings,
 					managepage: Routes.ManageSettings,
@@ -86,7 +86,7 @@ export default [
 				component: () =>
 					import("@/components/pages/management/prepare/ViewPrepareMatches.vue"),
 				meta: {
-					overview: "overview",
+					overview: "general.overview",
 					compSelector: true,
 					managesel: Routes.ManagePrepare,
 					managepage: Routes.ManagePrepare,

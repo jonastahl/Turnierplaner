@@ -8,7 +8,7 @@
 				</template>
 			</Card>
 			<Card>
-				<template #title>{{ t("general.matches") }}</template>
+				<template #title>{{ t("general.matches.label") }}</template>
 				<template #content>
 					<MatchesContainerDraggable
 						v-model="matches"

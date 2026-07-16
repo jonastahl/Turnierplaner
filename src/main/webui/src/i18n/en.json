@@ -332,7 +332,6 @@
 	},
 	"score": {
 		"update": {
-			"action": "Update the score for the game",
 			"title": "Score Update"
 		}
 	},

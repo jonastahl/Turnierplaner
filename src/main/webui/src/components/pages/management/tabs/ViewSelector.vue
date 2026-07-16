@@ -3,7 +3,7 @@
 		<template #item="{ item, props }">
 			<div v-bind="props.action" class="cursor-pointer">
 				<strong v-if="item.overview" v-bind="props.label">
-					{{ t("general." + item.overview) }}
+					{{ t(item.overview) }}
 				</strong>
 				<span v-else-if="item.add" class="pi pi-plus-circle"></span>
 				<span v-else v-bind="props.label">{{ item.name }}</span>

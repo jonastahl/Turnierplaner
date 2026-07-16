@@ -14,6 +14,7 @@
 						competitions
 							.filter((comp) => comp.cProgress === Progress.PUBLISHING)
 							.map((comp) => comp.name),
+						true,
 					)
 				"
 			/>
@@ -47,7 +48,7 @@
 						:disabled="comp.cProgress !== Progress.PUBLISHING"
 						:severity="'secondary'"
 						:label="t('competition.steps.publishing')"
-						@click="publish([comp.name])"
+						@click="publish([comp.name], false)"
 					/>
 				</div>
 			</div>
@@ -110,7 +111,7 @@ function editSchedule(compName: string) {
 	})
 }
 
-function publish(competitions: string[]) {
+function publish(competitions: string[], all: boolean) {
 	confirm.require({
 		header: t(
 			competitions.length === 1
@@ -119,7 +120,7 @@ function publish(competitions: string[]) {
 		),
 		message:
 			t("competition.action.publish.preparation.warning") +
-			(competitions.length > 1
+			(all
 				? ""
 				: "\n\n" + t("competition.action.publish.preparation.consider_all")),
 		icon: "pi pi-exclamation-triangle",

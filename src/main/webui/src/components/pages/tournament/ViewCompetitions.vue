@@ -75,7 +75,7 @@
 				/>
 				<Button
 					class="button"
-					:label="t('general.matches') + ' >>'"
+					:label="t('general.matches.label') + ' >>'"
 					@click="router.push({ name: Routes.MatchesOverview })"
 				/>
 			</div>
