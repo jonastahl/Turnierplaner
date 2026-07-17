@@ -7,7 +7,7 @@
 			@mouseleave="leave"
 		>
 			<span class="text-red-500">{{
-				t("ViewPrepare.editTeams.deleteBox")
+				t("competition.manage.action.deleteBox")
 			}}</span>
 		</div>
 		<DraggablePanel
@@ -25,7 +25,9 @@
 		</DraggablePanel>
 		<OverlayPanel ref="op">
 			<div @mouseover="enter" @mouseleave="leave">
-				<span v-if="trash.length === 0">No player deleted</span>
+				<span v-if="trash.length === 0">{{
+					t("competition.manage.no_deleted_player")
+				}}</span>
 				<DraggablePanel
 					id="trash"
 					:list="trash"

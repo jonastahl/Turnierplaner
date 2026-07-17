@@ -11,11 +11,11 @@
 							:competition="props.competition"
 							:tournament="props.tournament"
 							class="flex-grow-1 w-1"
-							:is-updating="isUpdating"
+							:is-updating="!!isUpdating"
 							:secondary="secondary"
 							@add-player="addPlayer"
 						/>
-						<DeleteBox :group="props.group" :secondary="secondary" />
+						<DeleteBox :group="props.group" :secondary="!!secondary" />
 					</div>
 					<PlayerContainerDraggable
 						:id="props.id"

@@ -16,7 +16,7 @@
 		/>
 		<Button
 			:disabled="loading"
-			:label="t('general.save')"
+			:label="t('general.action.save.label')"
 			severity="info"
 			@click="emit('save')"
 		/>
@@ -27,7 +27,7 @@
 			icon-pos="right"
 			severity="success"
 			class="p-button-success"
-			:label="t('general.saveandcomp')"
+			:label="t('general.action.save.and.comp')"
 			@click="emit('complete')"
 		/>
 		<Button
@@ -36,7 +36,7 @@
 			icon="pi pi-angle-right"
 			icon-pos="right"
 			severity="success"
-			:label="t('general.saveandcont')"
+			:label="t('general.action.save.and.cont')"
 			@click="emit('complete')"
 		/>
 	</div>

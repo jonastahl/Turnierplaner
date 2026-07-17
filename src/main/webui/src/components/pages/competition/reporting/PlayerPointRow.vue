@@ -3,7 +3,14 @@
 		<div
 			class="w-6 border-round-sm bg-primary font-bold flex flex-row align-items-center justify-content-center"
 		>
-			<LinkTeamNames :team="props.team" inverted short />
+			<LinkTeamNames
+				v-if="props.team"
+				:team="props.team"
+				inverted
+				short
+				white
+			/>
+			<span v-else>???</span>
 		</div>
 		<div v-if="gamePoints" class="w-6 flex flex-row gap-2">
 			<InputNumber

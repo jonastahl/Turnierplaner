@@ -38,7 +38,7 @@ import { Routes } from "@/routes"
 const { t } = useI18n()
 const router = useRouter()
 
-const selectedCourts = defineModel<Court[]>({ default: [] })
+const selectedCourts = defineModel<Court[]>({ default: () => [] })
 const { data: courts } = getCourts()
 const isLoggedIn = inject("loggedIn", ref(false))
 const { data: isAdmin } = getIsAdmin(isLoggedIn)

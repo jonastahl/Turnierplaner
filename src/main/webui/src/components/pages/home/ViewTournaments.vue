@@ -16,8 +16,8 @@
 		/>
 		<AddItem
 			v-if="canCreate"
-			:title="t('ViewTournaments.add_title')"
-			:content="t('ViewTournaments.add_content')"
+			:title="t('tournament.action.create.label')"
+			:content="t('tournament.action.add.suggestion')"
 			@selected="addTournament"
 		/>
 	</div>

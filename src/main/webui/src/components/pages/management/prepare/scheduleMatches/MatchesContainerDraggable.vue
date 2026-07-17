@@ -53,7 +53,7 @@ const { data: groups } = getGroup(
 	computed(() => competition.value?.tourType === CompType.GROUPS),
 )
 
-const matches = defineModel<AnnotatedMatch[]>({ default: [] })
+const matches = defineModel<AnnotatedMatch[]>({ default: () => [] })
 watch(
 	[knockout, groups],
 	() => {
@@ -84,7 +84,7 @@ function addMatch(match: Match, title: AnnotatedMatch["title"]) {
 
 const props = withDefaults(
 	defineProps<{
-		isUpdating: boolean
+		isUpdating?: boolean
 	}>(),
 	{
 		isUpdating: false,

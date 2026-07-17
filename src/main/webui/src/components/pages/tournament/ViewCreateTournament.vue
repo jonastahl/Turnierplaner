@@ -1,16 +1,14 @@
 <template>
 	<div class="flex justify-content-center w-full">
 		<Card id="card">
-			<template #title>{{
-				t("ViewCreateTournament.tournamentCreation")
-			}}</template>
+			<template #title>{{ t("tournament.action.create.label") }}</template>
 			<template #content>
 				<FormTournament ref="form" :disabled="false" @submit="submit" />
 			</template>
 			<template #footer>
 				<div class="justify-content-end flex">
 					<Button
-						:label="t('general.create')"
+						:label="t('general.action.create')"
 						severity="success"
 						@click="() => form !== null && form.onSubmit()"
 					/>

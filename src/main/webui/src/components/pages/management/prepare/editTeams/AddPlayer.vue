@@ -11,22 +11,22 @@
 				:loading="loading"
 				:disabled="props.isUpdating"
 				:auto-filter-focus="true"
-				:filter-placeholder="t('ViewCompetition.searchPlayer')"
-				:placeholder="t('ViewCompetition.selectPlayer')"
+				:filter-placeholder="t('player.action.search.label')"
+				:placeholder="t('player.select')"
 				option-label="name"
 				data-key="id"
 				filter
 				@filter="queryPlayer"
 			>
 				<template #empty>
-					{{ t("ViewSignUp.atLeastOneLetter") }}
+					{{ t("validation.string.at_least_one") }}
 				</template>
 				<template #emptyfilter>
-					{{ t("ViewSignUp.noPlayerFound") }}
+					{{ t("player.action.search.no_result") }}
 				</template>
 			</Dropdown>
 			<Button :disabled="props.isUpdating" @click="addPlayer">
-				{{ t("general.signUp") }}
+				{{ t("competition.action.signup.action") }}
 			</Button>
 		</div>
 	</div>

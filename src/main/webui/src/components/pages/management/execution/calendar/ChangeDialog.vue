@@ -1,7 +1,7 @@
 <template>
 	<Dialog
 		v-model:visible="visible"
-		:header="t('ViewManage.update_schedule_header')"
+		:header="t('competition.manage.warning.update_schedule_header')"
 		modal
 		style="min-width: 50vw"
 		class="m-3"
@@ -20,7 +20,7 @@
 				class="mt-3"
 				:size="'small'"
 				:severity="'success'"
-				:label="t('general.saveandpublish')"
+				:label="t('general.action.save.and.publish')"
 				@click="
 					() => {
 						emit('publishing')

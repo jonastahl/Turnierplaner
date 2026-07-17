@@ -18,6 +18,7 @@
 		}"
 		@click="updatePoints"
 	>
+		<!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
 		<i class="pi pi-pen-to-square mr-1 ml-2"></i> _:_ / _:_
 	</span>
 	<UpdatePointsDialog

@@ -1,13 +1,10 @@
 <template>
 	<Dialog
 		v-model:visible="visible"
-		:header="t('DialogUpdateScore.header')"
+		:header="t('score.update.title')"
 		modal
 		class="p-2 max-w-full xl:w-6"
 	>
-		<span class="text-surface-500 dark:text-surface-400 block mb-2">
-			{{ t("DialogUpdateScore.update_score") }}
-		</span>
 		<HorizontalScrollerOverflow>
 			<SetSelector
 				v-model:selected-set="selectedSet"
@@ -71,14 +68,14 @@
 			/>
 			<Button
 				:tabindex="12"
-				:label="t('general.cancel')"
+				:label="t('general.action.cancel')"
 				severity="secondary"
 				type="button"
 				@click="cancel"
 			></Button>
 			<Button
 				:tabindex="11"
-				:label="t('general.save')"
+				:label="t('general.action.save.label')"
 				type="button"
 				@click="savePoints"
 			></Button>

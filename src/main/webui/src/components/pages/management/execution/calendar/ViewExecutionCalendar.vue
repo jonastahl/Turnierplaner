@@ -56,7 +56,7 @@ const LIST = "list"
 const views = [
 	{
 		id: CALENDAR,
-		label: "general.calendar",
+		label: "general.time.calendar",
 	},
 	{
 		id: LIST,

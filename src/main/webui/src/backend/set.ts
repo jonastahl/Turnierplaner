@@ -4,10 +4,11 @@ import axios from "axios"
 import { RouteLocationNormalizedLoaded } from "vue-router"
 import { ToastServiceMethods } from "primevue/toastservice"
 import { computed, Ref } from "vue"
+import { TranslateFunction } from "@/main"
 
 export function useUpdateSet(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	useUpdateSetCustom(
@@ -31,7 +32,7 @@ export function mayEditMatch(
 export function useUpdateSetCustom(
 	route: RouteLocationNormalizedLoaded,
 	compId: Ref<string>,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()
@@ -45,7 +46,7 @@ export function useUpdateSetCustom(
 			toast.add({
 				severity: "success",
 				summary: t("general.success"),
-				detail: t("general.saved"),
+				detail: t("general.action.save.success"),
 				life: 3000,
 			})
 			queryClient.invalidateQueries({
@@ -65,7 +66,7 @@ export function useUpdateSetCustom(
 			toast.add({
 				severity: "error",
 				summary: t("general.failure"),
-				detail: t("general.error_saving"),
+				detail: t("general.action.save.error"),
 				life: 3000,
 			})
 			console.error(error)

@@ -16,12 +16,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 import { RouteLocationNormalizedLoaded } from "vue-router"
 import { Page } from "@/interfaces/general"
 import { Language } from "@/interfaces/competition"
+import { TranslateFunction } from "@/main"
 
 export function findCompPlayers(
 	search: Ref<string>,
 	route: RouteLocationNormalizedLoaded,
 	playerB: boolean,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return useQuery({
@@ -42,7 +43,7 @@ export function findCompPlayers(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("ViewCompetition.query_search_failed"),
+						summary: t("player.action.search.failed"),
 						detail: error,
 						life: 3000,
 					})
@@ -57,7 +58,7 @@ export function findPlayers(
 	search: Ref<string>,
 	page: Ref<number>,
 	pageSize: Ref<number>,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return useQuery({
@@ -76,7 +77,7 @@ export function findPlayers(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("ViewCompetition.query_search_failed"),
+						summary: t("player.action.search.failed"),
 						detail: error,
 						life: 3000,
 					})
@@ -88,7 +89,7 @@ export function findPlayers(
 }
 
 export function getUnverified(
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return useQuery({
@@ -100,7 +101,7 @@ export function getUnverified(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("ViewCompetition.query_search_failed"),
+						summary: t("player.action.search.failed"),
 						detail: error,
 						life: 3000,
 					})
@@ -125,7 +126,7 @@ export function useAdminVerify() {
 }
 
 export function useDeletePlayer(
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()
@@ -141,7 +142,7 @@ export function useDeletePlayer(
 			toast.add({
 				severity: "success",
 				summary: t("general.success"),
-				detail: t("Player.deleted"),
+				detail: t("player.action.delete.success"),
 				life: 3000,
 			})
 		},
@@ -149,7 +150,7 @@ export function useDeletePlayer(
 			toast.add({
 				severity: "error",
 				summary: t("general.failure"),
-				detail: t("Player.delete_failed"),
+				detail: t("player.error.delete"),
 				life: 3000,
 			})
 		},
@@ -158,7 +159,7 @@ export function useDeletePlayer(
 
 export function getPlayer(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return useQuery({
@@ -170,7 +171,7 @@ export function getPlayer(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("Player.player_not_found"),
+						summary: t("player.player_not_found"),
 						detail: error,
 						life: 3000,
 					})
@@ -183,7 +184,7 @@ export function getPlayer(
 
 export function getPlayerDetails(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return useQuery({
@@ -199,7 +200,7 @@ export function getPlayerDetails(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("Player.player_not_found"),
+						summary: t("player.player_not_found"),
 						detail: error,
 						life: 3000,
 					})
@@ -211,7 +212,7 @@ export function getPlayerDetails(
 }
 
 export function useUpdatePlayerDetails(
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()

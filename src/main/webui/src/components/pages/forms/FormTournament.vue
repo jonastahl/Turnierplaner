@@ -2,7 +2,7 @@
 	<div class="formgrid grid">
 		<div class="field flex w-full justify-content-end">
 			<div class="col" style="flex-grow: 3">
-				<label for="name">{{ t("general.name") }}</label>
+				<label for="name">{{ t("general.name.label") }}</label>
 				<InputText
 					id="name"
 					v-model="name"
@@ -19,15 +19,15 @@
 			</div>
 			<div class="col flex flex-column min-w-max flex-grow-0">
 				<label for="visible" class="text-900">{{
-					t("TournamentSettings.visible")
+					t("tournament.visible")
 				}}</label>
 				<SelectButton
 					v-model="visible"
 					v-bind="visibleAttrs"
 					:unselectable="false"
 					:options="[
-						{ name: t('no'), value: false },
-						{ name: t('yes'), value: true },
+						{ name: t('general.no'), value: false },
+						{ name: t('general.yes'), value: true },
 					]"
 					option-label="name"
 					option-value="value"
@@ -49,9 +49,7 @@
 			></Textarea>
 		</div>
 		<div class="field col-6">
-			<label for="registration">{{
-				t("TournamentSettings.registration_phase")
-			}}</label>
+			<label for="registration">{{ t("tournament.registration_phase") }}</label>
 			<Calendar
 				id="registration"
 				v-model="registrationPhase"
@@ -70,7 +68,7 @@
 			</InlineMessage>
 		</div>
 		<div class="field col-6">
-			<label for="game_phase">{{ t("TournamentSettings.game_phase") }}</label>
+			<label for="game_phase">{{ t("tournament.game_phase") }}</label>
 			<Calendar
 				id="game_phase"
 				v-model="gamePhase"
@@ -109,7 +107,7 @@ const { t } = useI18n()
 
 const props = withDefaults(
 	defineProps<{
-		disabled: boolean
+		disabled?: boolean
 		tourDetails?: Tournament
 	}>(),
 	{
@@ -129,7 +127,7 @@ const data = props.tourDetails
 
 setLocale({
 	mixed: {
-		notNull: "validation.date_missing",
+		notNull: "validation.required.date",
 	},
 })
 
@@ -140,12 +138,12 @@ const { defineField, errors, handleSubmit } = useForm<TournamentForm>({
 			visible: boolean(),
 			description: string().max(255),
 			registration_phase: array()
-				.length(2, "validation.date_missing")
+				.length(2, "validation.required.date")
 				.of(mixed().nonNullable())
 				.of(date())
 				.test(
 					"correctDates",
-					"TournamentSettings.wrong_dates",
+					"tournament.error.wrong_dates",
 					(arr, context) => {
 						if (!context.parent.game_phase?.[0]) return true
 						return (
@@ -154,14 +152,14 @@ const { defineField, errors, handleSubmit } = useForm<TournamentForm>({
 						)
 					},
 				)
-				.required("validation.date_missing"),
+				.required("validation.required.date"),
 			game_phase: array()
-				.length(2, "validation.date_missing")
+				.length(2, "validation.required.date")
 				.of(mixed().nonNullable())
 				.of(date())
 				.test(
 					"correctDates",
-					"TournamentSettings.wrong_dates",
+					"tournament.error.wrong_dates",
 					(arr, context) => {
 						if (!context.parent.registration_phase?.[1]) return true
 						return (
@@ -170,7 +168,7 @@ const { defineField, errors, handleSubmit } = useForm<TournamentForm>({
 						)
 					},
 				)
-				.required("validation.date_missing"),
+				.required("validation.required.date"),
 		}),
 	),
 	initialValues: {

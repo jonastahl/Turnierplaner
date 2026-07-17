@@ -8,10 +8,11 @@ import {
 import { ToastServiceMethods } from "primevue/toastservice"
 import { RouteLocationNormalizedLoaded } from "vue-router"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
+import { TranslateFunction } from "@/main"
 
 export function getTournamentList(
 	isLoggedIn: Ref<boolean>,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return useQuery({
@@ -25,7 +26,7 @@ export function getTournamentList(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("ViewTournaments.loadingFailed"),
+						summary: t("tournament.list.failed"),
 						detail: error,
 						life: 3000,
 					})
@@ -38,7 +39,7 @@ export function getTournamentList(
 
 export function getTournamentDetails(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return useQuery({
@@ -53,7 +54,7 @@ export function getTournamentDetails(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("ViewEditTournament.loadingDetailsFailed"),
+						summary: t("tournament.details.failed"),
 						detail: error,
 						life: 3000,
 					})
@@ -65,7 +66,7 @@ export function getTournamentDetails(
 }
 
 export function useUpdateTournament(
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 	handler: {
 		suc?: () => void
@@ -79,8 +80,8 @@ export function useUpdateTournament(
 		onSuccess(__, tournament) {
 			toast.add({
 				severity: "success",
-				summary: t("ViewEditTournament.tournamentUpdating"),
-				detail: t("ViewEditTournament.tournamentUpdated"),
+				summary: t("tournament.action.update.label"),
+				detail: t("tournament.action.update.success"),
 				life: 3000,
 			})
 			Promise.all([
@@ -99,7 +100,7 @@ export function useUpdateTournament(
 		onError(error) {
 			toast.add({
 				severity: "error",
-				summary: t("ViewEditTournament.tournamentUpdateFailed"),
+				summary: t("tournament.action.update.failed"),
 				detail: error,
 				life: 3000,
 			})
@@ -109,7 +110,7 @@ export function useUpdateTournament(
 }
 
 export function useAddTournament(
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 	handler: {
 		suc?: () => void
@@ -128,8 +129,8 @@ export function useAddTournament(
 			})
 			toast.add({
 				severity: "success",
-				summary: t("ViewCreateTournament.tournamentCreating"),
-				detail: t("ViewCreateTournament.tournamentCreated"),
+				summary: t("tournament.action.create.label"),
+				detail: t("tournament.action.create.success"),
 				life: 3000,
 			})
 			if (handler.suc) handler.suc()
@@ -137,8 +138,8 @@ export function useAddTournament(
 		onError() {
 			toast.add({
 				severity: "error",
-				summary: t("ViewCreateTournament.tournamentCreating"),
-				detail: t("ViewCreateTournament.tournamentCreationFailed"),
+				summary: t("tournament.action.create.label"),
+				detail: t("tournament.action.create.failed"),
 				life: 3000,
 			})
 			if (handler.err) handler.err()

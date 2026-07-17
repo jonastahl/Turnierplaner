@@ -11,7 +11,7 @@
 		:disable-views="props.disabledViews"
 		:min-date="props.minDate"
 		:max-date="props.maxDate"
-		:locale="$i18n.locale"
+		:locale="locale"
 		:split-days="props.splitDays"
 		sticky-split-labels
 		:min-event-width="props.minEventWidth"
@@ -61,9 +61,10 @@
 // @ts-expect-error vue-cal does not have proper typescript support
 import VueCal from "vue-cal"
 import "vue-cal/dist/vuecal.css"
-import { Ref, ref, watch } from "vue"
+import { ref, watch } from "vue"
 import { CalEvent, DaySplit, View } from "@/calendar/CalendarInterfaces"
 import { useRoute, useRouter } from "vue-router"
+import { useI18n } from "vue-i18n"
 
 const props = withDefaults(
 	defineProps<{
@@ -73,7 +74,6 @@ const props = withDefaults(
 		disabledViews?: View[]
 		minDate?: Date
 		maxDate?: Date
-		locale?: Ref<string> | string
 		splitDays?: DaySplit[]
 		minEventWidth?: number
 		minSplitWidth?: number
@@ -93,7 +93,6 @@ const props = withDefaults(
 		timeStep: 15,
 		activeView: View.day,
 		disabledViews: () => [View.years, View.year, View.month],
-		locale: "en",
 		editableEvents: false,
 		deletableEvents: false,
 		automaticEvent: true,
@@ -110,9 +109,13 @@ const props = withDefaults(
 const router = useRouter()
 const route = useRoute()
 
-const events = defineModel<CalEvent<T>[]>({ default: [] })
-const myStartDate = defineModel<Date>("startDate", { default: new Date() })
-const myEndDate = defineModel<Date>("endDate", { default: new Date() })
+const { locale } = useI18n()
+
+const events = defineModel<CalEvent<T>[]>({ default: () => [] })
+const myStartDate = defineModel<Date>("startDate", {
+	default: () => new Date(),
+})
+const myEndDate = defineModel<Date>("endDate", { default: () => new Date() })
 
 const activeView = ref(route.query.view == "week" ? View.week : View.day)
 const usersDate = ref(genSelDate())

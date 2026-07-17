@@ -19,11 +19,15 @@
 			<template #footer>
 				<div class="flex flex-row justify-content-between">
 					<Button
-						:label="t('general.delete')"
+						:label="t('general.action.delete')"
 						severity="danger"
 						@click="askDeleteCompetition"
 					/>
-					<Button :label="t('general.save')" severity="success" @click="save" />
+					<Button
+						:label="t('general.action.save.label')"
+						severity="success"
+						@click="save"
+					/>
 				</div>
 			</template>
 		</Card>
@@ -78,13 +82,13 @@ function submit(server_data: CompetitionServer) {
 
 function askDeleteCompetition() {
 	confirm.require({
-		message: t("ViewEditCompetition.confirmDelete"),
-		header: t("ViewEditCompetition.deleting_competition"),
+		message: t("competition.action.delete.confirm"),
+		header: t("competition.action.delete.label"),
 		icon: "pi pi-exclamation-triangle",
 		rejectClass: "p-button-secondary p-button-outlined",
-		rejectLabel: t("general.cancel"),
+		rejectLabel: t("general.action.cancel"),
 		acceptClass: "p-button-danger",
-		acceptLabel: t("general.delete"),
+		acceptLabel: t("general.action.delete"),
 		accept: () =>
 			deleteCompetition(undefined, {
 				onSuccess: () => router.back(),

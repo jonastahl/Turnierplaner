@@ -10,6 +10,7 @@ import { ToastServiceMethods } from "primevue/toastservice"
 import { GroupsDivision } from "@/interfaces/competition"
 import { Team, teamClientToServer, teamServerToClient } from "@/interfaces/team"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
+import { TranslateFunction } from "@/main"
 
 export function getGroup(
 	route: RouteLocationNormalizedLoaded,
@@ -35,7 +36,7 @@ export function getGroup(
 
 export function getGroupsDivision(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return useQuery({
@@ -60,7 +61,7 @@ export function getGroupsDivision(
 					toast.add({
 						severity: "error",
 						summary: t("general.failure"),
-						detail: t("general.loading_failed"),
+						detail: t("general.loading.failed"),
 						life: 3000,
 					})
 					throw error
@@ -71,7 +72,7 @@ export function getGroupsDivision(
 
 export function useInitGroups(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()
@@ -113,7 +114,7 @@ export function useInitGroups(
 			toast.add({
 				severity: "success",
 				summary: t("general.success"),
-				detail: t("general.saved"),
+				detail: t("general.action.save.success"),
 				life: 3000,
 			})
 		},
@@ -121,7 +122,7 @@ export function useInitGroups(
 			toast.add({
 				severity: "error",
 				summary: t("general.failure"),
-				detail: t("general.save_failed"),
+				detail: t("general.action.save.failed"),
 				life: 3000,
 			})
 		},

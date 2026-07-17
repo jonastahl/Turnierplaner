@@ -7,8 +7,8 @@
 					class="w-full"
 					:options="suggestionsPlayerA"
 					:auto-filter-focus="true"
-					:filter-placeholder="t('ViewCompetition.searchPlayer')"
-					:placeholder="t('ViewCompetition.selectPlayer')"
+					:filter-placeholder="t('player.action.search.label')"
+					:placeholder="t('player.select')"
 					:loading="loadingA"
 					option-label="name"
 					data-key="id"
@@ -17,10 +17,10 @@
 					@filter="(ev) => queryPlayer(true, ev)"
 				>
 					<template #empty>
-						{{ t("ViewSignUp.atLeastOneLetter") }}
+						{{ t("validation.string.at_least_one") }}
 					</template>
 					<template #emptyfilter>
-						{{ t("ViewSignUp.noPlayerFound") }}
+						{{ t("player.action.search.no_result") }}
 					</template>
 				</Dropdown>
 			</div>
@@ -30,8 +30,8 @@
 					class="w-full"
 					:options="suggestionsPlayerB"
 					:auto-filter-focus="true"
-					:filter-placeholder="t('ViewCompetition.searchPlayer')"
-					:placeholder="t('ViewCompetition.selectPlayer')"
+					:filter-placeholder="t('player.action.search.label')"
+					:placeholder="t('player.select')"
 					:loading="loadingB"
 					option-label="name"
 					data-key="id"
@@ -40,10 +40,10 @@
 					@filter="(ev) => queryPlayer(false, ev)"
 				>
 					<template #empty>
-						{{ t("ViewSignUp.atLeastOneLetter") }}
+						{{ t("validation.string.at_least_one") }}
 					</template>
 					<template #emptyfilter>
-						{{ t("ViewSignUp.noPlayerFound") }}
+						{{ t("player.action.search.no_result") }}
 					</template>
 				</Dropdown>
 			</div>
@@ -53,7 +53,7 @@
 			:disabled="mutDoubleLoading"
 			@click="signUpDoubleTog"
 		>
-			{{ t("general.signUp") }}
+			{{ t("competition.action.signup.action") }}
 		</Button>
 	</div>
 </template>
@@ -111,8 +111,11 @@ function signUpDoubleTog() {
 	if (dupA && dupA.playerA) {
 		toast.add({
 			severity: "error",
-			summary: t("Player.registration_conflict"),
-			detail: t("Player.already_exists").replace("$name", dupA.playerA.name),
+			summary: t("competition.action.signup.conflict"),
+			detail: t("competition.action.signup.exists").replace(
+				"$name",
+				dupA.playerA.name,
+			),
 			life: 3000,
 		})
 		return
@@ -123,8 +126,11 @@ function signUpDoubleTog() {
 	if (dupB && dupB.playerB) {
 		toast.add({
 			severity: "error",
-			summary: t("ViewSignUp.noPlayerSelected"),
-			detail: t("Player.already_exists").replace("$name", dupB.playerB.name),
+			summary: t("competition.action.signup.warning.no_player_selected"),
+			detail: t("competition.action.signup.exists").replace(
+				"$name",
+				dupB.playerB.name,
+			),
 			life: 3000,
 		})
 		return

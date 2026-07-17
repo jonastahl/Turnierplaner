@@ -11,7 +11,7 @@
 		<template #empty>
 			{{ t("settings.no_other_users") }}
 		</template>
-		<Column field="username" :header="t('general.name')" />
+		<Column field="username" :header="t('general.name.label')" />
 		<Column field="role" header="Rolle">
 			<template #body="{ data }">
 				<Dropdown

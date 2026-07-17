@@ -21,7 +21,7 @@ const activeTab = ref<number>(0)
 
 const menuComps = [
 	{
-		label: t("general.calendar"),
+		label: t("general.time.calendar"),
 		icon: "pi pi-calendar-clock",
 		route: Routes.ManageExecution,
 	},

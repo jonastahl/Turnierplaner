@@ -7,10 +7,11 @@ import { getCompetitionDetails } from "@/backend/competition"
 import { RouteLocationNormalizedLoaded } from "vue-router"
 import { computed, Ref } from "vue"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
+import { TranslateFunction } from "@/main"
 
 export function getSignedUp(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	return useQuery({
@@ -30,7 +31,7 @@ export function getSignedUp(
 				.catch((error) => {
 					toast.add({
 						severity: "error",
-						summary: t("ViewCompetition.query_player_failed"),
+						summary: t("competition.action.signup.participants.search.failed"),
 						life: 3000,
 					})
 					console.log(error)
@@ -42,7 +43,7 @@ export function getSignedUp(
 
 export function getSignedUpSepByComp(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const { data: competition } = getCompetitionDetails(route, t, toast)
@@ -50,13 +51,13 @@ export function getSignedUpSepByComp(
 
 	return {
 		...signedUp,
-		data: computed(() => separateByComp(competition, signedUp.data, t, toast)),
+		data: computed(() => separateByComp(competition, signedUp.data)),
 	}
 }
 
 export function getSignedUpSeparated(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const signedUp = getSignedUp(route, t, toast)
@@ -70,8 +71,6 @@ export function getSignedUpSeparated(
 function separateByComp(
 	competition: Ref<Competition> | Ref<undefined>,
 	signedUp: Ref<Team[]> | Ref<undefined>,
-	t: (s: string) => string,
-	toast: ToastServiceMethods,
 ) {
 	const teamLists: TeamLists = {
 		playersA: [],
@@ -123,11 +122,6 @@ function separateByComp(
 			return teamServerToClient(team)
 		})
 	} else {
-		toast.add({
-			severity: "error",
-			summary: t("ViewSignUp.invalidMode"),
-			life: 3000,
-		})
 		throw new Error()
 	}
 
@@ -167,7 +161,7 @@ export interface TeamPlayerLists {
 
 export function useUpdateTeams(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()
@@ -201,7 +195,7 @@ export function useUpdateTeams(
 			toast.add({
 				severity: "success",
 				summary: t("general.success"),
-				detail: t("general.saved"),
+				detail: t("general.action.save.success"),
 				life: 3000,
 			})
 		},
@@ -209,7 +203,7 @@ export function useUpdateTeams(
 			toast.add({
 				severity: "error",
 				summary: t("general.failure"),
-				detail: t("general.save_failed"),
+				detail: t("general.action.save.failed"),
 				life: 3000,
 			})
 		},

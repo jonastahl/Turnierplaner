@@ -8,7 +8,7 @@
 			/>
 		</i>
 		<span
-			>{{ t("general.begin") }}:
+			>{{ t("general.action.begin") }}:
 			<ValOrEdited
 				:original="
 					props.from.begin?.toLocaleString(t('lang'), dateOptions) || ''
@@ -17,14 +17,14 @@
 			/>
 		</span>
 		<span
-			>{{ t("general.end") }}:
+			>{{ t("general.time.end") }}:
 			<ValOrEdited
 				:original="props.from.end?.toLocaleString(t('lang'), dateOptions) || ''"
 				:edited="props.to.end?.toLocaleString(t('lang'), dateOptions) || ''"
 			/>
 		</span>
 		<span
-			>{{ t("general.court") }}:
+			>{{ t("general.court.single") }}:
 			<ValOrEdited
 				:original="props.from.court || ''"
 				:edited="props.to.court || ''"

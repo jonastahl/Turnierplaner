@@ -13,10 +13,11 @@ import { computed, ref, Ref } from "vue"
 import { v4 as uuidv4 } from "uuid"
 import { CompType } from "@/interfaces/competition"
 import { knockoutTitle } from "@/components/pages/competition/results/knockout/KnockoutTitleGenerator"
+import { TranslateFunction } from "@/main"
 
 export function useUpdateMatches(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()
@@ -38,7 +39,7 @@ export function useUpdateMatches(
 				toast.add({
 					severity: "success",
 					summary: t("general.success"),
-					detail: t("general.saved"),
+					detail: t("general.action.save.success"),
 					life: 3000,
 				})
 			queryClient.invalidateQueries({
@@ -66,7 +67,7 @@ export function useUpdateMatches(
 			toast.add({
 				severity: "error",
 				summary: t("general.failure"),
-				detail: t("general.error_saving"),
+				detail: t("general.action.save.error"),
 				life: 3000,
 			})
 			console.log(error)
@@ -76,7 +77,7 @@ export function useUpdateMatches(
 
 export function useRescheduleMatches(
 	route: RouteLocationNormalizedLoaded,
-	t: (s: string) => string,
+	t: TranslateFunction,
 	toast: ToastServiceMethods,
 ) {
 	const queryClient = useQueryClient()
@@ -90,15 +91,15 @@ export function useRescheduleMatches(
 			let message
 			if (data.status == 200) {
 				if (matches.length === 1) {
-					message = "ViewExecution.published_all"
+					message = "competition.action.publish.execution.all"
 				} else {
-					message = "ViewExecution.published_single"
+					message = "competition.action.publish.execution.single"
 				}
 			} else {
 				if (matches.length === 1) {
-					message = "ViewExecution.published_all_missing"
+					message = "competition.action.publish.execution.all_missing"
 				} else {
-					message = "ViewExecution.published_single_missing"
+					message = "competition.action.publish.execution.single_missing"
 				}
 			}
 			toast.add({
@@ -116,7 +117,7 @@ export function useRescheduleMatches(
 			toast.add({
 				severity: "error",
 				summary: t("general.failure"),
-				detail: t("general.error_saving"),
+				detail: t("general.action.save.error"),
 				life: 3000,
 			})
 			console.log(error)
@@ -236,9 +237,9 @@ export function genTitle(
 ) {
 	switch (title.type) {
 		case CompType.GROUPS:
-			return t("ViewGroupSystem.group") + " " + (title.number + 1)
+			return t("group.label") + " " + (title.number + 1)
 		case CompType.KNOCKOUT:
-			if (!title.isFinal) return t("ViewKnockout.thirdPlace")
+			if (!title.isFinal) return t("knockout.thirdPlace")
 			else return knockoutTitle(t)(title.number, title.total)
 	}
 }

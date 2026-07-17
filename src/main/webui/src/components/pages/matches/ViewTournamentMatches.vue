@@ -25,7 +25,7 @@ const { t } = useI18n()
 const views = [
 	{
 		id: "calendar",
-		label: "general.calendar",
+		label: "general.time.calendar",
 	},
 	{
 		id: "list",

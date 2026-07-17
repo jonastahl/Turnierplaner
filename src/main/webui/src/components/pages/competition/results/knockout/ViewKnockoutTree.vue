@@ -38,9 +38,7 @@
 								@update:teamB="
 									(team: Team | null) => (getMatch(level, index).teamB = team)
 								"
-							>
-								Fallback
-							</slot>
+							/>
 						</div>
 					</div>
 					<div
@@ -87,9 +85,7 @@
 										if (thirdPlace) thirdPlace.teamB = team
 									}
 								"
-							>
-								Fallback
-							</slot>
+							/>
 						</div>
 					</div>
 					<slot

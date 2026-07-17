@@ -15,7 +15,7 @@
 			<template v-else-if="competition.cProgress === Progress.PUBLISHING">
 				<div class="flex flex-column gap-3">
 					<span>
-						{{ t("ViewPrepare.prepared_not_published") }}
+						{{ t("competition.manage.warning.prepared_not_published") }}
 					</span>
 					<div class="flex flex-row">
 						<Button
@@ -28,7 +28,7 @@
 			</template>
 			<template v-else-if="competition.cProgress === Progress.DONE">
 				<span>
-					{{ t("ViewPrepare.prepared_published") }}
+					{{ t("competition.manage.warning.prepared_published") }}
 				</span>
 			</template>
 		</template>

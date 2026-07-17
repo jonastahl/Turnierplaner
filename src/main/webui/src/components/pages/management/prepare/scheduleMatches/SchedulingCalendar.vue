@@ -101,7 +101,7 @@ watch(
 	{ immediate: true },
 )
 
-const events = defineModel<MatchCalEvent[]>({ default: [] })
+const events = defineModel<MatchCalEvent[]>({ default: () => [] })
 watch(
 	[knockout, groups],
 	() => {

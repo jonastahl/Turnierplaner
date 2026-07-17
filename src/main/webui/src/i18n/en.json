@@ -1,354 +1,413 @@
 {
-	"title": "TOURNAMENT PLANNER",
-	"lang": "en-US",
+	"competition": {
+		"action": {
+			"create": {
+				"failed": "Couldn't create competition",
+				"label": "Create competition",
+				"success": "Competition created",
+				"suggestion": "Click to create new competition"
+			},
+			"delete": {
+				"confirm": "Are you sure you want to delete this competition?",
+				"label": "Deleting competition",
+				"success": "Competition deleted"
+			},
+			"load": {
+				"failed": "Couldn't load competitions"
+			},
+			"publish": {
+				"execution": {
+					"all": "Matches have been moved. All players were notified.",
+					"all_missing": "Matches have been moved. Not all players could be notified, as they did not specify an email address.",
+					"single": "Match has been moved. All players were notified.",
+					"single_missing": "Match has been moved. Not all players could be notified, as they did not specify an email address."
+				},
+				"preparation": {
+					"all": "All competitions have been published. All players were notified.",
+					"all_missing": "All competitions have been published. Not all players could be notified, as they did not specify an email address.",
+					"consider_all": "Consider using the function \"Publish all\".\nThis gives the players a combined E-Mail, leading to less spam.",
+					"single": "Competition has been published. All players were notified.",
+					"single_missing": "Competition has been published. Not all players could be notified, as they did not specify an email address.",
+					"warning": "Publishing notifies all players via E-Mail.\nAfterwards, you are more limited in editing the competition."
+				}
+			},
+			"revert_to_schedule": "Edit schedule",
+			"scheduling": {
+				"error_cont_not_scheduled": "All matches need to be scheduled before continuing"
+			},
+			"signup": {
+				"action": "Sign up",
+				"conflict": "Conflict during sign up",
+				"exists": "$name is already signed up",
+				"failed": "Signup failed",
+				"label": "Sign Up",
+				"not_found": "Can't find yourself? Maybe you forgot to register yourself.",
+				"options": {
+					"individual": "individual",
+					"together": "as team"
+				},
+				"participants": {
+					"empty": "It seems that no one has signed up yet...",
+					"search": {
+						"failed": "Querying participants failed"
+					}
+				},
+				"state": {
+					"not_started": "Registration hasn't started yet. Signup phase starts on",
+					"over": "Registration phase is over."
+				},
+				"success": "Players was successfully signed up",
+				"success_team": "Team was successfully signed up",
+				"warning": {
+					"no_player_selected": "No player selected",
+					"register_before": "Players need to be registered before signup",
+					"select_first": "Please select a player first"
+				}
+			},
+			"update": {
+				"failed": "Updating competition failed",
+				"label": "Update competition",
+				"success": "Competition updated"
+			}
+		},
+		"age": {
+			"max": {
+				"born": "Born after",
+				"label": "Maximum age"
+			},
+			"min": {
+				"born": "Born before",
+				"label": "Minimum age"
+			}
+		},
+		"details": {
+			"failed": "Couldn't load competition details"
+		},
+		"differentB": "Different settings for player 2",
+		"label": "Competition",
+		"manage": {
+			"action": {
+				"deleteBox": "Drop to delete",
+				"randomize": "Randomize",
+				"reroll": "Reroll"
+			},
+			"no_deleted_player": "No deleted player",
+			"restored": "Restored initial configuration",
+			"views": {
+				"execution": "Execution",
+				"preparation": "Preparation"
+			},
+			"warning": {
+				"knockout_not_assigned": "Not all players have been assigned yet",
+				"not_yet_published": "You need to publish the competition before entering results",
+				"prepare_reset": "All drawn and scheduled matches will be reset. Only assigned teams will be kept. Do you really want to reset the preparation?",
+				"prepared_not_published": "The competition has been prepared, but not published so far. You can reset the progress to restart the preparation.",
+				"prepared_published": "The competition has been prepared and published. You can no longer revoke preparation.",
+				"update_schedule_header": "The following matches were changed"
+			}
+		},
+		"mode": {
+			"label": "Game mode",
+			"options": {
+				"double": "Double",
+				"single": "Single"
+			}
+		},
+		"player": {
+			"A": "Player A",
+			"B": "Player B"
+		},
+		"sets": {
+			"count": "Choose the number of sets"
+		},
+		"steps": {
+			"assignMatches": "Assign matches",
+			"done": "Completed",
+			"editTeams": "Edit teams",
+			"publishing": "Publishing",
+			"scheduleMatches": "Schedule matches"
+		},
+		"type": {
+			"label": "Type of tournament",
+			"options": {
+				"group": "Group system",
+				"knockout": "Knockout"
+			}
+		}
+	},
+	"court": {
+		"courtTypes": {
+			"CLAY": "Sand",
+			"GRASS": "Grass",
+			"HARD": "Hard"
+		},
+		"no_courts": "There are no courts.",
+		"no_courts_admin": "Go to the settings to create them.",
+		"no_courts_no_admin": "Ask your admin to create them.",
+		"not_selected": "All fields need to be filled",
+		"select": "Select courts",
+		"type": "Type",
+		"warning_select_courts": "You need to select a court before you can schedule matches."
+	},
 	"date_format": "mm/dd/yy",
-	"no": "No",
-	"yes": "Yes",
+	"footer": {
+		"legal_notice": "Legal Notice",
+		"privacy_policy": "Privacy Policy"
+	},
 	"general": {
-		"settings": "Settings",
-		"general": "General",
-		"create": "Create",
-		"update": "Update",
-		"delete": "Delete",
-		"name": "Name",
-		"description": "Description",
-		"name_missing": "Please input a name",
-		"signUp": "Sign up",
-		"create_player": "Spieler erstellen",
-		"success": "Success",
-		"failure": "Failure",
-		"loading": "Loading...",
-		"error_saving": "Error while saving",
-		"save": "Save",
-		"reset": "Reset",
-		"reload": "Reload",
-		"cancel": "Cancel",
-		"back": "Back",
-		"next": "Next",
-		"add": "Add",
-		"saveandcont": "Save and continue",
-		"saveandcomp": "Save and complete",
-		"saveandpublish": "Save and publish",
-		"reviewchanges": "Review changes",
-		"saved": "Changes saved",
-		"save_failed": "Something went wrong while saving",
-		"loading_failed": "Something went wrong while loading",
-		"tournament_tree": "Tournament tree",
-		"successful": "Successful",
-		"matches": "Matches",
-		"calendar": "Calendar",
-		"list": "List",
-		"title": "Title",
-		"tournament": "Tournament",
-		"competition": "Competition",
-		"court": "Court",
-		"begin": "Begin",
-		"end": "End",
-		"team": "Team",
-		"result": "Result",
-		"courts": "Courts",
+		"action": {
+			"add": "Add",
+			"back": "Back",
+			"begin": "Begin",
+			"cancel": "Cancel",
+			"create": "Create",
+			"delete": "Delete",
+			"next": "Next",
+			"prepare": "Prepare",
+			"publish": {
+				"all": "Publish all",
+				"label": "Publish"
+			},
+			"remove": "Remove",
+			"save": {
+				"and": {
+					"comp": "Save and complete",
+					"cont": "Save and continue",
+					"publish": "Save and publish"
+				},
+				"error": "Error while saving",
+				"failed": "Something went wrong while saving",
+				"label": "Save",
+				"success": "Changes saved"
+			},
+			"update": "Update"
+		},
 		"any": "Any",
+		"court": {
+			"plural": "Courts",
+			"single": "Court"
+		},
+		"date": {
+			"missing": "Please choose a date"
+		},
+		"description": "Description",
+		"failure": "Failure",
 		"filter_by_name": "Filter by name",
-		"from": "From",
-		"to": "To",
-		"sex": "Sex",
-		"male": "Male",
-		"female": "Female",
-		"serverside_error": "Serverside error",
 		"gameplans": "Game plans",
-		"overview": "Overview"
+		"general": "General",
+		"list": "List",
+		"loading": {
+			"action": "Loading...",
+			"failed": "Something went wrong while loading"
+		},
+		"matches": {
+			"empty": "No matches found.",
+			"label": "Matches",
+			"loading": "Loading matches..."
+		},
+		"name": {
+			"label": "Name",
+			"missing": "Please input a name"
+		},
+		"no": "No",
+		"overview": "Overview",
+		"previous": "Previous",
+		"reload": "Reload",
+		"requirements": "Requirements",
+		"reset": "Reset",
+		"result": "Result",
+		"reviewchanges": "Review changes",
+		"serverside_error": "Serverside error",
+		"settings": "Settings",
+		"success": "Success",
+		"team": {
+			"delete": {
+				"success": "Team deleted"
+			},
+			"label": "Team",
+			"plural": "Teams"
+		},
+		"time": {
+			"begin": "Begin",
+			"calendar": "Calendar",
+			"end": "End",
+			"from": "From",
+			"to": "To"
+		},
+		"title": "Title",
+		"yes": "Yes"
 	},
-	"DialogUpdateScore": {
-		"header": "Score Update",
-		"update_score": "Update the score for the game"
+	"group": {
+		"invalid": "Invalid group(s)",
+		"label": "group",
+		"min_two_teams": "Every group needs at least 2 teams"
 	},
-	"ViewPlayerRegistration": {
-		"headline": "Player Registration",
-		"after": "Thank you for registration! Please confirm your e-mail with the verification link, we sent you to your email.",
-		"verification_success": "You have successfully verified yourself!",
-		"verification_failed": "This verification link doesn't seem to be correct.",
-		"first_name": {
-			"field": "First name",
-			"prompt": "Please input your first name"
+	"knockout": {
+		"finale": "Finale",
+		"quarterfinals": "Quarterfinales",
+		"round": "Round",
+		"semifinals": "Semifinales",
+		"thirdPlace": "Third place play-off"
+	},
+	"lang": "en-US",
+	"language": {
+		"de": "German",
+		"en": "English"
+	},
+	"match": {
+		"start": "The game starts at:"
+	},
+	"player": {
+		"action": {
+			"create": {
+				"disclaimer": "By creating a player, you agree to the Privacy Policy. Additionally, you agree that your name will be visible to other visitors. Your date of birth and email address will never be displayed publicly.",
+				"failed": "Creation of player failed",
+				"failed_detail": "Please check your input and if your player already exists.",
+				"follow_up": "Thank you for registration! Please confirm your e-mail with the verification link, we sent you to your email.",
+				"label": "Create player",
+				"success": "Successful created"
+			},
+			"delete": {
+				"confirm": "Are you sure you want to delete this player?",
+				"label": "Deleting player",
+				"success": "Player deleted"
+			},
+			"search": {
+				"failed": "Querying player failed",
+				"label": "Search for players...",
+				"no_result": "No player found"
+			},
+			"verification": {
+				"failure": "This verification link doesn't seem to be correct.",
+				"success": "You have successfully verified yourself!"
+			}
 		},
-		"last_name": {
-			"field": "Last name",
-			"prompt": "Please input your last name"
-		},
-		"sex": {
-			"field": "Sex",
-			"prompt": "Please input your gender",
-			"select": "Select",
-			"Option1": "Men",
-			"Option2": "Woman"
-		},
-		"language": {
-			"field": "Language",
-			"prompt": "Please select your language",
-			"select": "Select"
+		"age": {
+			"over": {
+				"long": "Over",
+				"short": "O"
+			},
+			"under": {
+				"long": "Under",
+				"short": "U"
+			}
 		},
 		"birthdate": {
 			"field": "Birthdate",
 			"prompt": "Please input your birthdate"
 		},
 		"email": {
-			"field": "E-Mail",
+			"correct": "Please input a valid mail address",
 			"empty": "Please input email address",
-			"correct": "Please input a valid mail address"
+			"field": "E-Mail"
 		},
-		"sign_up": "Sign up",
-		"registration_failed": "Player registration failed",
-		"registration_failed_detail": "Please check your input and if you are already registered.",
-		"registration_successful": "Player registered successfully",
-		"not_found": "Can't find yourself? Maybe you forgot to register yourself.",
-		"disclaimer": "By creating a player, you agree to the Privacy Policy. Additionally, you agree that your name will be visible to other visitors. Your date of birth and email address will never be displayed publicly."
-	},
-	"TournamentSettings": {
-		"visible": "Visible",
-		"registration_phase": "Registration phase",
-		"game_phase": "Game phase",
-		"missing_date": "Please select a period of time",
-		"wrong_dates": "Begin of game phase needs to be after end of registration phase"
-	},
-	"ViewTournaments": {
-		"loadingFailed": "Couldn't load tournaments",
-		"overview": "Tournament overview",
-		"add_title": "New tournament",
-		"add_content": "Click to add new tournament"
-	},
-	"ViewCreateTournament": {
-		"header": "Create tournament",
-		"tournamentCreating": "Creation of tournament",
-		"tournamentCreated": "Turnier created",
-		"tournamentCreationFailed": "Couldn't create tournament",
-		"tournamentCreation": "Create tournament"
-	},
-	"ViewEditTournament": {
-		"header": "Edit tournament",
-		"tournamentUpdating": "Updating of tournament",
-		"loadingDetailsFailed": "Couldn't load tournament details",
-		"tournamentUpdated": "Tournament updated",
-		"tournamentUpdateFailed": "Updating tournament failed",
-		"tournamentUpdate": "Update tournament"
-	},
-	"ViewCompetitions": {
-		"loadingFailed": "Couldn't load competitions",
-		"add_title": "New competition",
-		"add_content": "Click to add new competition",
-		"from": "Von",
-		"till": "Bis"
-	},
-	"ViewGroupSystem": {
-		"group": "group",
-		"progress": "games in progress...",
-		"finished": "games finished!",
-		"start": "The game starts at:"
-	},
-	"CompetitionSettings": {
-		"tournament_settings": "Tournament settings",
-		"type": "Tournament type",
-		"knockout": "Knockout",
-		"groups": "Group system",
-		"mode": "Game mode",
-		"single": "Single",
-		"double": "Double",
-		"signup": "Signup",
-		"individual": "individual",
-		"together": "as team",
-		"player": "Player settings",
-		"differentB": "Different settings for player 2",
-		"sex": "Sex",
-		"any": "Any",
-		"minAge": "Minimum age",
-		"maxAge": "Maximum age",
-		"missingAge": "Please choose a date",
-		"playerA": "Player 1",
-		"playerB": "Player 2",
-		"numberSets": "Choose the number of sets"
-	},
-	"ViewSignUp": {
-		"atLeastOneLetter": "Please type at least one letter",
-		"noPlayerSelected": "No player selected",
-		"selectPlayerFirst": "Please select a player first",
-		"noPlayerFound": "No player found",
-		"invalidMode": "Invalid mode",
-		"playerDeleted": "Player deleted",
-		"teamDeleted": "Team deleted"
-	},
-	"ViewCreateCompetition": {
-		"header": "Create competition",
-		"creationFailed": "Couldn't create competition",
-		"competitionCreated": "Competition created",
-		"competitionCreation": "Creating competition"
-	},
-	"ViewEditCompetition": {
-		"header": "Edit competition",
-		"saving_failed": "Something went wrong while saving",
-		"loadingDetailsFailed": "Couldn't load competition details",
-		"competitionUpdated": "Competition updated",
-		"competitionUpdateFailed": "Updating competition failed",
-		"competitionUpdate": "Update competition",
-		"competitionDeleted": "Competition deleted",
-		"deleting_competition": "Deleting competition",
-		"confirmDelete": "Are you sure you want to delete this competition?"
-	},
-	"ViewCompetition": {
-		"tournament_system": "Tournament system",
-		"game_mode": "Game mode",
-		"registration_not_started": "Registration hasn't started yet. Registration phase starts on",
-		"registration_over": "Registration phase is over.",
-		"no_registration": "It seems that no one has registered yet...",
-		"query_search_failed": "Querying player failed",
-		"query_player_failed": "Querying participants failed",
-		"requirements": "Requirements",
-		"born_before": "Born before",
-		"born_after": "Born after",
-		"playerA": "Player A",
-		"playerB": "Player B",
-		"prepare": "Prepare tournament",
-		"manage": "Manage tournament",
-		"selectPlayer": "Select a player",
-		"searchPlayer": "Search for players...",
-		"warning_register_before_signup": "Players need to be registered before signup"
-	},
-	"Player": {
-		"too_many_results": "Result ist not unique enough",
-		"no_result": "No player found",
-		"registration_conflict": "Conflict at registration",
-		"already_exists": "$name is alreader registered",
-		"register_success": "Successful registered",
-		"register_failed": "Registration failed",
-		"over": "O",
-		"under": "U",
+		"error": {
+			"delete": "Deleting player failed. Player probably already part of some matches"
+		},
+		"first_name": {
+			"field": "First name",
+			"prompt": "Please input your first name"
+		},
+		"language": {
+			"field": "Language",
+			"prompt": "Please select your language",
+			"select": "Select"
+		},
+		"last_name": {
+			"label": "Last name",
+			"prompt": "Please input your last name"
+		},
+		"overview": "Player Overview",
 		"player_not_found": "Player not found",
-		"confirm_delete": "Are you sure you want to delete this player?",
-		"deleting_player": "Deleting player",
-		"deleted": "Player deleted",
-		"delete_failed": "Deleting player failed. Player probably already part of some matches"
+		"select": "Select a player",
+		"settings": "Player settings",
+		"sex": {
+			"label": "Sex",
+			"options": {
+				"female": "Female",
+				"male": "Male"
+			},
+			"prompt": "Please input your gender"
+		}
 	},
-	"ViewKnockout": {
-		"finale": "Finale",
-		"thirdPlace": "Third place play-off",
-		"semifinals": "Semifinales",
-		"quarterfinals": "Quarterfinales",
-		"round": "Round"
-	},
-	"ViewPlayerOverview": {
-		"header": "Player Overview"
-	},
-	"ViewPrepare": {
-		"steps": {
-			"editTeams": "Edit teams",
-			"assignMatches": "Assign matches",
-			"scheduleMatches": "Schedule matches",
-			"done": "Completed",
-			"publishing": "Publishing",
-			"previous": "Previous",
-			"next": "Next",
-			"invalid_step": {
-				"summary": "Invalid step",
-				"detail": "Previous steps need to be fulfilled first"
-			}
-		},
-		"preparation": "Preparation",
-		"editTeams": {
-			"deleteBox": "Drop to delete",
-			"randomize": "Randomize",
-			"reset": "Reset",
-			"reroll": "Reroll"
-		},
-		"assignMatches": {
-			"Group": "Group",
-			"add": "Add",
-			"remove": "Remove",
-			"emptyGroupSum": "Invalid group(s)",
-			"emptyGroupDet": "Every group needs at least 2 teams",
-			"teams": "Teams",
-			"ranking": "Ranking",
-			"knockout_not_assigned": "Not all players have been assigned yet"
-		},
-		"overview": "Overview",
-		"prepared_not_published": "The competition has been prepared, but not published so far. You can reset the progress to restart the preparation.",
-		"prepare_reset_warning": "All drawn and scheduled matches will be reset. Only assigned teams will be kept. Do you really want to reset the preparation?",
-		"prepared_published": "The competition has been prepared and published. You can no longer revoke preparation.",
-		"restored": "Restored initial configuration",
-		"scheduleMatches": {
-			"error_cont_not_scheduled": "All matches need to be scheduled before continuing"
-		},
-		"publish_warning": "Publishing notifies all players via E-Mail.\nAfterwards, you are more limited in editing the competition.",
-		"publish_consider_all": "Consider using the function \"Publish all\".\nThis gives the players a combined E-Mail, leading to less spam.",
-		"published_single": "Competition has been published. All players were notified.",
-		"published_single_missing": "Competition has been published. Not all players could be notified, as they did not specify an email address.",
-		"published_all": "All competitions have been published. All players were notified.",
-		"published_all_missing": "All competitions have been published. Not all players could be notified, as they did not specify an email address."
-	},
-	"ViewExecution": {
-		"published_single": "Match has been moved. All players were notified.",
-		"published_single_missing": "Match has been moved. Not all players could be notified, as they did not specify an email address.",
-		"published_all": "Matches have been moved. All players were notified.",
-		"published_all_missing": "Matches have been moved. Not all players could be notified, as they did not specify an email address.",
-		"not_yet_published": "You need to publish the competition before entering results"
-	},
-	"ViewManage": {
-		"execution": "Execution",
-		"publish": "Publish",
-		"publishall": "Publish all",
-		"prepare": "Prepare",
-		"editSchedule": "Edit schedule",
-		"update_schedule_header": "The following matches were changed"
-	},
-	"validation": {
-		"field_invalid": "Field is invalid",
-		"field_required": "Field is required",
-		"field_too_short": "Field is too short",
-		"field_too_long": "Field is too long",
-		"field_invalid_email": "Field is not a valid email address",
-		"field_invalid_date": "Field is not a valid date",
-		"field_invalid_number": "Field is not a valid number",
-		"field_invalid_url": "Field is not a valid URL",
-		"date_missing": "Please choose start and end date"
-	},
-	"court": {
-		"type": "Type",
-		"courtTypes": {
-			"HARD": "Hard",
-			"CLAY": "Sand",
-			"GRASS": "Grass"
-		},
-		"not_selected": "All fields need to be filled",
-		"select": "Select courts",
-		"no_courts": "There are no courts.",
-		"no_courts_admin": "Go to the settings to create them.",
-		"no_courts_no_admin": "Ask your admin to create them.",
-		"warning_select_courts": "You need to select a court before you can schedule matches."
+	"score": {
+		"update": {
+			"title": "Score Update"
+		}
 	},
 	"set": {
 		"invalid_sets": "There are invalid sets"
 	},
 	"settings": {
-		"save_default": "Save as default",
-		"verification": "Verification",
-		"no_other_users": "There are no other users",
-		"no_unverified": "No unverified player",
 		"admin_needed": "Admin verification needed",
 		"admin_needed_summary": "Players need to be verified before being able to sign up to a competition",
-		"user": "User management",
-		"player": "Player management",
-		"player_updated": "Player updated",
-		"player_update_headline": "Update player",
-		"language": "Language",
 		"backup": "Backup",
 		"backup_download_warning": "Downloading a backup may time some minutes. Please be patient.",
 		"backup_restore_warning": "Restoring a backup deletes all existing data. Please make sure you have a backup before restoring.",
 		"download_backup": "Download backup",
-		"restore_backup": "Restore backup"
+		"language": "Language",
+		"no_other_users": "There are no other users",
+		"no_unverified": "No unverified player",
+		"player": "Player management",
+		"player_update_headline": "Update player",
+		"player_updated": "Player updated",
+		"restore_backup": "Restore backup",
+		"save_default": "Save as default",
+		"user": "User management",
+		"verification": "Verification"
 	},
-	"language": {
-		"en": "English",
-		"de": "German"
+	"title": "TOURNAMENT PLANNER",
+	"tournament": {
+		"action": {
+			"add": {
+				"suggestion": "Click to create new tournament"
+			},
+			"create": {
+				"failed": "Couldn't create tournament",
+				"label": "Create tournament",
+				"success": "Turnier created"
+			},
+			"update": {
+				"failed": "Updating tournament failed",
+				"label": "Update tournament",
+				"success": "Tournament updated"
+			}
+		},
+		"details": {
+			"failed": "Couldn't load tournament details"
+		},
+		"error": {
+			"wrong_dates": "Begin of game phase needs to be after end of registration phase"
+		},
+		"game_phase": "Game phase",
+		"label": "Tournament",
+		"list": {
+			"failed": "Couldn't load tournaments"
+		},
+		"manage": "Manage tournament",
+		"overview": "Tournament overview",
+		"registration_phase": "Registration phase",
+		"settings": "Tournament settings",
+		"tree": "Tournament tree",
+		"visible": "Visible"
 	},
-	"footer": {
-		"legal_notice": "Legal Notice",
-		"privacy_policy": "Privacy Policy"
+	"validation": {
+		"invalid": {
+			"date": "Field is not a valid date",
+			"email": "Field is not a valid email address",
+			"field": "Field is invalid",
+			"number": "Field is not a valid number",
+			"url": "Field is not a valid URL"
+		},
+		"required": {
+			"date": "Please choose start and end date",
+			"general": "Field is required",
+			"period": "Please select a period of time"
+		},
+		"string": {
+			"at_least_one": "Please type at least one letter",
+			"too_long": "Field is too long",
+			"too_short": "Field is too short"
+		}
 	}
 }
